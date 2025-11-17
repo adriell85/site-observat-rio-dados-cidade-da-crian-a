@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Observatório de Dados – Cidade da Criança de Fortaleza</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      /* Paleta Prefeitura de Fortaleza */
+      --pf-primary:   #F45A24;  /* laranja institucional */
+      --pf-secondary: #109D8B;  /* verde/teal */
+      --pf-detail:    #20A3DC;  /* azul detalhe */
+
+      /* Paleta Cidade da Criança */
+      --cc-orange: #F45E23;
+      --cc-gold:   #FEAE01;
+      --cc-teal:   #00ABB2;
+      --cc-red:    #FE444C;
+      --cc-blue:   #0185B8;
+
+      /* Cores herdadas do CSS do Superset */
+      --blue-main:   #1BA4DD;
+      --blue-deep:   #1565C0;
+      --blue-soft:   #23B4B6;
+      --yellow-main: #FAAE39;
+      --border-soft: #E6E2D3;
+      --bg-soft:     #c4e1ed;
+      --card:        #FFFFFF;
+      --text-main:   #162238;
+
+      --radius-lg:   18px;
+      --radius-md:   12px;
+      --shadow-soft: 0 10px 30px rgba(0,0,0,0.08);
+      --font: "Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    body{
+      font-family:var(--font);
+      color:var(--text-main);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(254,201,1,0.18), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(35,180,182,0.25), transparent 55%),
+        linear-gradient(135deg, #F6FAFF, var(--bg-soft));
+      min-height:100vh;
+    }
+
+    a{ text-decoration:none; color:inherit; }
+
+    /* ========= HEADER / NAV – CORES PREFEITURA ========= */
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(90deg, var(--pf-primary), var(--pf-secondary), var(--pf-detail));
+      border-bottom:1px solid rgba(0,0,0,0.12);
+    }
+
+    .nav{
+      max-width:1120px;
+      margin:0 auto;
+      padding:10px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      color:#fff;
+    }
+
+    .nav-logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .nav-logo-img{
+      height:42px;
+      width:auto;
+      display:block;
+    }
+
+    .nav-logo-text h1{
+      font-size:16px;
+      font-weight:700;
+      color:#fff;
+      line-height:1.2;
+    }
+    .nav-logo-text span{
+      font-size:12px;
+      color:rgba(255,255,255,0.8);
+    }
+
+    .nav-links{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+
+    .nav-link{
+      font-size:13px;
+      padding:7px 12px;
+      border-radius:999px;
+      border:1px solid transparent;
+      cursor:pointer;
+      transition:background .2s ease, color .2s ease, transform .1s ease, box-shadow .2s ease;
+      color:#fff;
+    }
+    .nav-link--secondary{
+      background:rgba(0,0,0,0.10);
+      border-color:rgba(255,255,255,0.22);
+    }
+    .nav-link--primary{
+      background:rgba(255,255,255,0.18);
+      color:#fff;
+      border-color:rgba(255,255,255,0.35);
+      font-weight:600;
+    }
+    .nav-link:hover{
+      transform:translateY(-1px);
+      box-shadow:0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    @media (max-width:720px){
+      .nav{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+      .nav-links{
+        justify-content:flex-start;
+      }
+    }
+
+    /* ========= HERO – CORES CIDADE DA CRIANÇA ========= */
+    .hero{
+      max-width:1120px;
+      margin:0 auto;
+      padding:26px 18px 40px;
+      display:grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.7fr);
+      gap:28px;
+      align-items:center;
+    }
+
+    .hero-text h2{
+      font-size:28px;
+      color:var(--cc-blue);
+      margin-bottom:10px;
+    }
+    .hero-text h2 span{
+      color:var(--cc-gold);
+    }
+    .hero-text p{
+      font-size:15px;
+      line-height:1.5;
+      margin-bottom:16px;
+    }
+
+    .hero-badges{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:18px;
+    }
+    .badge{
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      border:1px solid rgba(0,0,0,0.06);
+    }
+    .badge--azul{
+      background:#E3F5FD;
+      color:var(--blue-deep);
+    }
+    .badge--amarelo{
+      background:#FFF4D4;
+      color:#8C4C00;
+    }
+    .badge-dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:var(--cc-teal);
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:4px;
+    }
+    .btn{
+      border-radius:999px;
+      padding:10px 18px;
+      font-size:14px;
+      font-weight:600;
+      cursor:pointer;
+      border:1px solid transparent;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:background .2s ease, color .2s ease, transform .1s ease, box-shadow .2s ease;
+    }
+    .btn-primary{
+      background:var(--cc-blue);
+      color:#fff;
+      border-color:var(--blue-deep);
+      box-shadow:0 6px 14px rgba(1,133,184,0.4);
+    }
+    .btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow:0 10px 20px rgba(1,133,184,0.55);
+    }
+    .btn-outline{
+      background:transparent;
+      color:var(--cc-orange);
+      border-color:var(--cc-orange);
+    }
+    .btn-outline:hover{
+      background:rgba(244,94,35,0.08);
+      transform:translateY(-1px);
+    }
+
+    /* HERO MEDIA */
+    .hero-media{
+      background:var(--card);
+      border-radius:var(--radius-lg);
+      padding:16px 16px 18px;
+      box-shadow:var(--shadow-soft);
+      border:1px solid var(--border-soft);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .hero-media-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+    }
+    .hero-media-header span.title{
+      font-size:14px;
+      font-weight:600;
+      color:var(--cc-teal);
+    }
+    .hero-media-tag{
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      background:#E0F7FA;
+      color:var(--cc-teal);
+    }
+
+    .img-frame-main{
+      margin-top:4px;
+      border-radius:var(--radius-md);
+      border:2px dashed rgba(0,0,0,0.10);
+      background:linear-gradient(135deg, #E3F5FD, #FFFDE7);
+      overflow:hidden;
+      position:relative;
+      aspect-ratio: 16 / 9;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .img-frame-main img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .hero-media-footer{
+      font-size:12px;
+      color:#555;
+      background:#F6FAFF;
+      border-radius:var(--radius-md);
+      padding:8px 10px;
+    }
+
+    @media (max-width:880px){
+      .hero{
+        grid-template-columns:1fr;
+      }
+    }
+
+    /* ========= SEÇÕES GENÉRICAS ========= */
+    section{
+      padding:30px 18px;
+    }
+
+    .section-inner{
+      max-width:1120px;
+      margin:0 auto;
+    }
+
+    .section-title{
+      font-size:20px;
+      margin-bottom:6px;
+      color:var(--cc-blue);
+    }
+    .section-subtitle{
+      font-size:13px;
+      color:#555;
+      margin-bottom:18px;
+    }
+
+    /* ========= ACORDION (SANFONA) ========= */
+
+    .accordion-item{
+      border-radius:var(--radius-md);
+      border:1px solid rgba(0,0,0,0.06);
+      background:#F9FBFF;
+      margin-bottom:10px;
+      overflow:hidden;
+    }
+
+    .accordion-header{
+      width:100%;
+      text-align:left;
+      padding:10px 14px;
+      background:linear-gradient(90deg, #E3F5FD, #FFFFFF);
+      border:0;
+      outline:none;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:600;
+      color:var(--blue-deep);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+    }
+
+    .accordion-header span.chevron{
+      font-size:16px;
+      line-height:1;
+      color:#777;
+      transition:transform .2s ease;
+    }
+
+    .accordion-body{
+      max-height:0;
+      padding:0 14px;
+      overflow:hidden;
+      transition:max-height .25s ease, padding .25s ease;
+    }
+
+    .accordion-body p{
+      margin-top:8px;
+    }
+
+    .accordion-item.is-open .accordion-body{
+      max-height:600px;
+      padding:8px 14px 12px;
+    }
+
+    .accordion-item.is-open .accordion-header span.chevron{
+      transform:rotate(90deg);
+    }
+
+    /* ========= SOBRE ========= */
+
+    .sobre-grid{
+      display:grid;
+      grid-template-columns: minmax(0,2.3fr) minmax(0,2fr);
+      gap:20px;
+      align-items:flex-start;
+    }
+
+    .sobre-card{
+      background:var(--card);
+      border-radius:var(--radius-lg);
+      padding:12px;
+      border:1px solid var(--border-soft);
+      box-shadow:var(--shadow-soft);
+    }
+    .sobre-card p{
+      font-size:14px;
+      line-height:1.6;
+      margin-bottom:12px;
+    }
+    .sobre-card ul{
+      padding-left:18px;
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .sobre-paineis{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .sobre-pill{
+      padding:10px 12px;
+      border-radius:var(--radius-md);
+      border:1px solid rgba(0,0,0,0.05);
+      background:#E3F5FD;
+      font-size:13px;
+    }
+    .sobre-pill strong{
+      display:block;
+      margin-bottom:2px;
+      color:var(--blue-deep);
+    }
+
+    @media (max-width:880px){
+      .sobre-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    /* ========= ÁREAS TEMÁTICAS ========= */
+
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:18px;
+    }
+    @media (max-width:1100px){
+      .cards-grid{
+        grid-template-columns:repeat(2, minmax(0,1fr));
+      }
+    }
+    @media (max-width:640px){
+      .cards-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .area-card{
+      background:var(--card);
+      border-radius:var(--radius-md);
+      padding:14px 14px 16px;
+      border:1px solid var(--border-soft);
+      box-shadow:0 6px 20px rgba(0,0,0,0.04);
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .area-tag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      background:#E3F5FD;
+      color:var(--blue-deep);
+    }
+    .area-tag-dot{
+      width:9px;
+      height:9px;
+      border-radius:50%;
+      background:var(--cc-gold);
+    }
+    .area-card h3{
+      font-size:15px;
+      color:var(--blue-deep);
+    }
+    .area-card p{
+      font-size:13px;
+      line-height:1.45;
+    }
+    .area-chip-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin-top:4px;
+    }
+    .area-chip{
+      font-size:11px;
+      padding:4px 7px;
+      border-radius:999px;
+      background:#FFF4D4;
+      color:#8C6A00;
+    }
+
+    /* ========= GALERIA / IMAGENS ========= */
+
+    .gallery-grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:18px;
+    }
+    @media (max-width:900px){
+      .gallery-grid{
+        grid-template-columns:repeat(2, minmax(0,1fr));
+      }
+    }
+    @media (max-width:600px){
+      .gallery-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .gallery-card{
+      background:var(--card);
+      border-radius:var(--radius-md);
+      padding:12px 12px 14px;
+      border:1px solid var(--border-soft);
+      box-shadow:0 6px 16px rgba(0,0,0,0.04);
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      font-size:12px;
+    }
+
+    .img-frame{
+      border-radius:var(--radius-md);
+      overflow:hidden;
+      border:2px dashed rgba(0,0,0,0.10);
+      background:linear-gradient(135deg, #E3F5FD, #FFFDE7);
+      aspect-ratio:4/3;
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .img-frame img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .img-frame-label{
+      position:absolute;
+      bottom:6px;
+      right:6px;
+      background:rgba(0,0,0,0.55);
+      color:#fff;
+      padding:3px 6px;
+      border-radius:999px;
+      font-size:10px;
+    }
+
+    /* ========= DASHBOARDS ========= */
+
+    .dashboards-grid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:18px;
+    }
+    @media (max-width:1024px){
+      .dashboards-grid{
+        grid-template-columns:repeat(2, minmax(0,1fr));
+      }
+    }
+    @media (max-width:680px){
+      .dashboards-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .dashboard-card{
+      background:var(--card);
+      border-radius:var(--radius-md);
+      padding:14px 14px 16px;
+      border:1px solid var(--border-soft);
+      box-shadow:0 6px 18px rgba(0,0,0,0.05);
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .dashboard-chip{
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      background:#E3F5FD;
+      color:var(--blue-deep);
+      align-self:flex-start;
+    }
+
+    .dashboard-thumb{
+      border-radius:var(--radius-md);
+      overflow:hidden;
+      border:1px dashed rgba(0,0,0,0.12);
+      background:linear-gradient(135deg, #E3F5FD, #FFFDE7);
+      aspect-ratio: 16/9;
+      position:relative;
+    }
+    .dashboard-thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .dashboard-thumb-label{
+      position:absolute;
+      inset:auto 6px 6px auto;
+      background:rgba(0,0,0,0.55);
+      color:#fff;
+      border-radius:999px;
+      padding:3px 6px;
+      font-size:10px;
+    }
+
+    .dashboard-card h3{
+      font-size:14px;
+      color:var(--cc-blue);
+    }
+    .dashboard-card p{
+      font-size:12px;
+      line-height:1.45;
+      color:#555;
+    }
+    .dashboard-meta{
+      font-size:11px;
+      color:#777;
+    }
+    .dashboard-actions{
+      margin-top:8px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .btn-sm{
+      font-size:12px;
+      padding:7px 12px;
+    }
+
+    /* ========= METODOLOGIA ========= */
+
+    .met-grid{
+      display:grid;
+      grid-template-columns: minmax(0,2.2fr) minmax(0,2fr);
+      gap:18px;
+    }
+    @media (max-width:880px){
+      .met-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .met-card{
+      background:var(--card);
+      border-radius:var(--radius-md);
+      padding:10px 10px 12px;
+      border:1px solid var(--border-soft);
+      box-shadow:0 6px 18px rgba(0,0,0,0.06);
+      font-size:13px;
+      line-height:1.5;
+    }
+    .met-card ul{
+      padding-left:16px;
+      margin-top:6px;
+    }
+
+    .met-highlight{
+      background:#FFF4D4;
+      border-radius:var(--radius-md);
+      padding:10px 12px;
+      font-size:12px;
+      margin-top:8px;
+      border:1px solid rgba(0,0,0,0.05);
+    }
+
+    /* ========= FOOTER ========= */
+    footer{
+      margin-top:20px;
+      background:linear-gradient(90deg, var(--cc-orange), var(--cc-red));
+      color:#fff;
+      padding:18px;
+    }
+    .footer-inner{
+      max-width:1120px;
+      margin:0 auto;
+      display:flex;
+      flex-wrap:wrap;
+      gap:16px;
+      align-items:center;
+      justify-content:space-between;
+      font-size:12px;
+    }
+    .footer-logos{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    .footer-pill{
+      padding:5px 10px;
+      border-radius:999px;
+      background:rgba(0,0,0,0.18);
+    }
+    .footer-links{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .footer-links a{
+      color:#fff;
+      opacity:0.9;
+    }
+    .footer-links a:hover{
+      text-decoration:underline;
+    }
+
+    /* ========= SCROLL SUAVE ========= */
+    html{
+      scroll-behavior:smooth;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER / NAV -->
+  <header>
+    <nav class="nav">
+      <div class="nav-logo">
+        <!-- Troque o src para o caminho da logo oficial -->
+        <img class="nav-logo-img" src="https://dados.fortaleza.ce.gov.br/uploads/group/2023-02-23-165759.0840152022-11-16-182722.136979Prefeitura-de-Fortaleza.png" alt="Prefeitura de Fortaleza" />
+        <div class="nav-logo-text">
+          <h1>Observatório de Dados</h1>
+          <span>Cidade da Criança · Fortaleza</span>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="#sobre" class="nav-link nav-link--secondary">Sobre</a>
+        <a href="#areas" class="nav-link nav-link--secondary">Áreas Temáticas</a>
+        <a href="#galeria" class="nav-link nav-link--secondary">Imagens</a>
+        <a href="#dashboards" class="nav-link nav-link--secondary">Dashboards</a>
+        <a href="#metodologia" class="nav-link nav-link--secondary">Metodologia</a>
+        <a href="#dashboards" class="nav-link nav-link--primary">Ver Painéis</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-text">
+        <h2>
+          Observatório de Dados da <span>Cidade da Criança</span>
+        </h2>
+        <p>
+          Um espaço integrado para acompanhar, de forma visual e transparente, os principais indicadores da
+          <strong>primeira infância</strong> em Fortaleza – conectando dados das secretarias municipais, de fontes públicas
+          e da própria <strong>Cidade da Criança</strong>.
+        </p>
+
+        <div class="hero-badges">
+          <div class="badge badge--azul">
+            <span class="badge-dot"></span>
+            Indicadores por bairro, secretaria e ação
+          </div>
+          <div class="badge badge--amarelo">
+            Primeira infância no centro do planejamento
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#dashboards" class="btn btn-primary">
+            Acessar dashboards
+          </a>
+          <a href="#sobre" class="btn btn-outline">
+            Entender o Observatório
+          </a>
+        </div>
+      </div>
+
+      <!-- HERO MEDIA -->
+      <aside class="hero-media">
+        <div class="hero-media-header">
+          <span class="title">Cidade da Criança em destaque</span>
+          <span class="hero-media-tag">Localizado na Casinha da Tecnologia</span>
+        </div>
+
+        <div class="img-frame-main">
+          <img src="https://diariodonordeste.verdesmares.com.br/image/contentid/policy:7.5251093:1756209756/Requalificada-Cidade-da-Crianca-vira-um-dos-melhores-destinos-de-lazer-para-familias-em-Fortaleza-6.jpg?f=default&$p$f=48b991f" alt="Imagem da Cidade da Criança de Fortaleza" />
+        </div>
+
+        <div class="hero-media-footer">
+          A imagem em destaque simboliza a Cidade da Criança como um lugar de convivência, afeto e direito ao brincar,
+          reforçando o compromisso do Observatório em colocar as crianças no centro do planejamento da cidade.
+        </div>
+      </aside>
+    </section>
+
+    <!-- SOBRE O OBSERVATÓRIO -->
+    <section id="sobre">
+      <div class="section-inner">
+        <h2 class="section-title">Sobre o Observatório</h2>
+        <p class="section-subtitle">
+          O Observatório de Dados da Cidade da Criança foi implementado em parceria com a CESPI Fortaleza e integra
+          diferentes bases de informação para apoiar a gestão da primeira infância.
+        </p>
+
+        <div class="sobre-grid">
+          <div class="sobre-card">
+            <div class="accordion-item">
+              <button class="accordion-header">
+                Missão e contexto
+                <span class="chevron">▶</span>
+              </button>
+              <div class="accordion-body">
+                <p>
+                  O objetivo central é <strong>dar visibilidade</strong> às ações, serviços e resultados das políticas
+                  públicas para crianças de 0 a 6 anos, em especial aquelas relacionadas ao
+                  <strong>Programa Municipal de Primeira Infância de Fortaleza (PMPIF)</strong> e à agenda de primeira infância
+                  no município.
+                </p>
+                <p>
+                  Além das ações desenvolvidas na Cidade da Criança, o Observatório integra informações sobre
+                  a primeira infância no <strong>Brasil</strong> e no <strong>Estado do Ceará</strong>, articulando dados
+                  de fontes públicas, bases oficiais das secretarias e registros produzidos pelas equipes em campo.
+                </p>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                Como os painéis são utilizados
+                <span class="chevron">▶</span>
+              </button>
+              <div class="accordion-body">
+                <p>
+                  Os painéis consolidados permitem que gestores, equipes técnicas, controle social e sociedade acompanhem:
+                </p>
+                <ul>
+                  <li>Indicadores por bairro, regional, secretaria e política pública;</li>
+                  <li>Ações em andamento na Cidade da Criança e nos territórios;</li>
+                  <li>Metas pactuadas e avanços ao longo do tempo;</li>
+                  <li>Informações para relatórios, prestações de contas e reconhecimento em premiações nacionais e internacionais.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button class="accordion-header">
+                Desenvolvimento de soluções e inteligência em dados
+                <span class="chevron">▶</span>
+              </button>
+              <div class="accordion-body">
+                <p>
+                  O Observatório também atua no <strong>desenvolvimento de soluções</strong> para otimizar a coleta,
+                  qualificação e visualização de dados: formulários, rotinas automatizadas de atualização, painéis
+                  interativos e materiais de apoio que facilitam o uso das informações pelas equipes.
+                </p>
+                <p>
+                  Dessa forma, mais do que um repositório de números, o Observatório funciona como um espaço de
+                  <strong>inteligência em dados</strong> voltado à infância, conectando evidências, planejamento e práticas
+                  cotidianas.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="sobre-paineis">
+            <div class="sobre-pill">
+              <strong>Painéis por Ação</strong>
+              Acompanhamento detalhado das ações da agenda de primeira infância, com metas, indicadores, recortes territoriais
+              e séries históricas.
+            </div>
+            <div class="sobre-pill" style="background:#E0F7FA;">
+              <strong>Cidade da Criança em números</strong>
+              Visitas, atividades pedagógicas, eventos, formações, uso dos espaços, perfis de público atendido e vínculos com os territórios.
+            </div>
+            <div class="sobre-pill" style="background:#FFF4D4;">
+              <strong>Integração intersetorial</strong>
+              Dados articulados entre Educação, Saúde, Assistência Social, Cultura, Esporte, Meio Ambiente e outros parceiros,
+              fortalecendo a rede Cidade da Criança.
+            </div>
+            <div class="sobre-pill" style="background:#E3F5FD;">
+              <strong>Apoio à decisão e inovação</strong>
+              Informações organizadas para orientar planejamento, priorização de territórios, experimentação de soluções
+              e avaliação contínua das políticas voltadas à primeira infância.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ÁREAS TEMÁTICAS -->
+    <section id="areas">
+      <div class="section-inner">
+        <h2 class="section-title">Áreas Temáticas Monitoradas</h2>
+        <p class="section-subtitle">
+          Os dashboards estão organizados por eixos de atuação, acompanhando a jornada da criança de 0 a 6 anos pela cidade
+          e pela rede de serviços que compõem a política de primeira infância.
+        </p>
+
+        <div class="cards-grid">
+          <article class="area-card">
+            <div class="area-tag">
+              <span class="area-tag-dot"></span>
+              Eixo Educação
+            </div>
+            <h3>Educação Infantil e Ensino Fundamental</h3>
+            <p>
+              Matrículas, frequência, vagas em CEIs e escolas, ampliação de microparques, formações de professores
+              e outros indicadores ligados às aprendizagens e ao bem-estar das crianças na rede educacional.
+            </p>
+            <div class="area-chip-row">
+              <span class="area-chip">CEIs & Escolas</span>
+              <span class="area-chip">Microparques</span>
+              <span class="area-chip">Formação Docente</span>
+            </div>
+          </article>
+
+          <article class="area-card">
+            <div class="area-tag">
+              <span class="area-tag-dot"></span>
+              Eixo Saúde
+            </div>
+            <h3>Saúde e Desenvolvimento Infantil</h3>
+            <p>
+              Nascidos vivos, acompanhamento na atenção básica, vacinação, saúde mental e estímulo ao desenvolvimento
+              nos primeiros anos de vida, com foco na integralidade do cuidado.
+            </p>
+            <div class="area-chip-row">
+              <span class="area-chip">Pré-natal</span>
+              <span class="area-chip">Vacinação</span>
+              <span class="area-chip">Desenvolvimento Infantil</span>
+            </div>
+          </article>
+
+          <article class="area-card">
+            <div class="area-tag">
+              <span class="area-tag-dot"></span>
+              Eixo Assistência Social
+            </div>
+            <h3>Proteção e Assistência Social</h3>
+            <p>
+              Atendimentos em CRAS, CREAS e programas especializados, famílias acolhedoras, Rede Aquarela
+              e outras ações de proteção às crianças e às suas famílias em situação de vulnerabilidade.
+            </p>
+            <div class="area-chip-row">
+              <span class="area-chip">CRAS & CREAS</span>
+              <span class="area-chip">Famílias Acolhedoras</span>
+              <span class="area-chip">Proteção Integral</span>
+            </div>
+          </article>
+
+          <article class="area-card">
+            <div class="area-tag">
+              <span class="area-tag-dot"></span>
+              Eixo Cidade da Criança
+            </div>
+            <h3>Cidade da Criança e Territórios</h3>
+            <p>
+              Uso dos espaços da Cidade da Criança, agenda de visitas, oficinas, eventos, ações ambientais e culturais,
+              articulando o parque com os bairros e regionais de onde vêm as crianças.
+            </p>
+            <div class="area-chip-row">
+              <span class="area-chip">Visitas & Atividades</span>
+              <span class="area-chip">Eventos</span>
+              <span class="area-chip">Cidade Verde & Brincante</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALERIA -->
+    <section id="galeria">
+      <div class="section-inner">
+        <h2 class="section-title">Cidade da Criança em Imagens</h2>
+        <p class="section-subtitle">
+          Registros fotográficos que ajudam a contar a história da Cidade da Criança, do cotidiano das famílias
+          e das ações realizadas em seus espaços.
+        </p>
+
+        <div class="gallery-grid">
+          <article class="gallery-card">
+            <div class="img-frame">
+              <img src="https://diariodonordeste.verdesmares.com.br/image/contentid/policy:1.3684143:1756208225/Requalificada,%20Cidade%20da%20Crian%C3%A7a%20vira%20um%20dos%20melhores%20destinos%20de%20lazer%20para%20fam%C3%ADlias%20em%20Fortaleza%201.jpg?f=16x9&h=574&w=1020&$p$f$h$w=0f67d98" alt="Espaço de brincar da Cidade da Criança" />
+              <span class="img-frame-label">Espaço de brincar</span>
+            </div>
+            <strong>Espaços de brincar e convivência</strong>
+            <p>
+              Ambientes lúdicos, sombreados e acessíveis, que acolhem as famílias e reforçam o direito ao brincar
+              no coração da cidade.
+            </p>
+          </article>
+
+          <article class="gallery-card">
+            <div class="img-frame">
+              <img src="https://www.fortaleza.ce.gov.br/images/migracao/noticias/imagem-principal/dia_das_criancas_no_parque_das_criancas.jpg" alt="Atividade pedagógica com crianças" />
+              <span class="img-frame-label">Atividade pedagógica</span>
+            </div>
+            <strong>Atividades pedagógicas e culturais</strong>
+            <p>
+              Ações educativas, culturais e artísticas que aproximam as crianças de temas como leitura, meio ambiente,
+              cultura popular e cidadania, sempre em diálogo com a brincadeira.
+            </p>
+          </article>
+
+          <article class="gallery-card">
+            <div class="img-frame">
+              <img src="https://www.opovo.com.br/_midias/jpg/2025/07/11/_reforma_da_cidade_da_crianca__11-35622271.jpg" alt="Equipe e parceiros da Cidade da Criança" />
+              <span class="img-frame-label">Equipe & parceiros</span>
+            </div>
+            <strong>Equipe, parceiros e rede intersetorial</strong>
+            <p>
+              Momentos que mostram o trabalho das equipes, das parcerias institucionais e da rede Cidade da Criança,
+              que torna possível a implementação das ações de primeira infância.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARDS -->
+    <section id="dashboards">
+      <div class="section-inner">
+        <h2 class="section-title">Painéis e Dashboards</h2>
+        <p class="section-subtitle">
+          Os painéis abaixo apresentam conjuntos de indicadores organizados por eixo de atuação, permitindo uma leitura
+          integrada das políticas de primeira infância em Fortaleza e do papel da Cidade da Criança nesse contexto.
+        </p>
+
+        <div class="dashboards-grid">
+          <!-- EDUCAÇÃO -->
+          <article class="dashboard-card">
+            <span class="dashboard-chip">Educação</span>
+
+            <div class="dashboard-thumb">
+              <img src="imgs/educaçãoPrint.jpeg" alt="Print do dashboard de Educação Infantil" />
+              <span class="dashboard-thumb-label">Painel Educação</span>
+            </div>
+
+            <h3>Indicadores da Educação Infantil e Ensino Fundamental</h3>
+            <p>
+              Matrículas, frequência, microparques, turmas por ano e comparativos por regional e bairro,
+              com foco nas crianças de 0 a 6 anos e na transição para os anos iniciais.
+            </p>
+            <div class="dashboard-meta">
+              Fonte: SME Fortaleza · Atualização: mensal
+            </div>
+            <div class="dashboard-actions">
+              <a href="https://seu-dashboard-educacao.example" target="_blank" class="btn btn-primary btn-sm">
+                Abrir painel
+              </a>
+              <a href="#metodologia" class="btn btn-outline btn-sm">
+                Ver metodologia
+              </a>
+            </div>
+          </article>
+
+          <!-- SAÚDE -->
+          <article class="dashboard-card">
+            <span class="dashboard-chip">Saúde</span>
+            <div class="dashboard-thumb">
+              <img src="imgs/saudePrint.jpeg" alt="Print do dashboard de Saúde da Primeira Infância" />
+              <span class="dashboard-thumb-label">Painel Saúde</span>
+            </div>
+            <h3>Saúde da Primeira Infância</h3>
+            <p>
+              Nascidos vivos, acompanhamento de crianças de 0 a 6 anos, vacinação e cuidados na atenção básica,
+              apoiando o monitoramento da saúde integral das crianças.
+            </p>
+            <div class="dashboard-meta">
+              Fonte: SMS Fortaleza · Atualização: trimestral
+            </div>
+            <div class="dashboard-actions">
+              <a href="https://seu-dashboard-saude.example" target="_blank" class="btn btn-primary btn-sm">
+                Abrir painel
+              </a>
+              <a href="#metodologia" class="btn btn-outline btn-sm">
+                Ver metodologia
+              </a>
+            </div>
+          </article>
+
+          <!-- ASSISTÊNCIA SOCIAL -->
+          <article class="dashboard-card">
+            <span class="dashboard-chip">Assistência Social</span>
+            <div class="dashboard-thumb">
+              <img src="imgs/assistenciaPrint.jpeg" alt="Print do dashboard de Assistência Social" />
+              <span class="dashboard-thumb-label">Painel Assistência</span>
+            </div>
+            <h3>Proteção Social na Primeira Infância</h3>
+            <p>
+              Atendimentos em CRAS, CREAS, medidas protetivas, famílias acolhedoras e Rede Aquarela, evidenciando
+              a rede de proteção às crianças e às suas famílias.
+            </p>
+            <div class="dashboard-meta">
+              Fonte: Funci / Assistência · Atualização: semestral
+            </div>
+            <div class="dashboard-actions">
+              <a href="https://seu-dashboard-assistencia.example" target="_blank" class="btn btn-primary btn-sm">
+                Abrir painel
+              </a>
+              <a href="#metodologia" class="btn btn-outline btn-sm">
+                Ver metodologia
+              </a>
+            </div>
+          </article>
+
+    </section>
+
+    <!-- METODOLOGIA -->
+    <section id="metodologia">
+      <div class="section-inner">
+        <h2 class="section-title">Metodologia, Fontes de Dados e Governança</h2>
+        <p class="section-subtitle">
+          Como observatório de dados da primeira infância, este espaço busca garantir a coleta, a análise e a
+          divulgação de informações estratégicas para orientar decisões, monitorar políticas públicas e qualificar o debate.
+        </p>
+
+        <div class="met-grid">
+          <div class="met-card">
+            <div class="accordion-item">
+              <button class="accordion-header">
+                Fontes de dados
+                <span class="chevron">▶</span>
+              </button>
+              <div class="accordion-body">
+                <p>
+                  As informações exibidas nos dashboards são provenientes de bases oficiais das secretarias municipais
+                  e de registros internos da Cidade da Criança, tais como:
+                </p>
+                <ul>
+                  <li>Educação (matrículas, frequência, microparques, CEIs e escolas);</li>
+                  <li>Saúde (nascidos vivos, acompanhamento na atenção básica, vacinação, etc.);</li>
+                  <li>Assistência Social (CRAS, CREAS, programas de proteção especial);</li>
+                  <li>Registros da Cidade da Criança (visitas, eventos, atividades, ambientes utilizados);</li>
+                  <li>Outras bases setoriais e públicas relacionadas à primeira infância no Ceará e no Brasil.</li>
+                </ul>
+                <div class="met-highlight">
+                  Sempre que possível, os painéis indicam a data de última atualização e o período de referência
+                  considerado em cada indicador, reforçando a transparência na gestão das informações.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="met-card">
+            <div class="accordion-item">
+              <button class="accordion-header">
+                Funções de um observatório de dados da primeira infância
+                <span class="chevron">▶</span>
+              </button>
+              <div class="accordion-body">
+                <p>
+                  Um observatório de dados atua como um centro de inteligência informacional. No contexto da primeira infância,
+                  algumas funções são fundamentais:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Diagnóstico e monitoramento:</strong> acompanhar de forma contínua a situação das crianças,
+                    dos serviços e dos territórios, identificando avanços e desafios.
+                  </li>
+                  <li>
+                    <strong>Produção de evidências:</strong> transformar dados brutos em indicadores, análises e evidências
+                    qualificadas, com metodologias claras e transparentes.
+                  </li>
+                  <li>
+                    <strong>Apoio à decisão e ao planejamento:</strong> subsidiar planos, programas e ações, permitindo
+                    que gestores e equipes técnicas tomem decisões mais assertivas e orientadas por dados.
+                  </li>
+                  <li>
+                    <strong>Transparência e acesso público:</strong> disponibilizar informações, painéis, estudos e
+                    visualizações de forma acessível, fortalecendo a cultura de dados abertos e o controle social.
+                  </li>
+                  <li>
+                    <strong>Fomento ao conhecimento:</strong> contribuir para a produção de conhecimento, pesquisa e
+                    formação em temas relacionados à primeira infância e à ciência de dados aplicada às políticas públicas.
+                  </li>
+                  <li>
+                    <strong>Participação cidadã:</strong> apoiar espaços democráticos de discussão, permitindo que a sociedade
+                    acompanhe, questione e participe da construção das políticas voltadas às crianças.
+                  </li>
+                </ul>
+                <p style="margin-top:6px;">
+                  A partir dessas funções, o Observatório de Dados da Cidade da Criança agrega valor às informações,
+                  gera insights e orienta ações estratégicas com foco na defesa e promoção dos direitos das crianças de 0 a 6 anos.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        Observatório de Dados da Cidade da Criança · Fortaleza<br/>
+        <span style="opacity:0.85;">Primeira infância no centro do planejamento da cidade.</span>
+      </div>
+      <div class="footer-logos">
+        <div class="footer-pill">Cidade da Criança</div>
+        <div class="footer-pill">Prefeitura de Fortaleza</div>
+        <div class="footer-pill">Secretarias parceiras</div>
+      </div>
+      <div class="footer-links">
+        <a href="#inicio">Início</a>
+        <a href="#galeria">Imagens</a>
+        <a href="#dashboards">Dashboards</a>
+        <a href="#metodologia">Metodologia</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT DA SANFONA -->
+  <script>
+    document.querySelectorAll('.accordion-header').forEach(function(header) {
+      header.addEventListener('click', function() {
+
+        var item = header.parentElement;
+        item.classList.toggle('is-open');
+      });
+    });
+  </script>
+</body>
+</html>
