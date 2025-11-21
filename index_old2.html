@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Observatório Cidade da Criança – Fortaleza</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bibliotecas para CSV e gráficos -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root{
+      /* Paleta Cidade da Criança (mais forte) */
+      --cc-blue-bg:   #1BA4DD;  /* fundo principal azul claro */
+      --cc-blue-deep: #095EF6;  /* azul mais escuro / títulos */
+      --cc-gold:      #FEC901;  /* amarelo topbar / destaques */
+      --cc-orange:    #FAAE39;  /* laranja quente */
+      --cc-teal:      #23B4B6;  /* azul esverdeado / detalhes */
+      --cc-red:       #FE444C;
+
+      --card:         #FFFFFF;
+      --border-soft:  #E6E2D3;
+      --text-main:    #17212b;
+
+      --radius-lg:    18px;
+      --radius-md:    12px;
+      --shadow-soft:  0 10px 30px rgba(0,0,0,0.08);
+      --font: "Lato", "Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:var(--font);
+      color:var(--text-main);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(254,201,1,0.20), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(35,180,182,0.40), transparent 55%),
+        linear-gradient(180deg, var(--cc-blue-bg), #0b3c56);
+      min-height:100vh;
+    }
+
+    a{ text-decoration:none; color:inherit; }
+
+    .container{
+      max-width:1120px;
+      margin:0 auto;
+      padding:0 16px;
+    }
+
+    /* ===== HEADER (topbar amarela) ===== */
+    header.main-header{
+      background:var(--cc-gold);
+      border-bottom:1px solid rgba(0,0,0,0.10);
+      position:sticky;
+      top:0;
+      z-index:20;
+    }
+
+    .main-header__inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:10px 16px;
+      gap:16px;
+    }
+
+    .main-header__logo{
+      font-weight:800;
+      font-size:16px;
+      line-height:1.3;
+      letter-spacing:0.02em;
+      text-transform:uppercase;
+      color:#2b2500;
+    }
+    .main-header__logo span{
+      display:block;
+      font-size:11px;
+      text-transform:none;
+      font-weight:400;
+    }
+
+    .main-nav{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .menu{
+      list-style:none;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .menu li a{
+      font-size:13px;
+      padding:6px 11px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,0.08);
+      color:#3d2a00;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:0.04em;
+      background:rgba(255,255,255,0.7);
+      transition:background .2s ease, transform .1s ease, box-shadow .2s ease;
+    }
+
+    .menu li a:hover{
+      background:#fff;
+      transform:translateY(-1px);
+      box-shadow:0 4px 10px rgba(0,0,0,0.18);
+    }
+
+    .menu li.active a{
+      background:var(--cc-blue-deep);
+      color:#fff;
+      border-color:rgba(0,0,0,0.12);
+    }
+
+    .menu__toggle{
+      display:none;
+      width:32px;
+      height:24px;
+      flex-direction:column;
+      justify-content:space-between;
+      background:transparent;
+      border:0;
+      padding:0;
+      cursor:pointer;
+    }
+    .menu__toggle span{
+      height:3px;
+      border-radius:99px;
+      background:#3d2a00;
+      display:block;
+    }
+
+    @media (max-width:768px){
+      .main-header__inner{
+        flex-wrap:wrap;
+      }
+      .main-nav{
+        width:100%;
+        justify-content:flex-end;
+      }
+      .menu__toggle{
+        display:flex;
+      }
+      .menu{
+        display:none;
+        width:100%;
+        flex-direction:column;
+        padding-top:8px;
+      }
+      .menu.menu--open{
+        display:flex;
+      }
+      .menu li a{
+        width:100%;
+        text-align:right;
+      }
+    }
+
+    /* ===== HERO ===== */
+    .hero{
+      padding:26px 0 20px;
+      color:#fff;
+    }
+
+    .hero__inner{
+      display:grid;
+      grid-template-columns:minmax(0, 1.6fr) minmax(0, 1.4fr);
+      gap:32px;
+      align-items:center;
+    }
+
+    .hero h1{
+      font-size:30px;
+      line-height:1.2;
+      margin-bottom:10px;
+    }
+    .hero h1 span{
+      color:var(--cc-gold);
+    }
+
+    .hero p{
+      font-size:15px;
+      line-height:1.6;
+      max-width:520px;
+      margin-bottom:18px;
+      color:#f3f3f3;
+    }
+
+    .hero-tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:18px;
+    }
+    .tag{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(9,94,246,0.25);
+      border:1px solid rgba(255,255,255,0.45);
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+    .tag-dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:var(--cc-gold);
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:4px;
+    }
+    .btn{
+      border-radius:999px;
+      padding:10px 18px;
+      font-size:14px;
+      font-weight:600;
+      cursor:pointer;
+      border:1px solid transparent;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:background .2s ease, color .2s ease, transform .1s ease, box-shadow .2s ease;
+    }
+    .btn-primary{
+      background:#fff;
+      color:var(--cc-blue-deep);
+      border-color:transparent;
+      box-shadow:0 8px 18px rgba(0,0,0,0.30);
+    }
+    .btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow:0 10px 22px rgba(0,0,0,0.40);
+    }
+    .btn-outline{
+      background:transparent;
+      color:#fff;
+      border-color:rgba(255,255,255,0.80);
+    }
+    .btn-outline:hover{
+      background:rgba(255,255,255,0.14);
+      transform:translateY(-1px);
+    }
+
+    .hero__figure{
+      background:rgba(255,255,255,0.14);
+      border-radius:var(--radius-lg);
+      padding:12px;
+      border:1px solid rgba(255,255,255,0.28);
+      box-shadow:0 10px 28px rgba(0,0,0,0.45);
+    }
+.hero__img-wrapper{
+  border-radius:var(--radius-md);
+  overflow:hidden;
+  /* remove a borda tracejada */
+  border:0;
+  aspect-ratio:16/9;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#000;                 /* fundo neutro pra evitar bordas brancas */
+  box-shadow:0 10px 26px rgba(0,0,0,0.45);
+}
+
+.hero__img-wrapper img{
+  width:100%;
+  height:100%;
+  object-fit:cover;                /* preenche tudo, mesmo cortando um pouco nas bordas */
+  display:block;
+}
+
+    .hero__caption{
+      margin-top:8px;
+      font-size:12px;
+      color:#f1f1f1;
+    }
+
+    @media (max-width:840px){
+      .hero__inner{
+        grid-template-columns:1fr;
+      }
+      .hero__figure{
+        order:-1;
+      }
+    }
+
+    /* ===== SEÇÕES ===== */
+    section.section{
+      background:#f7fafc;
+      padding:28px 0;
+    }
+    section.section.section--blue{
+      background:#e9f6ff;
+    }
+    section.section.section--dark-card{
+      background:linear-gradient(135deg, #051720, #0d3044);
+      color:#fff;
+    }
+
+    .section__title{
+      font-size:22px;
+      margin-bottom:6px;
+      color:var(--cc-blue-deep);
+    }
+    .section__subtitle{
+      font-size:13px;
+      margin-bottom:20px;
+      color:#555;
+    }
+    .section--dark-card .section__title{
+      color:#fff;
+    }
+    .section--dark-card .section__subtitle{
+      color:#d2dde7;
+    }
+
+    /* ===== EIXOS ===== */
+    .axis-images{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:18px;
+      margin-bottom:20px;
+    }
+    .axis-image-card{
+      border-radius:var(--radius-md);
+      overflow:hidden;
+      background:linear-gradient(135deg, var(--cc-blue-deep), var(--cc-teal));
+      box-shadow:var(--shadow-soft);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+    .axis-image-card:nth-child(2){
+      background:linear-gradient(135deg, var(--cc-gold), var(--cc-orange));
+    }
+    .axis-image-card:nth-child(3){
+      background:linear-gradient(135deg, var(--cc-teal), var(--cc-blue-bg));
+    }
+    .axis-image-card img{
+      width:60%;
+      max-width:160px;
+      height:auto;
+      object-fit:contain;
+      display:block;
+    }
+
+    .axis-boxes{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:18px;
+    }
+
+    .axis-box{
+      background:var(--card);
+      padding:14px 16px 16px;
+      border-radius:var(--radius-md);
+      border:1px solid var(--border-soft);
+      box-shadow:0 8px 20px rgba(0,0,0,0.06);
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .axis-label{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:0.06em;
+      font-weight:700;
+      color:var(--cc-teal);
+    }
+    .axis-box h3{
+      font-size:15px;
+      color:var(--cc-blue-deep);
+    }
+    .axis-box p{
+      font-size:13px;
+      line-height:1.5;
+    }
+    .axis-box .btn{
+      align-self:flex-start;
+      margin-top:8px;
+      font-size:12px;
+      padding:7px 12px;
+    }
+    .btn-axis{
+      background:var(--cc-blue-deep);
+      color:#fff;
+      border:none;
+    }
+    .btn-axis:hover{
+      background:#0639a0;
+    }
+
+    @media (max-width:960px){
+      .axis-images{
+        grid-template-columns:1fr;
+      }
+      .axis-boxes{
+        grid-template-columns:1fr;
+      }
+    }
+
+    /* ===== INDICADORES EM NÚMEROS ===== */
+    .indicators-wrapper{
+      background:#ffffff;
+      border-radius:var(--radius-lg);
+      padding:16px 18px 18px;
+      box-shadow:0 10px 26px rgba(0,0,0,0.08);
+      border:1px solid var(--border-soft);
+    }
+
+    .indicators-title{
+      font-size:18px;
+      margin-bottom:12px;
+      color:var(--cc-blue-deep);
+    }
+
+    .indicators-group-title{
+      font-size:14px;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      margin:14px 0 6px;
+      color:#777;
+    }
+    .indicators-group-title span{
+      display:inline-block;
+      padding:3px 8px;
+      border-radius:999px;
+      background:#e4f3ff;
+      color:var(--cc-blue-deep);
+      font-size:11px;
+      margin-left:6px;
+    }
+
+    .indicator-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+    }
+    @media (max-width:900px){
+      .indicator-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+    @media (max-width:600px){
+      .indicator-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .indicator-card{
+      border-radius:var(--radius-md);
+      padding:12px 12px 14px;
+      background:linear-gradient(145deg, #f8fbff, #f0f6ff);
+      border:1px solid var(--border-soft);
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    .indicator-axis{
+      font-size:11px;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      color:#555;
+    }
+    .indicator-axis--visitas{
+      color:var(--cc-orange);
+    }
+    .indicator-axis--avaliacao{
+      color:var(--cc-teal);
+    }
+
+    .indicator-title{
+      font-size:13px;
+      font-weight:600;
+    }
+
+    .indicator-value{
+      font-size:22px;
+      font-weight:800;
+      margin-top:4px;
+      color:var(--cc-blue-deep);
+    }
+
+    .indicator-note{
+      font-size:11px;
+      margin-top:2px;
+      color:#666;
+    }
+
+    /* ===== GRÁFICOS ===== */
+    .charts-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:18px;
+      margin-top:18px;
+    }
+    @media (max-width:900px){
+      .charts-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .chart-card{
+      background:#ffffff;
+      border-radius:var(--radius-md);
+      padding:12px 14px 16px;
+      border:1px solid var(--border-soft);
+      box-shadow:0 8px 20px rgba(0,0,0,0.05);
+    }
+    .chart-card h3{
+      font-size:14px;
+      margin-bottom:4px;
+      color:var(--cc-blue-deep);
+    }
+    .chart-card p{
+      font-size:12px;
+      color:#555;
+      margin-bottom:8px;
+    }
+    .chart-wrapper{
+      height:260px;
+    }
+
+    /* ===== DESTAQUES ===== */
+    .news-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:18px;
+    }
+    @media (max-width:960px){
+      .news-grid{
+        grid-template-columns:1fr;
+      }
+    }
+    .news-card{
+      background:#062131;
+      color:#fff;
+      border-radius:var(--radius-md);
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.08);
+      box-shadow:0 10px 24px rgba(0,0,0,0.45);
+      display:flex;
+      flex-direction:column;
+    }
+    .news-card__img{
+      height:170px;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(135deg, var(--cc-blue-bg), var(--cc-gold));
+    }
+    .news-card__img img{
+      width:52%;
+      max-width:140px;
+      height:auto;
+      object-fit:contain;
+      display:block;
+    }
+    .news-card__body{
+      padding:12px 14px 14px;
+      font-size:13px;
+    }
+    .news-card__body h3{
+      font-size:14px;
+      margin-bottom:6px;
+    }
+    .news-card__body p{
+      font-size:12px;
+      color:#e5edf3;
+    }
+
+    /* ===== QUEM SOMOS ===== */
+    .about-grid{
+      display:grid;
+      grid-template-columns:minmax(0, 1.6fr) minmax(0, 1.2fr);
+      gap:24px;
+      align-items:flex-start;
+    }
+    @media (max-width:900px){
+      .about-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    .about-text{
+      background:#ffffff;
+      border-radius:var(--radius-lg);
+      padding:14px 16px 16px;
+      border:1px solid var(--border-soft);
+      box-shadow:var(--shadow-soft);
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .about-buttons{
+      margin-top:10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .about-cards{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .about-pill{
+      padding:10px 12px;
+      border-radius:var(--radius-md);
+      background:#0f2736;
+      color:#e3edf6;
+      border:1px solid rgba(255,255,255,0.10);
+      font-size:13px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.55);
+    }
+    .about-pill strong{
+      display:block;
+      margin-bottom:4px;
+      color:#fff;
+    }
+
+    /* ===== FOOTER ===== */
+    footer.site-footer{
+      background:#051720;
+      color:#d7e2eb;
+      padding:18px 16px;
+      margin-top:25px;
+    }
+
+    .site-footer__inner{
+      max-width:1120px;
+      margin:0 auto;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      font-size:12px;
+    }
+
+    .site-footer__logo{
+      font-weight:600;
+      margin-bottom:4px;
+    }
+
+    .footer-badges{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .footer-pill{
+      padding:5px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.25);
+      background:rgba(255,255,255,0.03);
+    }
+
+    .footer-links{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .footer-links a{
+      color:#cfe4f6;
+    }
+    .footer-links a:hover{
+      text-decoration:underline;
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="main-header">
+    <div class="container">
+      <div class="main-header__inner">
+        <a href="#topo" class="main-header__logo">
+          Observatório Cidade da Criança
+          <span>Primeira infância • Fortaleza</span>
+        </a>
+
+        <nav class="main-nav">
+          <button class="menu__toggle" id="btnMenu" aria-label="Abrir menu">
+            <span></span><span></span><span></span>
+          </button>
+          <ul class="menu" id="menuMain">
+            <li class="active"><a href="#topo">Início</a></li>
+            <li><a href="#eixos">Eixos</a></li>
+            <li><a href="#indicadores">Indicadores</a></li>
+            <li><a href="#graficos">Gráficos</a></li>
+            <li><a href="#destaques">Destaques</a></li>
+            <li><a href="#sobre">Quem somos</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <main id="topo">
+    <section class="hero">
+      <div class="container">
+        <div class="hero__inner">
+          <div class="hero__content">
+            <h1>
+              Monitoramento da <span>Primeira Infância</span> a partir da Cidade da Criança
+            </h1>
+            <p>
+              Dados, indicadores e visualizações sobre as ações voltadas às crianças de 0 a 6 anos em Fortaleza,
+              com a Cidade da Criança como ponto de encontro entre políticas públicas, territórios e famílias.
+            </p>
+
+            <div class="hero-tags">
+              <div class="tag">
+                <span class="tag-dot"></span>
+                Indicadores por secretaria, bairro e ação
+              </div>
+              <div class="tag">
+                Rede intersetorial Cidade da Criança
+              </div>
+            </div>
+
+            <div class="hero-actions">
+              <a href="#indicadores" class="btn btn-primary">Ver indicadores em números</a>
+              <a href="#graficos" class="btn btn-outline">Explorar gráficos</a>
+            </div>
+          </div>
+
+          <aside class="hero__figure">
+            <div class="hero__img-wrapper">
+              <!-- Ícone de infância (substitua pelo ícone do Flaticon que preferir) -->
+              <img src="https://s2-g1.glbimg.com/fPKFnviM-hU3slzjk8fOvffTUHs=/0x0:1280x810/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_59edd422c0c84a879bd37670ae4f538a/internal_photos/bs/2021/d/Y/Dx5FvhQrudhWvASaX4Bw/269691713-7384423424916394-1033096887170104989-n.jpg" alt="Ícone lúdico de crianças brincando">
+            </div>
+            <p class="hero__caption">
+              A Cidade da Criança como espaço de convivência, afeto e direito ao brincar, inspirando o Observatório a colocar
+              as crianças no centro do planejamento.
+            </p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- EIXOS -->
+    <section id="eixos" class="section section--blue">
+      <div class="container">
+        <h2 class="section__title">Conheça os eixos do Observatório</h2>
+        <p class="section__subtitle">
+          Os dados são organizados em eixos temáticos que dialogam com as principais políticas para a primeira infância
+          e com as experiências vividas na Cidade da Criança.
+        </p>
+
+        <!-- Ícones em vez de fotos -->
+        <div class="axis-images">
+          <figure class="axis-image-card">
+            <img src="assets/graph (1).png" alt="Ícone de indicadores de infância">
+          </figure>
+          <figure class="axis-image-card">
+            <img src="assets/evento.png" alt="Ícone de planos e documentos">
+          </figure>
+          <figure class="axis-image-card">
+            <img src="assets/plano.png" alt="Ícone de livros e biblioteca">
+          </figure>
+        </div>
+
+        <div class="axis-boxes">
+          <article class="axis-box">
+            <span class="axis-label">Indicadores</span>
+            <h3>Primeira infância em números</h3>
+            <p>
+              Acompanhe indicadores de educação, saúde, assistência social e proteção, com recortes por bairro,
+              regional e ações ligadas à Cidade da Criança. Explore séries históricas e veja de onde vêm
+              as crianças que participam das atividades.
+            </p>
+            <a href="#indicadores" class="btn btn-axis">Explorar indicadores</a>
+          </article>
+
+          <article class="axis-box">
+            <span class="axis-label">Cidade da Criança</span>
+            <h3>Visitas, eventos e experiências</h3>
+            <p>
+              Veja quantas crianças participaram das visitas, quais instituições estiveram presentes, quais espaços foram
+              utilizados e como as experiências nas casas do Arteliê e da Imaginação são avaliadas pelas escolas.
+            </p>
+            <a href="#graficos" class="btn btn-axis">Ver dados de visitas</a>
+          </article>
+
+          <article class="axis-box">
+            <span class="axis-label">Documentos e referências</span>
+            <h3>Planos, estudos e materiais</h3>
+            <p>
+              Consulte referências sobre primeira infância em Fortaleza, no Ceará e no Brasil, apoiando o planejamento, a
+              formação de equipes e a produção de conhecimento sobre a agenda da criança.
+            </p>
+            <a href="#sobre" class="btn btn-axis">Saiba mais</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- INDICADORES EM NÚMEROS -->
+    <section id="indicadores" class="section">
+      <div class="container">
+        <div class="indicators-wrapper">
+          <h2 class="indicators-title">Cidade da Criança em números</h2>
+          <p class="section__subtitle">
+            Os indicadores abaixo são calculados automaticamente a partir das planilhas de visitas e avaliações da Cidade da Criança,
+            publicadas no Google Sheets.
+          </p>
+
+          <h3 class="indicators-group-title">
+            Visitas registradas
+            <span>Dados consolidados</span>
+          </h3>
+          <div class="indicator-grid">
+            <div class="indicator-card">
+              <span class="indicator-axis indicator-axis--visitas">Cidade da Criança</span>
+              <div class="indicator-title">Crianças participantes das visitas</div>
+              <div class="indicator-value" id="kpi-total-criancas">–</div>
+              <div class="indicator-note">Soma da coluna QUANT. na planilha de visitas.</div>
+            </div>
+
+            <div class="indicator-card">
+              <span class="indicator-axis indicator-axis--visitas">Instituições</span>
+              <div class="indicator-title">Visitas / eventos registrados</div>
+              <div class="indicator-value" id="kpi-total-visitas">–</div>
+              <div class="indicator-note">Contagem de linhas com DATA e ESCOLA preenchidas.</div>
+            </div>
+
+            <div class="indicator-card">
+              <span class="indicator-axis indicator-axis--avaliacao">Avaliação</span>
+              <div class="indicator-title">Avaliação média geral das experiências</div>
+              <div class="indicator-value" id="kpi-media-geral">–</div>
+              <div class="indicator-note">Média das notas das casas do Arteliê e da Imaginação (1 a 5).</div>
+            </div>
+          </div>
+
+          <!-- GRÁFICOS -->
+          <div class="charts-grid" id="graficos">
+            <div class="chart-card">
+              <h3>Escolas e instituições com mais crianças participantes</h3>
+              <p>Top instituições considerando o número de crianças nas visitas registradas.</p>
+              <div class="chart-wrapper">
+                <canvas id="chartTopEscolas"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <h3>Avaliação das experiências na Cidade da Criança</h3>
+              <p>Média das notas atribuídas às casas do Arteliê e da Imaginação.</p>
+              <div class="chart-wrapper">
+                <canvas id="chartAvaliacoes"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DESTAQUES -->
+    <section id="destaques" class="section section--dark-card">
+      <div class="container">
+        <h2 class="section__title">Destaques e experiências</h2>
+        <p class="section__subtitle">
+          Registros de ações, projetos e momentos importantes relacionados à primeira infância e à Cidade da Criança.
+        </p>
+
+        <div class="news-grid">
+          <article class="news-card">
+            <div class="news-card__img">
+              <img src="assets/social.png" alt="Ícone família com criança">
+            </div>
+            <div class="news-card__body">
+              <h3>Participação das famílias e vínculos afetivos</h3>
+              <p>
+                Atividades que aproximam famílias, equipes e crianças, fortalecendo a participação ativa dos responsáveis
+                nas experiências vividas na Cidade da Criança.
+              </p>
+            </div>
+          </article>
+
+          <article class="news-card">
+            <div class="news-card__img">
+              <img src="assets/frutas.png" alt="Ícone alimentação infantil">
+            </div>
+            <div class="news-card__body">
+              <h3>Direito à alimentação adequada na infância</h3>
+              <p>
+                Ações educativas e campanhas que dialogam com o direito a uma alimentação saudável desde os primeiros
+                anos de vida, conectando saúde, educação e assistência.
+              </p>
+            </div>
+          </article>
+
+          <article class="news-card">
+            <div class="news-card__img">
+              <img src="assets/mochila.png" alt="Ícone criança na escola">
+            </div>
+            <div class="news-card__body">
+              <h3>Frequência escolar e proteção de direitos</h3>
+              <p>
+                Monitoramento da presença das crianças na educação infantil e nos primeiros anos do ensino fundamental,
+                com foco na garantia do direito à educação.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUEM SOMOS -->
+    <section id="sobre" class="section">
+      <div class="container">
+        <h2 class="section__title">Quem somos</h2>
+        <p class="section__subtitle">
+          Um observatório dedicado à primeira infância, articulando dados, equipes e territórios a partir da Cidade da Criança.
+        </p>
+
+        <div class="about-grid">
+          <div class="about-text">
+            <p>
+              O Observatório Cidade da Criança é um espaço de <strong>inteligência em dados</strong> voltado à primeira infância,
+              articulando informações de diferentes secretarias, órgãos e iniciativas que atuam com crianças de 0 a 6 anos
+              em Fortaleza.
+            </p>
+            <p>
+              A partir dos registros de visitas, eventos, ações e indicadores setoriais, o Observatório busca apoiar o
+              planejamento, o monitoramento e a avaliação das políticas públicas, fortalecendo a integração das equipes e
+              colocando a criança no centro das decisões.
+            </p>
+            <p>
+              Mais do que um repositório de números, o Observatório funciona como um lugar de encontro entre dados,
+              experiências e práticas, aproximando a gestão da realidade vivida pelas crianças e suas famílias nos
+              territórios.
+            </p>
+
+            <div class="about-buttons">
+              <a href="#indicadores" class="btn btn-outline">Ver indicadores</a>
+              <a href="#graficos" class="btn btn-outline">Explorar gráficos</a>
+            </div>
+          </div>
+
+          <div class="about-cards">
+            <div class="about-pill">
+              <strong>Integração intersetorial</strong>
+              Consolida informações da educação, saúde, assistência social, cultura, esporte, meio ambiente e outras áreas,
+              conectando-as com a agenda da primeira infância e com o cotidiano da Cidade da Criança.
+            </div>
+            <div class="about-pill">
+              <strong>Uso para decisão e formação</strong>
+              Subsidiar planos, relatórios, formações e debates, utilizando dados qualificados para orientar decisões mais
+              próximas das necessidades das crianças e dos territórios.
+            </div>
+            <div class="about-pill">
+              <strong>Transparência e participação</strong>
+              Disponibilizar informações de forma acessível, estimulando o controle social, o diálogo com famílias e
+              a participação da sociedade na construção de políticas para a infância.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div>
+        <div class="site-footer__logo">Observatório Cidade da Criança · Fortaleza</div>
+        <div>Primeira infância no centro do planejamento da cidade.</div>
+      </div>
+      <div class="footer-badges">
+        <div class="footer-pill">Cidade da Criança</div>
+        <div class="footer-pill">Prefeitura de Fortaleza</div>
+        <div class="footer-pill">Secretarias parceiras</div>
+      </div>
+      <div class="footer-links">
+        <a href="#topo">Início</a>
+        <a href="#eixos">Eixos</a>
+        <a href="#indicadores">Indicadores</a>
+        <a href="#graficos">Gráficos</a>
+        <a href="#sobre">Quem somos</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS: menu mobile + planilhas + gráficos -->
+  <script>
+    // === MENU MOBILE ===
+    const btnMenu = document.getElementById('btnMenu');
+    const menuMain = document.getElementById('menuMain');
+    if (btnMenu && menuMain) {
+      btnMenu.addEventListener('click', () => {
+        menuMain.classList.toggle('menu--open');
+      });
+    }
+
+    // === URLs CSV PUBLICADOS (GOOGLE SHEETS) ===
+    const URL_VISITAS = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR1I2iyO0jXJw1R7_aB9Pik696AiWar8A0386BfU5qB0VOU076Jiu41xRaMdsbgk50iiM7B9KBzYmQt/pub?gid=0&single=true&output=csv";
+    const URL_AVALIACOES = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSXo_JBM5LSpZLs3DnVIuwiJ6yIvroqmtKCIuA8t1Ew9W3UrnSsjrNfuc9HBHevgEgp5NONwLHbiEOb/pub?gid=1743711222&single=true&output=csv";
+
+    // === VISITAS ===
+    function carregarVisitas(){
+      Papa.parse(URL_VISITAS, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results){
+          const rows = results.data || [];
+          let totalCriancas = 0;
+          let totalVisitas = 0;
+          const escolasMap = {};
+
+          rows.forEach(row => {
+            const data = (row["DATA"] || row["Data"] || "").trim();
+            const escola = (row["ESCOLA"] || row["Escola"] || "").trim();
+            const quantStr = (row["QUANT."] || row["Quant"] || row["QUANT"] || "").toString().replace(",", ".");
+            const quant = parseInt(quantStr, 10);
+
+            if (data && escola){
+              totalVisitas++;
+            }
+
+            if (!isNaN(quant)){
+              totalCriancas += quant;
+              if (!escolasMap[escola]) escolasMap[escola] = 0;
+              escolasMap[escola] += quant;
+            }
+          });
+
+          const elCriancas = document.getElementById("kpi-total-criancas");
+          const elVisitas  = document.getElementById("kpi-total-visitas");
+          if (elCriancas) elCriancas.textContent = totalCriancas.toLocaleString('pt-BR');
+          if (elVisitas)  elVisitas.textContent  = totalVisitas.toLocaleString('pt-BR');
+
+          const escolasOrdenadas = Object.entries(escolasMap)
+            .sort((a,b)=> b[1] - a[1])
+            .slice(0, 8);
+
+          const labels = escolasOrdenadas.map(e => e[0]);
+          const data   = escolasOrdenadas.map(e => e[1]);
+
+          const ctx = document.getElementById("chartTopEscolas");
+          if (ctx && labels.length){
+            new Chart(ctx, {
+              type: "bar",
+              data: {
+                labels: labels,
+                datasets: [{
+                  label: "Crianças atendidas",
+                  data: data,
+                  backgroundColor: "rgba(9,94,246,0.75)",
+                  borderColor: "rgba(9,94,246,1)",
+                  borderWidth: 1,
+                  borderRadius: 6
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { display: false },
+                  tooltip: {
+                    callbacks: {
+                      label: ctx => ctx.parsed.y.toLocaleString('pt-BR') + " crianças"
+                    }
+                  }
+                },
+                scales: {
+                  x: {
+                    ticks: {
+                      font: { size: 11 },
+                      maxRotation: 45,
+                      minRotation: 0
+                    }
+                  },
+                  y: {
+                    beginAtZero: true,
+                    ticks: {
+                      stepSize: 10
+                    }
+                  }
+                }
+              }
+            });
+          }
+        }
+      });
+    }
+
+    // === AVALIAÇÕES ===
+    function carregarAvaliacoes(){
+      Papa.parse(URL_AVALIACOES, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results){
+          const rows = results.data || [];
+
+          let somaArtelie = 0, contaArtelie = 0;
+          let somaImaginacao = 0, contaImaginacao = 0;
+
+          rows.forEach(row => {
+            const arteliStr = (row["Como foi a experiência na casa do Artelie?"] || "").toString().replace(",", ".");
+            const imagiStr  = (row["Como foi a experiência na casa da Imaginação?"] || "").toString().replace(",", ".");
+
+            const arteli = parseFloat(arteliStr);
+            const imagi  = parseFloat(imagiStr);
+
+            if (!isNaN(arteli)){
+              somaArtelie += arteli;
+              contaArtelie++;
+            }
+            if (!isNaN(imagi)){
+              somaImaginacao += imagi;
+              contaImaginacao++;
+            }
+          });
+
+          const mediaArtelie    = contaArtelie    ? somaArtelie    / contaArtelie    : NaN;
+          const mediaImaginacao = contaImaginacao ? somaImaginacao / contaImaginacao : NaN;
+
+          let mediaGeral = NaN;
+          const somaTotal = somaArtelie + somaImaginacao;
+          const contaTotal = contaArtelie + contaImaginacao;
+          if (contaTotal) mediaGeral = somaTotal / contaTotal;
+
+          const elMediaGeral = document.getElementById("kpi-media-geral");
+          if (elMediaGeral && !isNaN(mediaGeral)){
+            elMediaGeral.textContent = mediaGeral.toFixed(1).replace(".", ",");
+          }
+
+          const ctx = document.getElementById("chartAvaliacoes");
+          if (ctx && !isNaN(mediaArtelie) && !isNaN(mediaImaginacao)){
+            new Chart(ctx, {
+              type: "bar",
+              data: {
+                labels: ["Casa do Arteliê", "Casa da Imaginação"],
+                datasets: [{
+                  data: [mediaArtelie, mediaImaginacao],
+                  backgroundColor: ["#FAAE39", "#FEC901"],
+                  borderColor: ["#d48415", "#C79700"],
+                  borderWidth: 1,
+                  borderRadius: 6
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { display: false },
+                  tooltip: {
+                    callbacks: {
+                      label: ctx => ctx.parsed.y.toFixed(2).replace(".", ",")
+                    }
+                  }
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    suggestedMax: 5,
+                    ticks: {
+                      stepSize: 1
+                    }
+                  }
+                }
+              }
+            });
+          }
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", function(){
+      carregarVisitas();
+      carregarAvaliacoes();
+    });
+  </script>
+</body>
+</html>

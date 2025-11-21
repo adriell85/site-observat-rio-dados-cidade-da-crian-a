@@ -71,43 +71,39 @@
     .r-red{    background:var(--red); }
 
     /* ========= HEADER / NAV ========= */
-   /* ========= HEADER / NAV ========= */
-header.main-header{
-  position:sticky;
-  top:0;
-  z-index:20;
-  /* degradê com as cores Infância Viva Fortaleza */
-  background: linear-gradient(
-    90deg,
-    var(--blue)   0%,
-    var(--green)  22%,
-    var(--yellow) 45%,
-    var(--orange) 70%,
-    var(--red)    100%
-  );
-  border-bottom:none;
-  box-shadow:0 4px 14px rgba(0,0,0,0.25);
-}
+    header.main-header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      background: linear-gradient(
+        90deg,
+        var(--blue)   0%,
+        var(--green)  22%,
+        var(--yellow) 45%,
+        var(--orange) 70%,
+        var(--red)    100%
+      );
+      border-bottom:none;
+      box-shadow:0 4px 14px rgba(0,0,0,0.25);
+    }
 
-.main-header__inner{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding:8px 14px;
-  margin:6px 0;
-  /* “pílula” branca sobre o degradê */
-  background:rgba(255,255,255,0.96);
-  border-radius:999px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.20);
-}
+    .main-header__inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:8px 14px;
+      margin:6px 0;
+      background:rgba(255,255,255,0.96);
+      border-radius:999px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.20);
+    }
 
-/* mantém o resto como estava */
-.brand-block{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
+    .brand-block{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
 
     .brand-icon{
       width:110px;
@@ -345,7 +341,6 @@ header.main-header{
       gap:14px;
     }
 
-    /* Bloco de ilustração no HERO */
     .hero-illustration{
       margin-top:4px;
       border-radius:var(--radius-lg);
@@ -641,7 +636,7 @@ header.main-header{
       height:260px;
     }
 
-    /* === NOVO BLOCO: LINKS PARA DASHBOARDS (cards com print + link) === */
+    /* === LINKS PARA DASHBOARDS === */
     .dashboards-links{
       margin-top:22px;
     }
@@ -1021,35 +1016,31 @@ header.main-header{
           <div class="hero-layout-left">
             <div>
               <h1 class="hero-title">
-                Observatório de dados para colocar a <span>Primeira Infância</span> no centro do planejamento.
+                Observa Infância Viva: dados e histórias da <span>primeira infância</span> em Fortaleza.
               </h1>
               <p class="hero-text">
-                O Observa Infância Viva é o observatório de dados da primeira infância da Prefeitura de Fortaleza,
-                coordenado pela CESPI. Reúne informações sobre crianças de 0 a 6 anos, territórios, equipamentos, programas
-                e ações que compõem a agenda da infância na cidade.
+                Um painel lúdico para enxergar, em um só lugar, quantas crianças participam,
+                onde estão as ações e como as experiências estão sendo avaliadas.
               </p>
 
               <div class="hero-tags">
-                <span class="hero-tag">CESPI · Coordenadoria Especial da Primeira Infância</span>
-                <span class="hero-tag">Plano Municipal pela Primeira Infância de Fortaleza (PMPIF)</span>
-                <span class="hero-tag">Programa Infância Viva Fortaleza</span>
+                <span class="hero-tag">Primeira infância (0 a 6 anos)</span>
+                <span class="hero-tag">Infância Viva Fortaleza</span>
               </div>
 
               <div class="hero-actions">
                 <a href="#painel-dados" class="btn btn-blue">Ver painel de dados</a>
-                <a href="#cespi" class="btn btn-outline">Conhecer mais sobre a CESPI</a>
+                <a href="#programas" class="btn btn-outline">Ver programas e ações</a>
               </div>
             </div>
 
-            <!-- Bloco ilustrativo (imagem lúdica) -->
             <div class="hero-illustration">
               <div class="hero-illustration-img">
-                <!-- Trocar pelo arquivo real (crianças brincando / Cidade da Criança) -->
                 <img src="assets/data-science.png" alt="Ilustração de dados e painéis sobre a primeira infância">
               </div>
               <div class="hero-illustration-text">
-                Pensado para equipes, gestores, famílias e parceiros que atuam com a infância em Fortaleza, o Observa
-                Infância Viva combina dados, imagens e histórias para apoiar decisões e inspirar novas experiências.
+                Pensado para equipes, famílias e parceiros que querem acompanhar, de forma simples,
+                o que está acontecendo com a infância na cidade.
               </div>
             </div>
           </div>
@@ -1058,31 +1049,30 @@ header.main-header{
             <div class="chip-cespi">
               <span></span> CESPI · Gabinete do Prefeito
             </div>
-            <h2>Governança e rede intersetorial</h2>
+            <h2>Quem cuida do observatório?</h2>
             <p>
-              A CESPI articula secretarias, fundações e equipamentos da Prefeitura de Fortaleza para colocar a primeira infância
-              no centro das decisões, monitorar metas do PMPIF e acompanhar ações do Infância Viva nos territórios.
+              A CESPI articula as secretarias parceiras e coordena o uso dos dados do Infância Viva
+              para apoiar decisões e novas experiências com as crianças.
             </p>
             <div class="hero-partners">
               <span class="partner-pill">Educação (SME)</span>
               <span class="partner-pill">Saúde (SMS)</span>
-              <span class="partner-pill">Direitos Humanos e Desenvolvimento Social (SDHDS)</span>
+              <span class="partner-pill">Assistência (SDHDS)</span>
               <span class="partner-pill">Funci</span>
-              <span class="partner-pill">Demais secretarias parceiras</span>
             </div>
 
             <div class="hero-mini-row">
               <div class="hero-mini-card">
                 <strong id="mini-kpi-criancas">–</strong>
-                crianças em atividades lúdicas e pedagógicas registradas
+                crianças em atividades registradas
               </div>
               <div class="hero-mini-card">
                 <strong id="mini-kpi-visitas">–</strong>
-                registros de grupos, visitas e ações em equipamentos da infância
+                visitas, grupos e ações
               </div>
               <div class="hero-mini-card">
                 <strong id="mini-kpi-nota">–</strong>
-                média das avaliações das experiências vividas pelas crianças
+                nota média das experiências
               </div>
             </div>
           </aside>
@@ -1090,15 +1080,15 @@ header.main-header{
       </div>
     </section>
 
-    <!-- CESPI -->
+    <!-- CESPI (texto reduzido) -->
     <section id="cespi" class="section section--white">
       <div class="container">
         <div class="section-header">
           <div>
-            <h2 class="section-title">CESPI e a governança da primeira infância</h2>
+            <h2 class="section-title">CESPI e a rede da primeira infância</h2>
             <p class="section-subtitle">
-              A Coordenadoria Especial da Primeira Infância organiza a agenda da infância em Fortaleza, articula a rede
-              intersetorial e coordena o acompanhamento do PMPIF e do programa Infância Viva.
+              A CESPI coordena a agenda da primeira infância em Fortaleza e usa o observatório
+              para acompanhar ações, metas e indicadores do Infância Viva.
             </p>
           </div>
         </div>
@@ -1107,61 +1097,54 @@ header.main-header{
           <article class="card">
             <div class="badge-row">
               <span class="badge">Gabinete do Prefeito</span>
-              <span class="badge">Coordenação transversal</span>
+              <span class="badge">Coordenação intersetorial</span>
             </div>
             <p>
-              A CESPI atua como instância de articulação estratégica para as políticas voltadas às crianças de 0 a 6 anos,
-              conectando secretarias, equipamentos e serviços municipais. O Observa Infância Viva é uma das ferramentas
-              utilizadas para qualificar esse acompanhamento, aproximando dados da realidade dos territórios.
-            </p>
-            <p>
-              O observatório apoia o trabalho da Comissão Municipal da Primeira Infância, do Grupo Técnico Intersetorial
-              e das equipes que executam programas, projetos e ações nos bairros, praças, unidades de saúde, escolas,
-              Centros de Educação Infantil, Centros de Referência da Assistência Social e outros espaços da infância.
+              O Observa Infância Viva conecta planilhas, relatórios e registros de campo para
+              mostrar, de forma amigável, o que está acontecendo com as crianças nos territórios.
             </p>
 
             <ul class="list-bullets">
               <li>
                 <span class="bullet"></span>
-                <span>Integra informações de educação, saúde, assistência, direitos humanos, cultura, esporte e outras áreas.</span>
+                <span>Integra dados de educação, saúde, assistência e direitos humanos.</span>
               </li>
               <li>
                 <span class="bullet"></span>
-                <span>Fortalece o planejamento, o monitoramento e a avaliação das ações para a primeira infância.</span>
+                <span>Apoia o acompanhamento do PMPIF e do programa Infância Viva.</span>
               </li>
               <li>
                 <span class="bullet"></span>
-                <span>Produz leituras territoriais, acompanha fluxos de serviços e apoia processos de formação.</span>
+                <span>Ajuda equipes a planejar ações e formações nos bairros.</span>
               </li>
             </ul>
           </article>
 
           <aside class="card-colored-blue">
-            <h3>Rede intersetorial da primeira infância</h3>
+            <h3>Rede intersetorial</h3>
             <p>
-              A CESPI trabalha em parceria com secretarias e fundações para consolidar uma rede de cuidado à infância,
-              em que cada política pública contribui com um pedaço do percurso das crianças e de suas famílias.
+              A primeira infância acontece em muitos lugares ao mesmo tempo: escolas, praças,
+              unidades de saúde, CRAS, CREAS, conselhos tutelares e equipamentos culturais.
             </p>
             <div class="pill-grid">
-              <span class="pill">Educação infantil e primeiros anos (SME)</span>
-              <span class="pill">Saúde da criança, vacinação e desenvolvimento (SMS)</span>
-              <span class="pill">Proteção social básica e especial (SDHDS)</span>
-              <span class="pill">Proteção integral de crianças e adolescentes (Funci)</span>
-              <span class="pill">Cultura, esporte, meio ambiente e mobilidade</span>
+              <span class="pill">Educação infantil (SME)</span>
+              <span class="pill">Saúde da criança (SMS)</span>
+              <span class="pill">Proteção social (SDHDS)</span>
+              <span class="pill">Proteção integral (Funci)</span>
             </div>
           </aside>
         </div>
       </div>
     </section>
 
-    <!-- MARCOS LEGAIS -->
+    <!-- MARCOS LEGAIS (curto) -->
     <section id="marcos-legais" class="section section--yellow">
       <div class="container">
         <div class="section-header">
           <div>
-            <h2 class="section-title">Marcos legais da primeira infância</h2>
+            <h2 class="section-title">De onde vêm as diretrizes?</h2>
             <p class="section-subtitle">
-              Leis, planos e normas que sustentam a política de primeira infância em Fortaleza, no Ceará e no Brasil.
+              O observatório dialoga com leis e planos que colocam a criança no centro das políticas públicas.
             </p>
           </div>
         </div>
@@ -1171,17 +1154,16 @@ header.main-header{
             <span class="law-tag">Brasil</span>
             <h3>Marco Legal da Primeira Infância</h3>
             <p>
-              Lei federal que estabelece princípios e diretrizes para a formulação de políticas públicas para crianças
-              de 0 a 6 anos, com foco na prioridade absoluta e na proteção integral.
+              Lei federal que garante prioridade absoluta para crianças de 0 a 6 anos
+              e orienta as políticas em todo o país.
             </p>
           </div>
 
           <div class="law-card">
             <span class="law-tag">Ceará</span>
-            <h3>Normas e políticas estaduais</h3>
+            <h3>Políticas estaduais</h3>
             <p>
-              Conjunto de leis, planos e programas estaduais que dialogam com a agenda da primeira infância e apoiam os
-              municípios na implementação de políticas integradas.
+              Programas e normas que apoiam os municípios na organização de ações integradas.
             </p>
           </div>
 
@@ -1189,23 +1171,22 @@ header.main-header{
             <span class="law-tag">Fortaleza</span>
             <h3>PMPIF e legislação municipal</h3>
             <p>
-              Marcos legais que instituem o Plano Municipal pela Primeira Infância, a CESPI e programas como o Infância Viva
-              Fortaleza, garantindo base jurídica para as ações monitoradas pelo observatório.
+              Conjunto de leis e planos que estruturam o PMPIF, a CESPI e o Infância Viva Fortaleza.
             </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- PAINEL DE DADOS -->
+    <!-- PAINEL DE DADOS (texto enxuto) -->
     <section id="painel-dados" class="section section--white">
       <div class="container">
         <div class="section-header">
           <div>
             <h2 class="section-title">Painel de dados da primeira infância</h2>
             <p class="section-subtitle">
-              Indicadores produzidos a partir de planilhas da Prefeitura de Fortaleza, com registros de visitas mediadas,
-              atividades lúdicas e avaliações realizadas pelas escolas e instituições parceiras.
+              Indicadores simples para acompanhar quantas crianças participam, onde estão as ações
+              e como as experiências são avaliadas.
             </p>
           </div>
         </div>
@@ -1214,114 +1195,100 @@ header.main-header{
           <div class="kpi-row">
             <div class="kpi-card">
               <div class="kpi-label">Participação infantil</div>
-              <div class="kpi-title">Crianças participantes de atividades registradas</div>
+              <div class="kpi-title">Crianças em atividades registradas</div>
               <div class="kpi-value" id="kpi-total-criancas">–</div>
-              <div class="kpi-note">Soma da coluna QUANT. nas planilhas de visitas e ações lúdicas.</div>
+              <div class="kpi-note">Soma da coluna QUANT. nas planilhas de visitas e ações.</div>
             </div>
 
             <div class="kpi-card">
               <div class="kpi-label">Grupos e eventos</div>
-              <div class="kpi-title">Registros de visitas, grupos e atividades</div>
+              <div class="kpi-title">Visitas, grupos e ações registradas</div>
               <div class="kpi-value" id="kpi-total-visitas">–</div>
-              <div class="kpi-note">Contagem de linhas com data e instituição preenchidas.</div>
+              <div class="kpi-note">Contagem de linhas com data e instituição.</div>
             </div>
 
             <div class="kpi-card">
-              <div class="kpi-label">Avaliação das experiências</div>
-              <div class="kpi-title">Média geral atribuída às vivências das crianças</div>
+              <div class="kpi-label">Avaliação</div>
+              <div class="kpi-title">Média geral das experiências</div>
               <div class="kpi-value" id="kpi-media-geral">–</div>
-              <div class="kpi-note">Média das notas dadas às experiências lúdicas (escala 1 a 5).</div>
+              <div class="kpi-note">Notas de 1 a 5 dadas pelas crianças e equipes.</div>
             </div>
           </div>
 
           <div class="data-grid">
             <div class="chart-card">
-              <h3>Instituições com mais crianças nas atividades</h3>
-              <p>Top escolas e instituições considerando o número de crianças nas visitas e ações registradas.</p>
+              <h3>Instituições com mais crianças</h3>
+              <p>Top escolas e instituições pelas quantidades registradas.</p>
               <div class="chart-wrapper">
                 <canvas id="chartTopEscolas"></canvas>
               </div>
             </div>
 
             <div class="chart-card">
-              <h3>Avaliação das experiências lúdicas</h3>
-              <p>Média das notas atribuídas às diferentes casas/ambientes de brincar e explorar.</p>
+              <h3>Avaliação das casas</h3>
+              <p>Média das notas para a Casa do Arteliê e a Casa da Imaginação.</p>
               <div class="chart-wrapper">
                 <canvas id="chartAvaliacoes"></canvas>
               </div>
             </div>
           </div>
 
-          <!-- NOVO BLOCO: LINKS PARA OS DASHBOARDS COMPLETOS -->
           <div class="dashboards-links">
-            <h3 class="dashboards-links-title">Acesse os dashboards completos</h3>
+            <h3 class="dashboards-links-title">Dashboards completos</h3>
             <p class="dashboards-links-subtitle">
-              Os painéis interativos abaixo permitem explorar os dados em mais detalhes, por período, território e tipo de atividade.
+              Versões interativas com filtros por período, território e tipo de ação.
             </p>
 
             <div class="dashboards-grid">
               <article class="dashboard-card">
-  <div class="dashboard-thumb">
-    <!-- Trocar pelo print real do dashboard do PMPIF -->
-    <img src="assets/dashboardPMPIF.png" alt="Print do dashboard do PMPIF">
-  </div>
-  <div class="dashboard-body">
-    <h3>Dashboard – Ações do Plano Municipal pela Primeira Infância (PMPIF)</h3>
-    <p>
-      Acompanha metas e indicadores das ações do PMPIF nas diferentes secretarias,
-      como nascidos vivos, captação precoce de gestantes, consultas de pré-natal,
-      matrículas na educação infantil e outras ações voltadas à primeira infância.
-    </p>
-    <span class="dashboard-meta">
-      Fonte: relatórios de coleta de dados das ações do PMPIF (SMS, SME, SDHDS, AMC,
-      ETUFOR, SCSP, SECEL, SESEC, SEUMA, FUNCI e demais secretarias parceiras).
-    </span>
-    <!-- Trocar o href pela URL real do dashboard (Superset / portal) -->
-    <a class="dashboard-link" href="https://exemplo.fortaleza.ce.gov.br/dashboard/sintese-geral" target="_blank" rel="noopener">
-      Abrir dashboard
-    </a>
-  </div>
-</article>
+                <div class="dashboard-thumb">
+                  <img src="assets/dashboardPMPIF.png" alt="Print do dashboard do PMPIF">
+                </div>
+                <div class="dashboard-body">
+                  <h3>PMPIF – Ações e indicadores</h3>
+                  <p>
+                    Painel com metas e indicadores do Plano Municipal pela Primeira Infância.
+                  </p>
+                  <span class="dashboard-meta">
+                    SMS · SME · SDHDS · AMC · ETUFOR · SCSP · SECEL · SESEC · SEUMA · FUNCI e demais parceiras.
+                  </span>
+                  <a class="dashboard-link" href="https://exemplo.fortaleza.ce.gov.br/dashboard/sintese-geral" target="_blank" rel="noopener">
+                    Abrir dashboard
+                  </a>
+                </div>
+              </article>
 
-
-<article class="dashboard-card">
-  <div class="dashboard-thumb">
-    <!-- Trocar pelo print real do dashboard de visitas/avaliações da Cidade da Criança -->
-    <img src="assets/dashboardCidade.png" alt="Print do dashboard de visitas e avaliações na Cidade da Criança">
-  </div>
-  <div class="dashboard-body">
-    <h3>Dashboard – Visitas e avaliações na Cidade da Criança</h3>
-    <p>
-      Mostra o quantitativo de alunos e visitas homologadas, escolas e instituições
-      participantes, distribuição por turno e os principais indicadores de avaliação
-      das experiências na Cidade da Criança.
-    </p>
-    <span class="dashboard-meta">
-      Fonte: planilha de registro de visitas da Cidade da Criança (a partir de setembro/2025)
-      e formulários de avaliação das experiências.
-    </span>
-    <a class="dashboard-link" href="https://exemplo.fortaleza.ce.gov.br/dashboard/avaliacoes-experiencias" target="_blank" rel="noopener">
-      Abrir dashboard
-    </a>
-  </div>
-</article>
-
+              <article class="dashboard-card">
+                <div class="dashboard-thumb">
+                  <img src="assets/dashboardCidade.png" alt="Print do dashboard de visitas e avaliações na Cidade da Criança">
+                </div>
+                <div class="dashboard-body">
+                  <h3>Cidade da Criança – Visitas e avaliações</h3>
+                  <p>
+                    Quantidade de alunos, visitas homologadas e avaliação das experiências.
+                  </p>
+                  <span class="dashboard-meta">
+                    Planilha de visitas e formulários de avaliação a partir de setembro/2025.
+                  </span>
+                  <a class="dashboard-link" href="https://exemplo.fortaleza.ce.gov.br/dashboard/avaliacoes-experiencias" target="_blank" rel="noopener">
+                    Abrir dashboard
+                  </a>
+                </div>
+              </article>
             </div>
           </div>
-          <!-- FIM DO NOVO BLOCO -->
         </div>
       </div>
     </section>
 
-    <!-- NOTÍCIAS / MATERIAIS CESPI -->
+    <!-- NOTÍCIAS / MATERIAIS (curtas) -->
     <section id="noticias" class="section section--white">
       <div class="container">
         <div class="section-header">
           <div>
-            <h2 class="section-title">Notícias, materiais e produções da CESPI</h2>
+            <h2 class="section-title">Materiais e inspirações</h2>
             <p class="section-subtitle">
-              Destaques de livros infantis, eventos, infográficos e outros materiais produzidos no âmbito da agenda
-              Infância Viva e do PMPIF.
+              Livros, eventos e infográficos que ajudam a conversar sobre primeira infância.
             </p>
           </div>
         </div>
@@ -1329,75 +1296,58 @@ header.main-header{
         <div class="news-grid">
           <article class="news-card">
             <div class="news-card__img">
-              <!-- Livro infantil CESPI -->
               <img src="https://media.istockphoto.com/id/157482029/pt/foto/pilha-de-livros.jpg?s=612x612&w=0&k=20&c=myOJb6QEPe3OX7IO_youGJY_qc9KF699encUvHRP1E0=" alt="Capa de livro infantil sobre primeira infância">
             </div>
             <div class="news-card__body">
               <span class="news-badge">Livro infantil</span>
-              <h3>Material didático sobre a primeira infância</h3>
+              <h3>Histórias para falar de cuidado e afeto</h3>
               <p>
-                Publicação lúdica que apresenta informações, recomendações e histórias sobre a importância do cuidado,
-                do afeto e da garantia de direitos, voltada para crianças, famílias e educadores.
+                Material lúdico para crianças, famílias e educadores, com dicas e pequenas histórias.
               </p>
-              <div class="news-meta">
-                • Indicado para formações e uso em sala de aula.<br>
-                • Produção CESPI em parceria com secretarias e equipes do território.
-              </div>
             </div>
           </article>
 
           <article class="news-card">
             <div class="news-card__img">
-              <!-- Evento -->
               <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStUDU3zv1fp64cfzTnKB-tfx9NQ5vp9wFBeQ&s" alt="Registro de evento do programa Infância Viva">
             </div>
             <div class="news-card__body">
               <span class="news-badge" style="background:var(--blue);color:var(--white);">
                 Evento
               </span>
-              <h3>Encontros Infância Viva nos territórios</h3>
+              <h3>Encontros Infância Viva</h3>
               <p>
-                Eventos intersetoriais que reúnem famílias, equipes e crianças em praças, escolas e equipamentos públicos,
-                com atividades lúdicas, culturais e de cuidado.
+                Momentos de brincar, cuidar e conversar com as famílias nos territórios.
               </p>
-              <div class="news-meta">
-                • Ações articuladas pela CESPI com SME, SMS, SDHDS, Funci e parceiros.
-              </div>
             </div>
           </article>
 
           <article class="news-card">
             <div class="news-card__img">
-              <!-- Infográfico -->
               <img src="https://cdn.create.microsoft.com/catalog-assets/pt-br/b0e3906b-4070-402b-8374-7384e2f4b3bd/thumbnails/600/formas-de-infogr%25C3%25A1fico-modern-simple-1-1-e48519a5acf6.webp" alt="Infográfico com dados da primeira infância">
             </div>
             <div class="news-card__body">
               <span class="news-badge" style="background:var(--orange);color:var(--white);">
                 Infográfico
               </span>
-              <h3>Infográficos da primeira infância</h3>
+              <h3>Dados em linguagem simples</h3>
               <p>
-                Materiais visuais que organizam os principais indicadores da primeira infância, com foco em participação,
-                presença na escola, saúde e proteção social.
+                Quadros e gráficos para usar em apresentações, formações e reuniões.
               </p>
-              <div class="news-meta">
-                • Apoiam apresentações, relatórios e formações intersetoriais.
-              </div>
             </div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- PROGRAMAS -->
+    <!-- PROGRAMAS (resumidos) -->
     <section id="programas" class="section section--green">
       <div class="container">
         <div class="section-header">
           <div>
             <h2 class="section-title">Programas, projetos e ações</h2>
             <p class="section-subtitle">
-              A agenda Infância Viva articula um conjunto de programas e projetos conduzidos pela CESPI em parceria com
-              secretarias, fundações e equipamentos municipais.
+              Um olhar rápido sobre como o Infância Viva se espalha pelos territórios.
             </p>
           </div>
         </div>
@@ -1405,88 +1355,72 @@ header.main-header{
         <div class="cards-grid-3">
           <article class="program-card">
             <span class="program-tag">Planejamento</span>
-            <h3>PMPIF – Plano Municipal pela Primeira Infância</h3>
+            <h3>PMPIF – Plano Municipal</h3>
             <p>
-              Organização de metas, ações e indicadores que orientam a política municipal para crianças de 0 a 6 anos,
-              com acompanhamento realizado em parceria com as secretarias e a Comissão Municipal da Primeira Infância.
+              Metas e ações para garantir direitos das crianças de 0 a 6 anos em Fortaleza.
             </p>
-            <div class="program-meta">
-              Eixos: saúde, educação, proteção social, direitos humanos, cultura e espaços públicos.
-            </div>
           </article>
 
           <article class="program-card">
             <span class="program-tag">Programa intersetorial</span>
             <h3>Infância Viva Fortaleza</h3>
             <p>
-              Programa que integra ações de diferentes secretarias para garantir o direito ao brincar, à convivência
-              familiar e comunitária, à saúde, à educação e à proteção integral das crianças nos bairros da cidade.
+              Ações de brincar, conviver e cuidar em praças, parques, escolas e equipamentos sociais.
             </p>
-            <div class="program-meta">
-              Ações em praças, parques, escolas, unidades de saúde e equipamentos sociais.
-            </div>
           </article>
 
           <article class="program-card">
-            <span class="program-tag">Territórios e redes</span>
-            <h3>Projetos e redes locais de cuidado</h3>
+            <span class="program-tag">Territórios</span>
+            <h3>Redes locais de cuidado</h3>
             <p>
-              Conjunto de projetos que aproximam serviços, famílias e crianças – como mutirões de vacinação, ações de
-              busca ativa, fortalecimento da frequência escolar e atividades de promoção da saúde emocional.
+              Mutirões, busca ativa, visitas e formações que aproximam famílias e serviços.
             </p>
-            <div class="program-meta">
-              Parceria com escolas, unidades de saúde, CRAS, CREAS e conselhos tutelares.
-            </div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- ANÁLISES / HISTÓRIAS -->
+    <!-- ANÁLISES / HISTÓRIAS (curtas) -->
     <section id="analises" class="section section--orange">
       <div class="container">
         <div class="section-header">
           <div>
-            <h2 class="section-title">Análises, boletins e histórias dos territórios</h2>
+            <h2 class="section-title">Histórias dos territórios</h2>
             <p class="section-subtitle">
-              Além dos números, o Observa Infância Viva valoriza narrativas e leituras construídas com as equipes e os
-              territórios, apoiando decisões e formações.
+              Pequenas narrativas que ajudam a ler os números e escutar as famílias.
             </p>
           </div>
         </div>
 
         <div class="stories-grid">
           <article class="story-card">
-            <div class="story-chip">Famílias e vínculos</div>
-            <h3>Encontros com famílias e cuidadores</h3>
+            <div class="story-chip">Famílias</div>
+            <h3>Rodas com mães, pais e cuidadores</h3>
             <p>
-              Momentos de diálogo com famílias fortalecem vínculos, compartilham informações sobre desenvolvimento infantil
-              e articulam a rede de serviços do território para apoiar o cuidado das crianças.
+              Conversas que fortalecem vínculos e conectam famílias aos serviços do território.
             </p>
           </article>
 
           <article class="story-card">
-            <div class="story-chip">Saúde e bem-estar</div>
-            <h3>Promoção da saúde da criança</h3>
+            <div class="story-chip">Saúde</div>
+            <h3>Vacinação e cuidado contínuo</h3>
             <p>
-              Ações de vacinação, acompanhamento de crescimento e desenvolvimento, cuidado com a alimentação e com a saúde
-              emocional das crianças, em parceria com equipes de saúde da família e outros serviços.
+              Ações que acompanham crescimento, desenvolvimento e bem-estar das crianças.
             </p>
           </article>
 
           <article class="story-card">
-            <div class="story-chip">Educação e proteção</div>
-            <h3>Presença na escola e proteção de direitos</h3>
+            <div class="story-chip">Educação</div>
+            <h3>Presença e proteção na escola</h3>
             <p>
-              Monitoramento da participação das crianças na educação infantil e nos primeiros anos do ensino fundamental,
-              combinando dados de frequência com ações de busca ativa e de proteção social.
+              Monitoramento da frequência e ações de busca ativa para garantir o direito de aprender.
             </p>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- GALERIA DE IMAGENS -->
+    <!-- GALERIA DE IMAGENS (mantida) -->
     <section id="galeria" class="section section--white">
       <div class="container">
         <div class="section-header">
@@ -1519,14 +1453,14 @@ header.main-header{
       </div>
     </section>
 
-    <!-- METODOLOGIA / PUBLICAÇÕES -->
+    <!-- METODOLOGIA / PUBLICAÇÕES (enxuto) -->
     <section id="metodologia" class="section section--white">
       <div class="container">
         <div class="section-header">
           <div>
             <h2 class="section-title">Metodologia e fontes de dados</h2>
             <p class="section-subtitle">
-              Como os dados são coletados, organizados e interpretados no Observa Infância Viva.
+              Um resumo de como os dados chegam até aqui.
             </p>
           </div>
         </div>
@@ -1535,15 +1469,13 @@ header.main-header{
           <div>
             <div class="card">
               <p>
-                Os dados apresentados neste observatório são produzidos a partir de planilhas e sistemas da Prefeitura
-                de Fortaleza, com foco em registros de visitas mediadas, atividades lúdicas e avaliações realizadas pelas
-                escolas e instituições parceiras.
+                Os dados do Observa Infância Viva vêm de planilhas e sistemas da Prefeitura de Fortaleza,
+                com foco em visitas mediadas, atividades lúdicas e avaliações das experiências.
               </p>
               <ul class="simple-list">
-                <li>Planilhas de visitas e ações em equipamentos da infância.</li>
-                <li>Registros de avaliações de experiências lúdicas.</li>
-                <li>Integração futura com bases setoriais (educação, saúde, assistência, etc.).</li>
-                <li>Atualização periódica definida em conjunto com as equipes responsáveis.</li>
+                <li>Registros de visitas e ações em equipamentos da infância.</li>
+                <li>Formulários de avaliação das experiências lúdicas.</li>
+                <li>Integração gradual com outras bases setoriais.</li>
               </ul>
             </div>
           </div>
@@ -1552,8 +1484,7 @@ header.main-header{
             <div class="card">
               <h3>Publicações e materiais</h3>
               <p style="font-size:13px; margin-bottom:6px;">
-                Relatórios, boletins e materiais de apoio produzidos pela CESPI e parceiros a partir das leituras do
-                Observa Infância Viva.
+                Produções que nascem a partir das leituras do observatório.
               </p>
               <ul class="pub-list">
                 <li><span class="pub-badge">Relatório</span> Relatório anual de acompanhamento do PMPIF.</li>
@@ -1566,14 +1497,14 @@ header.main-header{
       </div>
     </section>
 
-    <!-- CONTATO -->
+    <!-- CONTATO (texto reduzido) -->
     <section id="contato" class="section section--blue">
       <div class="container">
         <div class="section-header">
           <div>
             <h2 class="section-title">Contato e uso dos dados</h2>
             <p class="section-subtitle">
-              Informações para contato com a CESPI e orientações sobre o uso dos dados do Observa Infância Viva.
+              Como citar e como falar com a CESPI.
             </p>
           </div>
         </div>
@@ -1581,11 +1512,12 @@ header.main-header{
         <div class="contact-box">
           <strong>CESPI – Coordenadoria Especial da Primeira Infância</strong>
           <p>
-            Observatório mantido pela CESPI, vinculada ao Gabinete do Prefeito de Fortaleza. Os dados aqui apresentados
-            podem ser utilizados em relatórios, formações, reuniões e estudos, com a devida citação da fonte.
+            Observatório mantido pela CESPI, vinculada ao Gabinete do Prefeito de Fortaleza.
+            Os dados podem ser usados em relatórios, formações, reuniões e estudos,
+            com a citação: “Fonte: Observa Infância Viva – CESPI/Prefeitura de Fortaleza”.
           </p>
           <p style="margin-top:6px;">
-            Para dúvidas, sugestões de indicadores ou solicitações de apoio técnico, utilize o canal institucional da CESPI.
+            Para dúvidas, novas ideias de indicadores ou apoio técnico, utilize o canal institucional da CESPI.
           </p>
         </div>
       </div>
