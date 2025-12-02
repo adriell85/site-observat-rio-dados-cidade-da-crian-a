@@ -261,6 +261,167 @@ header.main-header{
       color:var(--black);
     }
 
+    /* ====== SEÇÃO SOBRE / SUB-ABAS ====== */
+
+.sobre-wrapper{
+  display:grid;
+  grid-template-columns:minmax(0,2fr) minmax(0,1.4fr);
+  gap:18px;
+}
+
+@media(max-width:900px){
+  .sobre-wrapper{
+    grid-template-columns:1fr;
+  }
+}
+
+.sobre-tabs{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:14px;
+}
+
+.sobre-tab{
+  font-size:12px;
+  padding:6px 11px;
+  border-radius:999px;
+  border:1px solid rgba(0,0,0,0.25);
+  background:var(--white);
+  cursor:pointer;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+}
+
+.sobre-tab:hover{
+  background:var(--yellow);
+  box-shadow:0 3px 8px rgba(0,0,0,0.12);
+  transform:translateY(-1px);
+}
+
+.sobre-tab--primary{
+  background:var(--blue);
+  color:var(--white);
+  border-color:var(--blue);
+}
+
+/* coluna principal de texto */
+.sobre-main{
+  background:var(--white);
+  border-radius:var(--radius-lg);
+  border:1px solid rgba(0,0,0,0.12);
+  padding:14px 16px 16px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.10);
+  font-size:14px;
+  line-height:1.6;
+}
+
+/* coluna lateral com missão/visão/resumo rápido */
+.sobre-aside{
+  background:var(--blue);
+  color:var(--white);
+  border-radius:var(--radius-lg);
+  border:1px solid rgba(0,0,0,0.18);
+  padding:14px 16px 16px;
+  box-shadow:0 10px 26px rgba(0,0,0,0.22);
+  font-size:13px;
+}
+
+.sobre-aside h3{
+  font-size:15px;
+  margin-bottom:6px;
+}
+
+.sobre-aside p{
+  margin-bottom:8px;
+}
+
+.sobre-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:11px;
+  padding:4px 9px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.14);
+  border:1px solid rgba(255,255,255,0.55);
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+}
+
+/* blocos internos da coluna principal */
+
+.sobre-block{
+  margin-bottom:14px;
+}
+
+.sobre-block h3{
+  font-size:15px;
+  margin-bottom:6px;
+}
+
+.sobre-block p{
+  margin-bottom:6px;
+}
+
+.sobre-grid-3{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+
+@media(max-width:720px){
+  .sobre-grid-3{
+    grid-template-columns:1fr;
+  }
+}
+
+.sobre-card-mini{
+  border-radius:var(--radius-md);
+  border:1px solid rgba(0,0,0,0.10);
+  background:#F7FAFC;
+  padding:8px 9px 10px;
+  font-size:13px;
+}
+
+/* tabela "Quem somos" simplificada */
+
+.sobre-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13px;
+}
+
+.sobre-table thead{
+  background:#F1F5F9;
+}
+
+.sobre-table th,
+.sobre-table td{
+  padding:6px 6px;
+  border-bottom:1px solid rgba(15,23,42,0.08);
+  text-align:left;
+}
+
+.sobre-table th{
+  text-transform:uppercase;
+  font-size:11px;
+  letter-spacing:0.05em;
+}
+
+/* breadcrumb simples (Início / Sobre) */
+
+.breadcrumb{
+  font-size:11px;
+  margin-bottom:6px;
+  color:#64748b;
+}
+
+.breadcrumb a{
+  text-decoration:underline;
+}
+
+
     /* ========= HERO ========= */
     .hero{
       padding:26px 0 20px;
@@ -1014,6 +1175,7 @@ header.main-header{
   </header>
 
   <!-- HERO -->
+   
   <main id="topo">
     <section class="hero">
       <div class="container">
@@ -1040,6 +1202,8 @@ header.main-header{
                 <a href="#cespi" class="btn btn-outline">Conhecer mais sobre a CESPI</a>
               </div>
             </div>
+
+            
 
             <!-- Bloco ilustrativo (imagem lúdica) -->
             <div class="hero-illustration">

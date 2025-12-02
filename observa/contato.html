@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fale Conosco – Observa Infância Viva · CESPI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div class="top-ribbon">
+    <span class="r-blue"></span>
+    <span class="r-green"></span>
+    <span class="r-yellow"></span>
+    <span class="r-orange"></span>
+    <span class="r-red"></span>
+  </div>
+
+  <header class="main-header">
+    <div class="container">
+      <div class="main-header__inner">
+        <a href="index.html#topo" class="brand-block">
+          <div class="brand-icon">
+            <img src="https://images.seeklogo.com/logo-png/23/3/prefeitura-de-fortaleza-logo-png_seeklogo-231117.png" alt="Logo Prefeitura de Fortaleza">
+          </div>
+          <div class="brand-text">
+            <strong>Observa Infância Viva</strong>
+            <span>Observatório da Primeira Infância · CESPI · Fortaleza</span>
+          </div>
+        </a>
+
+        <nav class="main-nav">
+          <button class="menu-toggle" id="btnMenu" aria-label="Abrir menu">
+            <span></span><span></span><span></span>
+          </button>
+          <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">
+    🌙
+  </button>
+          <ul class="menu" id="menuMain">
+            <li><a href="index.html#topo">Início</a></li>
+            <li><a href="dados.html">Dados &amp; Painéis</a></li>
+            <li><a href="programas.html">Planos, Programas e Ações</a></li>
+            <li><a href="biblioteca.html">Biblioteca &amp; Materiais</a></li>
+            <li><a href="sobre.html">Sobre o Observatório</a></li>
+            <li class="active"><a href="contato.html">Fale Conosco</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section section--blue" id="contato">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="index.html">Início</a> / Fale Conosco
+        </div>
+
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Contato e uso dos dados</h2>
+            <p class="section-subtitle">
+              Informações para contato com a CESPI e orientações sobre o uso dos dados do Observa Infância Viva.
+            </p>
+          </div>
+        </div>
+
+        <div class="contact-box">
+          <strong>CESPI – Coordenadoria Especial da Primeira Infância</strong>
+          <p>
+            Observatório mantido pela CESPI, vinculada ao Gabinete do Prefeito de Fortaleza. Os dados aqui apresentados
+            podem ser utilizados em relatórios, formações, reuniões e estudos, com a devida citação da fonte.
+          </p>
+          <p style="margin-top:6px;">
+            Para dúvidas, sugestões de indicadores ou solicitações de apoio técnico, utilize o canal institucional da CESPI.
+          </p>
+          <!-- Aqui você pode incluir e-mails / telefones / formulário quando tiver -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div>Observa Infância Viva · Observatório da Primeira Infância</div>
+        <div>Coordenadoria Especial da Primeira Infância (CESPI) · Prefeitura de Fortaleza</div>
+      </div>
+      <div class="footer-pills">
+        <span class="footer-pill">CESPI</span>
+        <span class="footer-pill">Gabinete do Prefeito</span>
+        <span class="footer-pill">Secretarias parceiras</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html#topo">Início</a>
+        <a href="dados.html">Painel</a>
+        <a href="programas.html">Programas</a>
+        <a href="contato.html">Contato</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const btnMenu = document.getElementById('btnMenu');
+    const menuMain = document.getElementById('menuMain');
+    if (btnMenu && menuMain){
+      btnMenu.addEventListener('click', () => {
+        menuMain.classList.toggle('menu--open');
+      });
+    }
+  </script>
+  <script src="js/theme.js"></script>
+</body>
+</html>
