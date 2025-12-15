@@ -790,6 +790,40 @@ body.theme-dark .modal-overlay .modal-hero-img img{
       box-shadow:0 16px 40px rgba(0,0,0,0.95);
     }
 
+.projeto-pill{
+  margin-top:8px;
+  padding:10px 12px;
+  border-radius:16px;
+  background:rgba(255,255,255,0.14);
+  border:1px solid rgba(255,255,255,0.7);
+  box-shadow:0 6px 14px rgba(15,23,42,0.28);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    background 0.16s ease,
+    border-color 0.16s ease;
+  position:relative;
+}
+
+/* SELO "CESPI" – só quando tiver essa classe */
+.projeto-pill--cespi::after{
+  content:"CESPI";
+  position:absolute;
+  top:-10px;
+  left:12px;
+  font-size:9px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.16em;
+  padding:2px 8px;
+  border-radius:999px;
+  background:rgba(15,23,42,0.9);
+  color:#F9FAFB;
+  box-shadow:0 4px 10px rgba(15,23,42,0.45);
+  white-space:nowrap;
+}
 
     
   </style>
@@ -899,7 +933,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </div>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Ruas da Infância</h4>
               <p>
                 Iniciativa voltada à transformação de ruas e espaços urbanos em ambientes mais seguros e
@@ -908,7 +942,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </p>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Infância Viva em território</h4>
               <p>
                 Ações territorializadas que levam a agenda da Primeira Infância para bairros específicos,
@@ -918,7 +952,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
             </div>
 
             <!-- NOVO PROJETO DESTAQUE: INFÂNCIA VIVA NA PRAÇA -->
-            <div class="projeto-pill projeto-pill--destaque" data-projeto-modal="modal-infancia-praca">
+            <div class="projeto-pill projeto-pill--cespi projeto-pill--destaque" data-projeto-modal="modal-infancia-praca">
               <h4>Infância Viva na Praça</h4>
               <p>
                 Programação especial em praças e espaços públicos, com apresentações culturais, ações de
@@ -926,7 +960,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </p>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Infância Viva</h4>
               <p>
                 Agenda municipal intersetorial que integra iniciativas do PMPIF, promovendo a articulação
@@ -935,7 +969,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </p>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Cirandas</h4>
               <p>
                 Encontros e mobilizações comunitárias em formato de rodas, brincadeiras e momentos de
@@ -944,7 +978,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </p>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Projeto Cidade</h4>
               <p>
                 Conjunto de ações que utilizam espaços urbanos – como a própria Cidade da Criança e outros
@@ -954,7 +988,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
             </div>
 
             <!-- BEBETECAS – DESTAQUE COM MODAL -->
-            <div class="projeto-pill projeto-pill--destaque" data-projeto-modal="modal-bebeteca">
+            <div class="projeto-pill projeto-pill--cespi projeto-pill--destaque" data-projeto-modal="modal-bebeteca">
               <h4>Bebetecas</h4>
               <p>
                 Implantação e fortalecimento de espaços de leitura, estímulo sensorial e convivência voltados
@@ -963,7 +997,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </p>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Cuidoteca</h4>
               <p>
                 Ambiente que integra cuidado, informação e acesso a serviços para famílias e cuidadores,
@@ -973,7 +1007,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
             </div>
 
             <!-- CUCA CUIDA – DESTAQUE COM MODAL -->
-            <div class="projeto-pill projeto-pill--destaque" data-projeto-modal="modal-cuca-cuida">
+            <div class="projeto-pill projeto-pill--cespi projeto-pill--destaque" data-projeto-modal="modal-cuca-cuida">
               <h4>Cuca Cuida</h4>
               <p>
                 Parceria com equipamentos da juventude e cultura para incorporar a Primeira Infância na
@@ -1029,7 +1063,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </p>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>PFI – Plano/Programa intersetorial</h4>
               <p>
                 Instrumento de planejamento que organiza as ações do PMPIF entre diferentes secretarias,
@@ -1037,7 +1071,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </p>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Comissões e instâncias de governança</h4>
               <p>
                 Comissões e grupos formais que acompanham planos, programas e instrumentos, garantindo
@@ -1045,7 +1079,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </p>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>GTI – Grupo de Trabalho Intersetorial</h4>
               <p>
                 Espaço técnico de pactuação e acompanhamento das ações do PMPIF, onde diferentes áreas
@@ -1053,7 +1087,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </p>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Monitoramento de planos e indicadores (JPS e afins)</h4>
               <p>
                 Participação em fóruns e agendas de monitoramento, conectando os indicadores da infância aos
@@ -1061,7 +1095,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </p>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Articulação com o Conselho de Direitos</h4>
               <p>
                 Integração com o Conselho Municipal dos Direitos da Criança e do Adolescente em decisões
@@ -1070,7 +1104,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </p>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Parceria com iniciativas nacionais (como ABRINQ)</h4>
               <p>
                 Projetos que dialogam com iniciativas nacionais de reconhecimento e apoio a cidades
@@ -1109,7 +1143,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </div>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Fluxo de Criança em Situação de Rua</h4>
               <p>
                 Organização do fluxo intersetorial de atendimento às crianças de 0 a 6 anos em situação de rua,
@@ -1117,7 +1151,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </p>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Acordos de Cooperação Técnica com órgãos de controle</h4>
               <p>
                 Projetos e acordos com órgãos como tribunais de contas para acompanhar investimentos,
@@ -1126,7 +1160,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </p>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Parcerias com universidades</h4>
               <p>
                 Cooperações com instituições de ensino superior para desenvolvimento de estudos, pesquisas,
@@ -1182,7 +1216,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </div>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Café com Fé</h4>
               <p>
                 Encontros com comunidades e lideranças religiosas para dialogar sobre proteção, cuidado,
@@ -1190,7 +1224,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </p>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Cursos e formações</h4>
               <p>
                 Oferta de cursos e atividades formativas para equipes técnicas, gestoras e parceiros da rede,
@@ -1198,7 +1232,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </p>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Livros e materiais de referência</h4>
               <p>
                 Curadoria, produção e divulgação de livros, cadernos e materiais de apoio sobre a Primeira
@@ -1206,7 +1240,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </p>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Ouvidoria e canais de escuta</h4>
               <p>
                 Fortalecimento da escuta institucional por meio de ouvidorias e outros canais, qualificando
@@ -1253,7 +1287,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </div>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Observatório CESPI</h4>
               <p>
                 Organização de bases de dados, construção de indicadores, desenvolvimento de painéis,
@@ -1261,7 +1295,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </p>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Articulação com APS e Núcleos de Desenvolvimento Infantil</h4>
               <p>
                 Integração com a Atenção Primária à Saúde e núcleos especializados para monitorar
@@ -1269,7 +1303,7 @@ body.theme-dark .modal-overlay .modal-hero-img img{
               </p>
             </div>
 
-            <div class="projeto-pill">
+            <div class="projeto-pill projeto-pill--cespi">
               <h4>Monitoramento de metas e indicadores</h4>
               <p>
                 Consolidação de indicadores, acompanhamento de metas e elaboração de análises para
