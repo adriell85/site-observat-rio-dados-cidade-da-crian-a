@@ -2607,3 +2607,847 @@ body{
   background:
     linear-gradient(135deg, rgba(15,23,42,0.95), rgba(15,23,42,0.9));
 }
+
+
+/* ====== SOBRE – cabeçalhos com bolinha colorida ====== */
+
+.sobre-block-header{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:6px;
+}
+
+.sobre-block-header h3{
+  font-size:15px;
+  margin:0;
+}
+
+/* bolinha numerada */
+.sobre-badge-circle{
+  width:30px;
+  height:30px;
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  font-weight:700;
+  color:#FFFFFF;
+  box-shadow:0 6px 14px rgba(0,0,0,0.25);
+}
+
+/* variações de cor, seguindo a paleta */
+.sobre-badge-1{
+  background:linear-gradient(135deg,#1787B5 0%,#1CABB2 100%);
+}
+.sobre-badge-2{
+  background:linear-gradient(135deg,#F4AD22 0%,#F97316 100%);
+}
+.sobre-badge-3{
+  background:linear-gradient(135deg,#1CABB2 0%,#22C55E 100%);
+}
+.sobre-badge-4{
+  background:linear-gradient(135deg,#6366F1 0%,#22C55E 100%);
+}
+.sobre-badge-5{
+  background:linear-gradient(135deg,#DE464E 0%,#EB5E28 100%);
+}
+
+/* ====== SOBRE – cards laterais com ícone redondo ====== */
+
+.sobre-aside{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+/* bloco com ícone + texto */
+.sobre-aside-block{
+  display:flex;
+  gap:10px;
+  margin-top:4px;
+  padding:8px 10px;
+  border-radius:var(--radius-md);
+  background:rgba(255,255,255,1);
+  border:1px solid rgba(0,0,0,0.08);
+}
+
+/* bolinha icônica */
+.sobre-aside-icon-bubble{
+  flex:0 0 32px;
+  height:32px;
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:17px;
+  background:rgba(0,0,0,0.9);
+  box-shadow:0 4px 10px rgba(0,0,0,0.18);
+}
+
+.sobre-aside-text h3{
+  font-size:14px;
+  margin-bottom:2px;
+  color: rgba(0,0,0,0.9);
+}
+
+.sobre-aside-text p{
+  font-size:13px;
+  margin:0;
+  color: rgba(0,0,0,0.9);
+}
+
+/* ====== SOBRE – pequenos refinamentos visuais ====== */
+
+/* mini cards "Por que / Para que / Como" */
+.sobre-card-mini{
+  background:#F7FAFC;
+}
+
+/* bullets coloridinhos na lista da governança */
+.list-bullets .bullet{
+  background:#F4AD22; /* amarelo em vez de verde escuro, mais "Primeira Infância" */
+}
+
+/* ====== DARK MODE – página Sobre mais legível ====== */
+
+/* coluna principal em dark: painel escuro, texto claro */
+[data-theme="dark"] .sobre-main{
+  background:#020617;
+  color:#E5E7EB;
+  border-color:rgba(148,163,184,0.55);
+  box-shadow:0 14px 32px rgba(0,0,0,0.9);
+}
+
+/* mini-cards em dark */
+[data-theme="dark"] .sobre-card-mini{
+  background:rgba(15,23,42,0.95);
+  border-color:rgba(148,163,184,0.65);
+  box-shadow:0 10px 26px rgba(0,0,0,0.9);
+}
+
+/* tabela "Quem somos" em dark – linhas bem visíveis */
+[data-theme="dark"] .sobre-table thead{
+  background:#020617;
+}
+[data-theme="dark"] .sobre-table th,
+[data-theme="dark"] .sobre-table td{
+  border-bottom:1px solid rgba(51,65,85,0.9);
+}
+
+/* aside em dark: degradê azul escuro, texto claro */
+[data-theme="dark"] .sobre-aside{
+  background:linear-gradient(135deg,#0F172A 0%,#1D4ED8 55%);
+  border-color:rgba(129,140,248,0.8);
+  box-shadow:0 18px 45px rgba(0,0,0,0.95);
+}
+
+/* pill "CESPI · Observa Infância Viva" em dark */
+[data-theme="dark"] .sobre-pill{
+  background:rgba(15,23,42,0.85);
+  border-color:rgba(165,180,252,0.9);
+}
+
+/* blocos laterais em dark – sem perder o contraste do ícone */
+[data-theme="dark"] .sobre-aside-block{
+  background:rgba(15,23,42,0.92);
+  border-color:rgba(148,163,184,0.7);
+}
+
+[data-theme="dark"] .sobre-aside-icon-bubble{
+  background:#F9FAFB;     /* bolinha clara */
+  box-shadow:0 4px 10px rgba(0,0,0,0.9);
+}
+
+/* texto dentro da coluna lateral */
+[data-theme="dark"] .sobre-aside-text h3,
+[data-theme="dark"] .sobre-aside-text p{
+  color:#E5E7EB;
+}
+
+/* bullets amarelos também no dark, pra não sumir */
+[data-theme="dark"] .list-bullets .bullet{
+  background:#FACC15;
+}
+
+/* badge numerado continua forte no dark, sem estourar */
+[data-theme="dark"] .sobre-badge-circle{
+  box-shadow:0 6px 16px rgba(0,0,0,0.95);
+}
+
+/* ====== Balõezinhos coloridos – coluna esquerda "Sobre" ====== */
+
+.sobre-block-shell{
+  position: relative;
+  border-radius: 18px;
+  padding: 10px 12px 12px;
+  margin-bottom: 14px;
+  background: #FFFFFF;
+  border: 1px solid rgba(15,23,42,0.08);
+  box-shadow: 0 6px 16px rgba(15,23,42,0.08);
+  overflow: hidden;
+}
+
+/* brilhozinho suave no topo do balão */
+.sobre-block-shell::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at top left, rgba(255,255,255,0.85) 0, transparent 55%);
+  opacity:0.8;
+  pointer-events:none;
+}
+
+/* linha colorida na esquerda */
+.sobre-block-shell::after{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:4px;
+  border-radius:999px;
+}
+
+/* variações de cor por seção */
+.sobre-block-shell--blue{
+  background:
+    radial-gradient(circle at top right, rgba(23,135,181,0.06) 0, transparent 65%),
+    #FFFFFF;
+}
+.sobre-block-shell--blue::after{
+  background: var(--blue);
+}
+
+.sobre-block-shell--green{
+  background:
+    radial-gradient(circle at top right, rgba(28,171,178,0.08) 0, transparent 65%),
+    #FFFFFF;
+}
+.sobre-block-shell--green::after{
+  background: var(--green);
+}
+
+.sobre-block-shell--yellow{
+  background:
+    radial-gradient(circle at top right, rgba(244,173,34,0.10) 0, transparent 65%),
+    #FFFFFF;
+}
+.sobre-block-shell--yellow::after{
+  background: var(--yellow);
+}
+
+.sobre-block-shell--orange{
+  background:
+    radial-gradient(circle at top right, rgba(235,94,40,0.10) 0, transparent 65%),
+    #FFFFFF;
+}
+.sobre-block-shell--orange::after{
+  background: var(--orange);
+}
+
+.sobre-block-shell--red{
+  background:
+    radial-gradient(circle at top right, rgba(222,70,78,0.10) 0, transparent 65%),
+    #FFFFFF;
+}
+.sobre-block-shell--red::after{
+  background: var(--red);
+}
+
+/* cabeçalho com número romano + título alinhados */
+.sobre-block-header{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:6px;
+}
+
+.sobre-block-header h3{
+  margin:0;
+}
+
+/* medalhinhas numeradas (I, II, III...) */
+.sobre-badge-circle{
+  width:26px;
+  height:26px;
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  font-weight:700;
+  color:#FFFFFF;
+  box-shadow:0 3px 8px rgba(15,23,42,0.25);
+}
+
+.sobre-badge-1{ background: var(--blue); }
+.sobre-badge-2{ background: var(--green); }
+.sobre-badge-3{ background: var(--yellow); color:#111827; }
+.sobre-badge-4{ background: var(--orange); }
+.sobre-badge-5{ background: var(--red); }
+
+/* ==== Dark mode – manter contraste bom ==== */
+
+[data-theme="dark"] .sobre-block-shell{
+  background: #020617;
+  border-color: rgba(148,163,184,0.45);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.9);
+}
+
+[data-theme="dark"] .sobre-block-shell--blue{
+  background:
+    radial-gradient(circle at top right, rgba(56,189,248,0.16) 0, transparent 65%),
+    #020617;
+}
+[data-theme="dark"] .sobre-block-shell--green{
+  background:
+    radial-gradient(circle at top right, rgba(34,197,94,0.16) 0, transparent 65%),
+    #020617;
+}
+[data-theme="dark"] .sobre-block-shell--yellow{
+  background:
+    radial-gradient(circle at top right, rgba(234,179,8,0.18) 0, transparent 65%),
+    #020617;
+}
+[data-theme="dark"] .sobre-block-shell--orange{
+  background:
+    radial-gradient(circle at top right, rgba(249,115,22,0.18) 0, transparent 65%),
+    #020617;
+}
+[data-theme="dark"] .sobre-block-shell--red{
+  background:
+    radial-gradient(circle at top right, rgba(248,113,113,0.18) 0, transparent 65%),
+    #020617;
+}
+
+
+/* ===============================
+   AJUSTE – TIRAR DEGRADÊ DA COLUNA ESQUERDA
+   Mantém só o balão branco + faixa colorida
+   =============================== */
+
+/* base dos balões da coluna esquerda */
+.sobre-block-shell{
+  background:#FFFFFF;                 /* fundo liso */
+  border-radius:18px;
+  padding:10px 12px 12px;
+  margin-bottom:14px;
+  border:1px solid rgba(15,23,42,0.08);
+  box-shadow:0 6px 16px rgba(15,23,42,0.08);
+  position:relative;
+  overflow:hidden;
+}
+
+/* remove aquele brilho radial em cima */
+.sobre-block-shell::before{
+  content:none;
+}
+
+/* mantém só a faixa colorida na lateral */
+.sobre-block-shell::after{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:4px;
+  border-radius:999px;
+}
+
+/* cores da faixa por seção */
+.sobre-block-shell--blue::after{   background:var(--blue); }
+.sobre-block-shell--green::after{  background:var(--green); }
+.sobre-block-shell--yellow::after{ background:var(--yellow); }
+.sobre-block-shell--orange::after{ background:var(--orange); }
+.sobre-block-shell--red::after{    background:var(--red); }
+
+/* ===== Dark mode: fundo sólido, sem degradê também ===== */
+
+[data-theme="dark"] .sobre-block-shell{
+  background:#020617;                          /* bloco liso escuro */
+  border-color:rgba(148,163,184,0.45);
+  box-shadow:0 14px 30px rgba(0,0,0,0.9);
+}
+
+[data-theme="dark"] .sobre-block-shell--blue::after{   background:var(--blue); }
+[data-theme="dark"] .sobre-block-shell--green::after{  background:var(--green); }
+[data-theme="dark"] .sobre-block-shell--yellow::after{ background:var(--yellow); }
+[data-theme="dark"] .sobre-block-shell--orange::after{ background:var(--orange); }
+[data-theme="dark"] .sobre-block-shell--red::after{    background:var(--red); }
+
+/* ================================
+   AJUSTE DE TEXTO NO MODO ESCURO
+   – títulos da coluna esquerda
+   ================================ */
+
+/* Garante que os blocos de texto da esquerda fiquem legíveis no dark */
+[data-theme="dark"] .sobre-main{
+  color: #E5E7EB; /* texto claro padrão */
+}
+
+/* Títulos das seções (I, II, III, IV, V) */
+[data-theme="dark"] #sobre-missao-visao h3,
+[data-theme="dark"] #sobre-por-que h3,
+[data-theme="dark"] #sobre-quem-somos h3,
+[data-theme="dark"] #sobre-cespi h3{
+  color: #F9FAFB;       /* um pouco mais claro para destacar */
+}
+
+/* Parágrafos dentro desses blocos */
+[data-theme="dark"] #sobre-missao-visao p,
+[data-theme="dark"] #sobre-por-que p,
+[data-theme="dark"] #sobre-quem-somos p,
+[data-theme="dark"] #sobre-cespi p{
+  color: #E5E7EB;
+}
+
+/* Caso você esteja usando o "balão" .sobre-block-shell na esquerda,
+   garante que o texto dentro dele também fique claro */
+[data-theme="dark"] .sobre-block-shell{
+  color: #E5E7EB;
+}
+
+/* ================================
+   AJUSTE DO CHIP "CESPI · Observa Infância Viva"
+   ================================ */
+
+[data-theme="dark"] .sobre-pill{
+  background: var(--yellow);                  /* chip amarelo */
+  border-color: rgba(15,23,42,0.85);
+  color: #111827;                             /* texto escuro pra contraste */
+}
+
+/* Só por segurança, se houver <span> dentro */
+[data-theme="dark"] .sobre-pill span{
+  color: #111827;
+}
+
+
+/* =========================================
+   DARK MODE – AJUSTES ESPECÍFICOS PARA A PÁGINA "SOBRE"
+   Deixa:
+   - "Missão & Visão"
+   - "Por que · Para que · Como"
+   - "Quem somos"
+   - "CESPI e governança"
+   bem legíveis
+   ========================================= */
+
+/* Base da seção "Sobre" no dark: fundo escuro + texto claro */
+[data-theme="dark"] .section--white#sobre{
+  background: #020617;
+  color: #E5E7EB;
+}
+
+/* Coluna principal (esquerda) – card mais escuro e legível */
+[data-theme="dark"] .section--white#sobre .sobre-main{
+  background: #020617; /* em vez daquele quase branco */
+  border-color: rgba(148,163,184,0.6);
+  color: #E5E7EB;
+}
+
+/* Títulos principais da coluna esquerda */
+[data-theme="dark"] .section--white#sobre #sobre-missao-visao h3,
+[data-theme="dark"] .section--white#sobre #sobre-por-que h3,
+[data-theme="dark"] .section--white#sobre #sobre-quem-somos h3,
+[data-theme="dark"] .section--white#sobre #sobre-cespi h3{
+  color: #F9FAFB;        /* branco mais forte para destacar */
+}
+
+/* Textos dentro desses blocos */
+[data-theme="dark"] .section--white#sobre #sobre-missao-visao p,
+[data-theme="dark"] .section--white#sobre #sobre-por-que p,
+[data-theme="dark"] .section--white#sobre #sobre-quem-somos p,
+[data-theme="dark"] .section--white#sobre #sobre-cespi p{
+  color: #E5E7EB;
+}
+
+/* Mini-cards "Por que / Para que / Como" – deixam de ser quase brancos */
+[data-theme="dark"] .section--white#sobre .sobre-card-mini{
+  background: #020617;
+  border-color: rgba(148,163,184,0.7);
+  color: #E5E7EB;
+}
+[data-theme="dark"] .section--white#sobre .sobre-card-mini strong{
+  color: #F9FAFB;
+}
+
+/* Tabela "Quem somos" – linhas e texto mais legíveis */
+[data-theme="dark"] .section--white#sobre .sobre-table thead{
+  background: #020617;
+}
+[data-theme="dark"] .section--white#sobre .sobre-table th,
+[data-theme="dark"] .section--white#sobre .sobre-table td{
+  color: #E5E7EB;
+  border-bottom: 1px solid rgba(51,65,85,0.9);
+}
+
+/* Chip "CESPI · Observa Infância Viva" na coluna da direita */
+[data-theme="dark"] .section--white#sobre .sobre-pill{
+  background: var(--yellow);                /* amarelinho que já usa no site */
+  border-color: rgba(15,23,42,0.85);
+  color: #111827;                           /* texto escuro em cima do amarelo */
+}
+[data-theme="dark"] .section--white#sobre .sobre-pill span{
+  color: #111827;
+}
+
+/* =========================================
+   DARK MODE – ABAS "SOBRE"
+   (Missão & Visão, Por que/Para que/Como, etc.)
+   ========================================= */
+
+[data-theme="dark"] .section--white#sobre .sobre-tab{
+  background: rgba(15,23,42,0.95);           /* fundo escuro */
+  color: #E5E7EB;                            /* texto claro */
+  border-color: rgba(148,163,184,0.75);
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.8),
+    0 0 0 1px rgba(15,23,42,0.9);
+}
+
+/* Aba ativa (sobre-tab--primary) em dark mode */
+[data-theme="dark"] .section--white#sobre .sobre-tab.sobre-tab--primary{
+  background: linear-gradient(135deg,#0EA5E9 0%,#22C55E 100%);
+  color: #0B1120;                            /* texto escuro sobre gradiente claro */
+  border-color: rgba(125,211,252,0.9);
+  box-shadow:
+    0 3px 10px rgba(0,0,0,0.9),
+    0 0 0 1px rgba(15,23,42,0.9);
+}
+
+/* Garante que o texto dentro da aba ativa também fique legível */
+[data-theme="dark"] .section--white#sobre .sobre-tab.sobre-tab--primary span,
+[data-theme="dark"] .section--white#sobre .sobre-tab.sobre-tab--primary strong{
+  color: #0B1120;
+}
+
+
+/* ==== Ajuste de textos no modo escuro – Marcos Legais & Metodologia ==== */
+
+/* Títulos & subtítulos em dark */
+body.theme-dark #marcos-legais .section-title,
+body.theme-dark #metodologia .section-title{
+  color:#F9FAFB;
+  text-shadow:0 1px 2px rgba(0,0,0,0.55);
+}
+
+body.theme-dark #marcos-legais .section-subtitle,
+body.theme-dark #metodologia .section-subtitle{
+  color:#E5E7EB;
+  text-shadow:0 1px 2px rgba(0,0,0,0.5);
+}
+
+/* Textos dentro dos cards de marcos legais */
+body.theme-dark #marcos-legais .law-card h3{
+  color:#E5E7EB;
+}
+
+body.theme-dark #marcos-legais .law-card p{
+  color:#CBD5F5;
+}
+
+/* Tag "Brasil / Ceará / Fortaleza" em dark */
+body.theme-dark #marcos-legais .law-tag{
+  color:#F9FAFB;
+  background:rgba(15,23,42,0.9);
+  border-color:rgba(148,163,184,0.9);
+}
+
+
+/* METODOLOGIA – faixa amarela sempre, em qualquer tema */
+#metodologia{
+  background:#F9CB62; /* amarelo que você já está usando */
+}
+
+/* No modo escuro: mantém a faixa amarela e texto preto nos cards */
+body.theme-dark #metodologia,
+html[data-theme="dark"] #metodologia{
+  background:#F9CB62;
+}
+
+/* Cards dentro da metodologia: fundo claro e texto preto */
+body.theme-dark #metodologia .card,
+html[data-theme="dark"] #metodologia .card{
+  background:#FFFFFF;
+  border-color:rgba(0,0,0,0.12);
+  color:#111827;
+}
+
+/* Textos internos dos cards (parágrafos e listas) também pretos */
+body.theme-dark #metodologia .card p,
+body.theme-dark #metodologia .card li,
+html[data-theme="dark"] #metodologia .card p,
+html[data-theme="dark"] #metodologia .card li{
+  color:#111827;
+}
+
+
+#metodologia{
+  /* faixa em degradê laranja → azul claro, mais intenso */
+  background:linear-gradient(
+    135deg,
+    #F97316 0%,   /* laranja forte */
+    #FB923C 30%,  /* laranja médio */
+    #38BDF8 100%  /* azul claro vivo */
+  );
+}
+
+.section--yellow{
+  background:linear-gradient(
+    135deg,
+    #F97316 0%,
+    #FB923C 30%,
+    #38BDF8 100%
+  );
+}
+
+
+:root{
+  --badge-material: #6366F1;
+  --badge-formacao: #16A34A;
+}
+
+
+/* =========================================
+   TOPBAR MOBILE MAIS BONITA
+   ========================================= */
+@media (max-width: 768px){
+
+  /* Header mais compacto e fofinho */
+  header.main-header{
+    padding: 4px 0 10px;
+  }
+
+  .main-header__inner{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 8px 10px;
+    margin: 6px 8px;
+    border-radius: 24px;
+  }
+
+  /* Logo um pouco menor no mobile */
+  .brand-icon{
+    width: 82px;
+    height: 54px;
+  }
+  .brand-text strong{
+    font-size: 13px;
+  }
+  .brand-text span{
+    font-size: 10px;
+  }
+
+  .brand-block{
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  /* Nav vira linha de controles + menu “cartão” */
+  .main-nav{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Deixa os botões (hamburger + tema) com carinha de chip */
+  .menu-toggle,
+  .theme-toggle{
+    box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+    border-radius: 999px;
+    padding: 6px 9px;
+    background: rgba(255,255,255,0.96);
+  }
+
+  /* Agrupamento visual dos botões à direita */
+  .menu-toggle{
+    order: 2;
+  }
+  .theme-toggle{
+    order: 1;
+    margin-left: auto;
+  }
+
+  /* Menu aberto = cartão cheio, colado no header */
+  .menu{
+    width: 100%;
+    flex-direction: column;
+    display: none;
+    margin-top: 6px;
+    padding: 6px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.98);
+    box-shadow: 0 12px 26px rgba(0,0,0,0.18);
+  }
+
+  .menu.menu--open{
+    display: flex;
+  }
+
+  .menu li{
+    margin-bottom: 0;
+  }
+
+  .menu li a{
+    width: 100%;
+    text-align: left;
+    padding: 9px 12px;
+    border-radius: 12px;
+    border-width: 0; /* deixa o pill mais clean, sombra já resolve */
+  }
+}
+
+/* Ajustes da topbar mobile no modo escuro */
+@media (max-width: 768px){
+  [data-theme="dark"] .main-header__inner{
+    background: rgba(15,23,42,0.92);
+  }
+
+  [data-theme="dark"] .menu{
+    background: #020617;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.9);
+    border: 1px solid rgba(148,163,184,0.6);
+  }
+
+  [data-theme="dark"] .menu li a{
+    background: transparent;
+    color: rgba(0,0,0,0.9);
+    background: #E5E7EB;
+  }
+}
+/* =========================================
+   TOPBAR MOBILE – botões maiores (tema + menu)
+   ========================================= */
+@media (max-width: 768px){
+
+  /* Botão hamburguer maior e mais confortável pra tocar */
+  .menu-toggle{
+    width: 36px;      /* antes ~28px */
+    height: 28px;     /* antes ~22px */
+    padding: 6px 8px; /* mantém “pill” bonitinho */
+  }
+
+  .menu-toggle span{
+    height: 4px;          /* barras mais grossas */
+    border-radius: 999px;
+  }
+
+  /* Ícone de tema maior (lua/sol) e com tap area melhor */
+  .theme-toggle{
+    padding: 8px 12px;    /* aumenta área clicável */
+    font-size: 20px;      /* antes ~15px */
+    line-height: 1;       /* evita ficar “espremido” */
+  }
+}
+
+
+/* =========================================
+   1) Mais espaço entre os botões de navegação
+   ========================================= */
+
+/* Espaço entre o ícone de tema e o hambúrguer */
+.main-nav{
+  gap: 16px; /* antes 10px */
+}
+
+/* Espaço entre os "pills" do menu (Início, Dados, Biblioteca...) */
+.menu{
+  column-gap: 26px; /* antes 20px */
+  row-gap: 20px;    /* um pouco mais de respiro entre linhas */
+}
+
+@media (max-width: 768px){
+  /* No mobile, mantém boa distância vertical entre itens */
+  .menu{
+    row-gap: 14px;
+  }
+}
+
+/* =========================================
+   2) Hambúrguer no modo escuro:
+      cápsula branca, traços pretos
+   ========================================= */
+
+[data-theme="dark"] .menu-toggle{
+  background: #F9FAFB;          /* fundo branco da cápsula */
+  border-radius: 999px;
+  padding: 6px 9px;             /* mantém boa área de toque */
+  box-shadow: 0 3px 8px rgba(0,0,0,0.8);
+}
+
+/* Barrinhas pretas dentro do botão branco */
+[data-theme="dark"] .menu-toggle span{
+  background: #0B1120;          /* quase preto */
+}
+
+
+/* ===== CORREÇÃO DO MODAL NO MODO ESCURO ===== */
+body.theme-dark .modal-overlay .modal-dialog{
+  background:#020617 !important;          /* fundo bem escuro */
+  color:#E5E7EB !important;               /* texto claro */
+  border:1px solid rgba(148,163,184,0.6);
+}
+
+/* título e chip */
+body.theme-dark .modal-overlay .modal-title span{
+  color:#F9FAFB;
+}
+body.theme-dark .modal-overlay .modal-chip{
+  background:#1E293B;
+  color:#BAE6FD;
+}
+
+/* borda do header */
+body.theme-dark .modal-overlay .modal-header{
+  border-bottom:1px solid rgba(51,65,85,0.9);
+}
+
+/* corpo do texto e listas */
+body.theme-dark .modal-overlay .modal-body p,
+body.theme-dark .modal-overlay .modal-body li,
+body.theme-dark .modal-overlay .modal-section-title{
+  color:#E5E7EB;
+}
+
+/* botão de fechar */
+body.theme-dark .modal-overlay .modal-close{
+  color:#9CA3AF;
+}
+
+/* imagem do modal em modo escuro */
+body.theme-dark .modal-overlay .modal-hero-img img{
+  box-shadow:0 12px 28px rgba(15,23,42,0.9);
+}
+
+body.theme-dark .modal-dialog {
+  background: #0B1120; /* Cor de fundo do modal no modo escuro */
+  color: #E5E7EB; /* Cor do texto no modo escuro */
+}
+
+body.theme-dark .modal-header {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.35); /* Linha de separação no header */
+}
+
+body.theme-dark .modal-title {
+  color: #E5E7EB; /* Título do modal no modo escuro */
+}
+
+body.theme-dark .modal-body {
+  color: #E5E7EB; /* Texto principal do modal */
+}
+
+body.theme-dark .modal-close {
+  color: #9CA3AF; /* Cor do botão de fechamento no modo escuro */
+}
+
+body.theme-dark .modal-close:hover {
+  color: #FFFFFF; /* Cor do botão de fechamento quando passar o mouse */
+}

@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Projetos CESPI – Observa Infância Viva · CESPI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Estilos apenas para a página de projetos (balões) -->
+  <style>
+    .projetos-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:16px;
+      align-items:flex-start;
+    }
+
+    .projeto-pill{
+      margin-top:8px;
+      padding:10px 12px;
+      border-radius:16px;
+      background:rgba(255,255,255,0.14);
+      border:1px solid rgba(255,255,255,0.7);
+      box-shadow:0 6px 14px rgba(15,23,42,0.28);
+      backdrop-filter:blur(4px);
+      -webkit-backdrop-filter:blur(4px);
+      transition:
+        transform 0.16s ease,
+        box-shadow 0.16s ease,
+        background 0.16s ease,
+        border-color 0.16s ease;
+    }
+
+    .projeto-pill h4{
+      margin:0 0 4px;
+      font-size:13px;
+      font-weight:600;
+    }
+
+    .projeto-pill p{
+      margin:0;
+      font-size:12px;
+      line-height:1.4;
+    }
+
+    .projeto-pill:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 22px rgba(15,23,42,0.45);
+      background:rgba(255,255,255,0.22);
+      border-color:rgba(255,255,255,0.9);
+    }
+
+    /* Versão para cards claros (fundo branco) */
+    .card--light .projeto-pill{
+      background:rgba(15,23,42,0.03);
+      border-color:rgba(148,163,184,0.7);
+      box-shadow:0 4px 10px rgba(15,23,42,0.12);
+      backdrop-filter:none;
+      -webkit-backdrop-filter:none;
+    }
+    .card--light .projeto-pill:hover{
+      background:rgba(15,23,42,0.06);
+      border-color:rgba(148,163,184,0.95);
+      box-shadow:0 8px 20px rgba(15,23,42,0.18);
+    }
+
+    /* ===== DESTAQUES ESPECIAIS – PROJETOS COM MODAL ===== */
+    .projeto-pill--destaque{
+      position:relative;
+      border-width:2px;
+      border-color:rgba(250,250,250,0.95);
+      box-shadow:0 10px 26px rgba(15,23,42,0.55);
+      background:linear-gradient(135deg,rgba(255,255,255,0.24),rgba(255,255,255,0.08));
+      cursor:pointer;
+    }
+    .projeto-pill--destaque::before{
+      content:"Card";
+      position:absolute;
+      top:-10px;
+      right:10px;
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:0.12em;
+      padding:2px 8px;
+      border-radius:999px;
+      background:rgba(15,23,42,0.85);
+      color:#F9FAFB;
+      box-shadow:0 4px 10px rgba(15,23,42,0.45);
+    }
+    .projeto-pill--destaque:hover{
+      transform:translateY(-3px) scale(1.01);
+      box-shadow:0 14px 32px rgba(15,23,42,0.7);
+      background:linear-gradient(135deg,rgba(255,255,255,0.32),rgba(255,255,255,0.16));
+    }
+
+    /* Ajuste em fundo claro */
+    .card--light .projeto-pill--destaque{
+      border-color:rgba(148,163,184,0.95);
+      background:linear-gradient(135deg,rgba(255,255,255,0.9),rgba(241,245,249,0.9));
+    }
+    .card--light .projeto-pill--destaque::before{
+      background:#0F172A;
+    }
+
+    /* Ajustes para modo escuro */
+    body.theme-dark .card--light{
+      background:rgba(15,23,42,0.96);
+      border-color:rgba(148,163,184,0.7);
+      color:#E5E7EB;
+    }
+    body.theme-dark .card--light .projeto-pill{
+      background:rgba(15,23,42,0.55);
+      border-color:rgba(148,163,184,0.95);
+      color:#E5E7EB;
+      box-shadow:0 6px 16px rgba(15,23,42,0.55);
+    }
+    body.theme-dark .card--light .projeto-pill:hover{
+      background:rgba(15,23,42,0.78);
+      box-shadow:0 10px 22px rgba(15,23,42,0.7);
+    }
+    body.theme-dark .projeto-pill--destaque{
+      background:linear-gradient(135deg,rgba(15,23,42,0.9),rgba(30,64,175,0.85));
+      border-color:rgba(191,219,254,0.95);
+    }
+
+    /* Cronograma semanal – cards coloridos */
+    .semana-wrapper{
+      margin-top:24px;
+    }
+
+    .semana-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:16px;
+      margin-top:12px;
+    }
+
+    .semana-card{
+      position:relative;
+      border-radius:18px;
+      padding:12px 12px 10px;
+      color:#FFFFFF;
+      overflow:hidden;
+      box-shadow:0 10px 24px rgba(15,23,42,0.35);
+      border:1px solid rgba(255,255,255,0.6);
+    }
+
+    .semana-card::before{
+      content:"";
+      position:absolute;
+      inset:-20%;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.35) 0, transparent 55%),
+        radial-gradient(circle at bottom right, rgba(0,0,0,0.28) 0, transparent 55%);
+      opacity:0.7;
+      pointer-events:none;
+    }
+
+    .semana-card-content{
+      position:relative;
+      z-index:1;
+    }
+
+    .semana-day{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:0.15em;
+      font-weight:700;
+      margin-bottom:6px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .semana-day-chip{
+      width:18px;
+      height:18px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:11px;
+      font-weight:700;
+    }
+
+    .semana-sub{
+      font-size:11px;
+      opacity:0.9;
+      margin-bottom:8px;
+    }
+
+    .semana-projects{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+    }
+
+    .semana-tag{
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.15);
+      border:1px solid rgba(255,255,255,0.6);
+      backdrop-filter:blur(4px);
+      -webkit-backdrop-filter:blur(4px);
+      white-space:nowrap;
+    }
+
+    /* Cores específicas por dia (degradês) */
+    .semana-card--seg{
+      background:linear-gradient(135deg,#1CABB2 0%,#00A859 55%,#00796B 100%);
+    }
+    .semana-card--ter{
+      background:linear-gradient(135deg,#F4AD22 0%,#EB5E28 50%,#C0392B 100%);
+    }
+    .semana-card--qua{
+      background:linear-gradient(135deg,#9C27B0 0%,#F06292 45%,#F4AD22 100%);
+    }
+    .semana-card--qui{
+      background:linear-gradient(135deg,#1787B5 0%,#1CABB2 50%,#00A859 100%);
+    }
+    .semana-card--sex{
+      background:linear-gradient(135deg,#111827 0%,#1F2937 40%,#4B5563 100%);
+    }
+    .semana-card--sab{
+      background:linear-gradient(135deg,#E53935 0%,#F57C00 50%,#F4AD22 100%);
+    }
+
+    /* Ajustes modo escuro – mantém contraste e brilho */
+    body.theme-dark .semana-card{
+      box-shadow:0 12px 30px rgba(0,0,0,0.6);
+      border-color:rgba(255,255,255,0.7);
+    }
+    body.theme-dark .semana-sub{
+      opacity:0.92;
+    }
+
+    /* ===== Hover da tabela semanal (cards + balõezinhos) ===== */
+
+    .semana-card,
+    .semana-tag{
+      transition:
+        transform .16s ease,
+        box-shadow .18s ease,
+        border-color .18s ease,
+        background .18s ease,
+        filter .18s ease;
+    }
+
+    .semana-card:hover{
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(15,23,42,0.55);
+      border-color: rgba(255,255,255,0.9);
+      filter: brightness(1.03);
+    }
+
+    .semana-tag:hover{
+      background: rgba(255,255,255,0.25);
+      border-color: rgba(255,255,255,0.9);
+      transform: translateY(-1px);
+    }
+
+    /* Card – Observa Infância Viva & inteligência em dados (todos os temas) */
+    .projeto-card--observatorio{
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.35) 0, transparent 55%),
+        linear-gradient(135deg, var(--blue) 0%, #1CABB2 50%, #1787B5 100%);
+      color:#FFFFFF;
+      border-color:rgba(23,135,181,0.9);
+      box-shadow:0 14px 32px rgba(15,23,42,0.28);
+
+      border-radius:18px;
+      padding:14px 14px 12px;
+    }
+
+    .projeto-card--observatorio h3{
+      color:#FFFFFF;
+    }
+
+    .projeto-card--observatorio p,
+    .projeto-card--observatorio h4{
+      color:#F9FAFB;
+    }
+
+    body.theme-dark .projeto-card--observatorio{
+      background:
+        radial-gradient(circle at top left, rgba(15,23,42,0.65) 0, transparent 55%),
+        linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0B718E 100%);
+      border-color:rgba(148,163,184,0.9);
+      box-shadow:0 18px 40px rgba(0,0,0,0.7);
+    }
+
+    /* ========== MODAL DE PROJETOS ==========
+       - overlay escuro
+       - caixa central com imagem e textos
+    */
+    .modal-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,0.7);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:1000;
+      padding:16px;
+    }
+    .modal-overlay.is-open{
+      display:flex;
+    }
+    .modal-dialog{
+      position:relative;
+      max-width:720px;
+      width:100%;
+      border-radius:20px;
+      background:#FFFFFF;
+      box-shadow:0 24px 60px rgba(15,23,42,0.75);
+      overflow:hidden;
+    }
+    body.theme-dark .modal-dialog{
+      background:#0B1120;
+      color:#E5E7EB;
+    }
+    .modal-header{
+      padding:12px 16px 8px;
+      border-bottom:1px solid rgba(148,163,184,0.35);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+    }
+    .modal-title{
+      font-size:15px;
+      font-weight:600;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .modal-chip{
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:0.14em;
+      padding:2px 8px;
+      border-radius:999px;
+      background:#E0F2FE;
+      color:#0369A1;
+    }
+    body.theme-dark .modal-chip{
+      background:#1E293B;
+      color:#BAE6FD;
+    }
+    .modal-close{
+      border:none;
+      background:transparent;
+      font-size:18px;
+      cursor:pointer;
+      color:#64748B;
+    }
+    body.theme-dark .modal-close{
+      color:#9CA3AF;
+    }
+
+    .modal-body{
+      padding:12px 16px 14px;
+      max-height:70vh;
+      overflow:auto;
+    }
+    .modal-hero-img{
+      text-align:center;
+      margin-bottom:12px;
+    }
+    .modal-hero-img img{
+      max-width:220px;
+      width:100%;
+      height:auto;
+      border-radius:18px;
+      box-shadow:0 12px 28px rgba(15,23,42,0.45);
+      object-fit:cover;
+    }
+    .modal-body p{
+      font-size:13px;
+      margin:0 0 8px;
+    }
+    .modal-section-title{
+      font-size:13px;
+      font-weight:600;
+      margin-top:6px;
+      margin-bottom:4px;
+    }
+    .modal-body ul{
+      padding-left:18px;
+      margin:0 0 6px;
+      font-size:13px;
+    }
+    .modal-body li+li{
+      margin-top:2px;
+    }
+
+    @media (max-width:640px){
+      .modal-dialog{
+        max-width:100%;
+      }
+      .modal-hero-img img{
+        max-width:180px;
+      }
+    }
+
+
+    /* ===== CORREÇÃO FORÇADA DO MODAL NO MODO ESCURO ===== */
+body.theme-dark .modal-overlay{
+  background:rgba(15,23,42,0.85) !important;
+}
+
+body.theme-dark .modal-overlay .modal-dialog{
+  background:#020617 !important;         /* fundo escuro */
+  color:#E5E7EB !important;              /* texto claro */
+  border:1px solid rgba(148,163,184,0.7);
+}
+
+/* header e título */
+body.theme-dark .modal-overlay .modal-header{
+  border-bottom:1px solid rgba(51,65,85,0.9);
+}
+
+body.theme-dark .modal-overlay .modal-title span{
+  color:#F9FAFB !important;
+}
+
+/* chip */
+body.theme-dark .modal-overlay .modal-chip{
+  background:#1E293B !important;
+  color:#BAE6FD !important;
+}
+
+/* texto geral do modal */
+body.theme-dark .modal-overlay .modal-body p,
+body.theme-dark .modal-overlay .modal-body li,
+body.theme-dark .modal-overlay .modal-section-title{
+  color:#E5E7EB !important;
+}
+
+/* botão fechar */
+body.theme-dark .modal-overlay .modal-close{
+  color:#9CA3AF !important;
+}
+
+/* imagem no modal escuro */
+body.theme-dark .modal-overlay .modal-hero-img img{
+  box-shadow:0 12px 28px rgba(15,23,42,0.9);
+}
+
+
+[data-theme="dark"] .modal-dialog{
+  background:#0B1120;
+  color:#E5E7EB;
+}
+
+/* ===== CORREÇÃO FORÇADA DO MODAL NO MODO ESCURO ===== */
+[data-theme="dark"] .modal-overlay{
+  background:rgba(15,23,42,0.85) !important;
+}
+
+[data-theme="dark"] .modal-overlay .modal-dialog{
+  background:#020617 !important;         /* fundo escuro */
+  color:#E5E7EB !important;              /* texto claro */
+  border:1px solid rgba(148,163,184,0.7);
+}
+
+/* header e título */
+[data-theme="dark"] .modal-overlay .modal-header{
+  border-bottom:1px solid rgba(51,65,85,0.9);
+}
+
+[data-theme="dark"] .modal-overlay .modal-title span{
+  color:#F9FAFB !important;
+}
+
+/* chip */
+[data-theme="dark"] .modal-overlay .modal-chip{
+  background:#1E293B !important;
+  color:#BAE6FD  !important;
+}
+
+/* texto geral do modal */
+[data-theme="dark"] .modal-overlay .modal-body p,
+[data-theme="dark"] .modal-overlay .modal-body li,
+[data-theme="dark"] .modal-overlay .modal-section-title{
+  color:#E5E7EB !important;
+}
+
+/* botão fechar */
+[data-theme="dark"] .modal-overlay .modal-close{
+  color:#9CA3AF !important;
+}
+
+/* imagem no modal escuro */
+[data-theme="dark"] .modal-overlay .modal-hero-img img{
+  box-shadow:0 12px 28px rgba(15,23,42,0.9);
+}
+
+    /* ========== MODAL DE PROJETOS ==========
+       - overlay escuro
+       - caixa central com imagem e textos
+       - visual mais “card premium” e seções bem separadas
+    */
+    .modal-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,0.75);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:1000;
+      padding:16px;
+    }
+    .modal-overlay.is-open{
+      display:flex;
+    }
+
+    .modal-dialog{
+      position:relative;
+      max-width:760px;
+      width:100%;
+      border-radius:22px;
+      background:
+        radial-gradient(circle at top left, rgba(148,163,184,0.08) 0, transparent 55%),
+        #FFFFFF;
+      box-shadow:
+        0 18px 48px rgba(15,23,42,0.55),
+        0 0 0 1px rgba(148,163,184,0.22);
+      overflow:hidden;
+    }
+    body.theme-dark .modal-dialog,
+    [data-theme="dark"] .modal-dialog{
+      background:
+        radial-gradient(circle at top left, rgba(15,23,42,0.9) 0, transparent 55%),
+        #020617;
+      box-shadow:
+        0 22px 60px rgba(0,0,0,0.9),
+        0 0 0 1px rgba(30,64,118,0.65);
+      color:#E5E7EB;
+    }
+
+    .modal-header{
+      padding:12px 18px 10px;
+      border-bottom:1px solid rgba(148,163,184,0.25);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+      background:
+        linear-gradient(135deg, rgba(239,246,255,0.96), rgba(219,234,254,0.94));
+    }
+    body.theme-dark .modal-header,
+    [data-theme="dark"] .modal-header{
+      background:
+        linear-gradient(135deg, rgba(15,23,42,0.98), rgba(30,64,118,0.9));
+      border-bottom:1px solid rgba(30,64,118,0.9);
+    }
+
+    .modal-title{
+      font-size:15px;
+      font-weight:600;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:#0F172A;
+    }
+    body.theme-dark .modal-title,
+    [data-theme="dark"] .modal-title{
+      color:#F9FAFB;
+    }
+
+    .modal-chip{
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:0.14em;
+      padding:3px 9px;
+      border-radius:999px;
+      background:#E0F2FE;
+      color:#0369A1;
+      border:1px solid rgba(37,99,235,0.35);
+      box-shadow:0 4px 10px rgba(148,163,184,0.55);
+    }
+    body.theme-dark .modal-chip,
+    [data-theme="dark"] .modal-chip{
+      background:#1E293B;
+      color:#BAE6FD;
+      border-color:rgba(56,189,248,0.65);
+      box-shadow:0 4px 12px rgba(15,23,42,0.9);
+    }
+
+    .modal-close{
+      border:none;
+      background:transparent;
+      font-size:20px;
+      cursor:pointer;
+      color:#64748B;
+      padding:4px;
+      line-height:1;
+      border-radius:999px;
+      transition:
+        background 0.16s ease,
+        color 0.16s ease,
+        transform 0.12s ease;
+    }
+    .modal-close:hover{
+      background:rgba(148,163,184,0.15);
+      color:#0F172A;
+      transform:translateY(-1px);
+    }
+    body.theme-dark .modal-close,
+    [data-theme="dark"] .modal-close{
+      color:#9CA3AF;
+    }
+    body.theme-dark .modal-close:hover,
+    [data-theme="dark"] .modal-close:hover{
+      background:rgba(15,23,42,0.8);
+      color:#F9FAFB;
+    }
+
+    .modal-body{
+      padding:14px 18px 16px;
+      max-height:72vh;
+      overflow:auto;
+      background:
+        radial-gradient(circle at top left, rgba(251,251,251,0.8) 0, transparent 55%),
+        #FFFFFF;
+    }
+    body.theme-dark .modal-body,
+    [data-theme="dark"] .modal-body{
+      background:
+        radial-gradient(circle at top left, rgba(15,23,42,0.9) 0, transparent 55%),
+        #020617;
+    }
+
+    .modal-hero-img{
+      text-align:center;
+      margin-bottom:12px;
+    }
+    .modal-hero-img img{
+      max-width:260px;
+      width:100%;
+      height:auto;
+      border-radius:20px;
+      box-shadow:0 14px 32px rgba(15,23,42,0.5);
+      object-fit:cover;
+    }
+    body.theme-dark .modal-hero-img img,
+    [data-theme="dark"] .modal-hero-img img{
+      box-shadow:0 16px 40px rgba(0,0,0,0.95);
+    }
+
+    .modal-body > p{
+      font-size:13px;
+      margin:0 0 10px;
+      color:#0F172A;
+    }
+    body.theme-dark .modal-body > p,
+    [data-theme="dark"] .modal-body > p{
+      color:#E5E7EB;
+    }
+
+    .modal-section{
+      position:relative;
+      margin-top:10px;
+      padding-top:8px;
+      padding-left:10px;
+      border-top:1px dashed rgba(148,163,184,0.45);
+    }
+    .modal-section::before{
+      content:"";
+      position:absolute;
+      top:-4px;
+      left:0;
+      width:4px;
+      height:18px;
+      border-radius:999px;
+      background:linear-gradient(180deg,#1CABB2,#1787B5);
+    }
+    body.theme-dark .modal-section,
+    [data-theme="dark"] .modal-section{
+      border-top:1px dashed rgba(51,65,85,0.9);
+    }
+    body.theme-dark .modal-section::before,
+    [data-theme="dark"] .modal-section::before{
+      background:linear-gradient(180deg,#38BDF8,#22C55E);
+    }
+
+    .modal-section-title{
+      font-size:13px;
+      font-weight:600;
+      margin-top:0;
+      margin-bottom:4px;
+      color:#0F172A;
+    }
+    body.theme-dark .modal-section-title,
+    [data-theme="dark"] .modal-section-title{
+      color:#E5E7EB;
+    }
+
+    .modal-body ul{
+      padding-left:18px;
+      margin:0 0 8px;
+      font-size:13px;
+      color:#111827;
+    }
+    body.theme-dark .modal-body ul,
+    [data-theme="dark"] .modal-body ul{
+      color:#E5E7EB;
+    }
+
+    .modal-body li+li{
+      margin-top:3px;
+    }
+
+    /* Pequena animação de entrada do diálogo */
+    .modal-overlay.is-open .modal-dialog{
+      animation: modal-pop 0.18s ease-out;
+    }
+    @keyframes modal-pop{
+      from{
+        opacity:0;
+        transform:translateY(6px) scale(0.98);
+      }
+      to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+      }
+    }
+
+    @media (max-width:640px){
+      .modal-dialog{
+        max-width:100%;
+        border-radius:18px;
+      }
+      .modal-hero-img img{
+        max-width:200px;
+      }
+      .modal-body{
+        padding:12px 14px 14px;
+      }
+    }
+
+    /* ===== CORREÇÃO FORÇADA DO MODAL NO MODO ESCURO ===== */
+    body.theme-dark .modal-overlay,
+    [data-theme="dark"] .modal-overlay{
+      background:rgba(15,23,42,0.88) !important;
+    }
+
+    body.theme-dark .modal-overlay .modal-dialog,
+    [data-theme="dark"] .modal-overlay .modal-dialog{
+      background:#020617 !important;
+      color:#E5E7EB !important;
+      border:1px solid rgba(148,163,184,0.7);
+    }
+
+    body.theme-dark .modal-overlay .modal-header,
+    [data-theme="dark"] .modal-overlay .modal-header{
+      border-bottom:1px solid rgba(51,65,85,0.9);
+    }
+
+    body.theme-dark .modal-overlay .modal-title span,
+    [data-theme="dark"] .modal-overlay .modal-title span{
+      color:#F9FAFB !important;
+    }
+
+    body.theme-dark .modal-overlay .modal-chip,
+    [data-theme="dark"] .modal-overlay .modal-chip{
+      background:#1E293B !important;
+      color:#BAE6FD !important;
+    }
+
+    body.theme-dark .modal-overlay .modal-body p,
+    body.theme-dark .modal-overlay .modal-body li,
+    body.theme-dark .modal-overlay .modal-section-title,
+    [data-theme="dark"] .modal-overlay .modal-body p,
+    [data-theme="dark"] .modal-overlay .modal-body li,
+    [data-theme="dark"] .modal-overlay .modal-section-title{
+      color:#E5E7EB !important;
+    }
+
+    body.theme-dark .modal-overlay .modal-close,
+    [data-theme="dark"] .modal-overlay .modal-close{
+      color:#9CA3AF !important;
+    }
+
+    body.theme-dark .modal-overlay .modal-hero-img img,
+    [data-theme="dark"] .modal-overlay .modal-hero-img img{
+      box-shadow:0 16px 40px rgba(0,0,0,0.95);
+    }
+
+
+    
+  </style>
+</head>
+<body>
+
+  <div class="top-ribbon">
+    <span class="r-blue"></span>
+    <span class="r-green"></span>
+    <span class="r-yellow"></span>
+    <span class="r-orange"></span>
+    <span class="r-red"></span>
+  </div>
+
+  <header class="main-header">
+    <div class="container">
+      <div class="main-header__inner">
+        <a href="index.html#topo" class="brand-block">
+          <div class="brand-icon">
+            <img src="https://images.seeklogo.com/logo-png/23/3/prefeitura-de-fortaleza-logo-png_seeklogo-231117.png" alt="Logo Prefeitura de Fortaleza">
+          </div>
+          <div class="brand-text">
+            <strong>Observa Infância Viva</strong>
+            <span>Observatório da Primeira Infância · CESPI · Fortaleza</span>
+          </div>
+        </a>
+
+        <nav class="main-nav">
+          <button class="menu-toggle" id="btnMenu" aria-label="Abrir menu">
+            <span></span><span></span><span></span>
+          </button>
+          <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">
+            🌙
+          </button>
+          <ul class="menu" id="menuMain">
+            <li><a href="index.html#topo">Início</a></li>
+            <li><a href="dados.html">Dados &amp; Painéis</a></li>
+            <!-- <li><a href="programas.html">Planos, Programas e Ações</a></li> -->
+            <li><a href="biblioteca.html">Biblioteca &amp; Materiais</a></li>
+            <li class="active"><a href="projetos.html">Projetos</a></li>
+            <li><a href="parcerias.html">Parcerias</a></li>
+            <li><a href="noticias.html">Notícias</a></li>
+            <li><a href="sobre.html">Sobre o Observatório</a></li>
+            <li><a href="contato.html">Fale Conosco</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section section--white" id="projetos-cespi">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="index.html">Início</a> / Projetos CESPI
+        </div>
+
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Portfólio de projetos da CESPI</h2>
+            <p class="section-subtitle">
+              A CESPI coordena um conjunto de <strong>projetos intersetoriais</strong> que articulam rua, território,
+              fé, cultura, proteção social, governança e dados em torno da Primeira Infância. Abaixo,
+              uma visão organizada desses projetos, com descrições ampliadas e balões para destacar
+              cada iniciativa.
+            </p>
+          </div>
+        </div>
+
+        <p style="font-size:13px; max-width:780px; margin-bottom:18px;">
+          A organização por grupos temáticos ajuda a visualizar como o trabalho da CESPI combina
+          <strong>intervenções em território</strong>, <strong>planejamento e marcos legais</strong>, <strong>proteção integral</strong>,
+          <strong>diálogo social e formação</strong> e <strong>inteligência em dados</strong> para apoiar o Programa Municipal
+          pela Primeira Infância de Fortaleza (PMPIF).
+        </p>
+
+        <!-- GRID DE CARDS TEMÁTICOS -->
+        <div class="projetos-grid">
+
+          <!-- CARD 1: Territórios e Ruas -->
+          <article
+            class="card"
+            style="
+              background:
+                radial-gradient(circle at top left, rgba(255,255,255,0.26) 0, transparent 55%),
+                linear-gradient(135deg, #1CABB2 0%, #00A859 55%, #1CABB2 100%);
+              color:#FFFFFF;
+              border-color:rgba(0,0,0,0.12);
+            "
+          >
+            <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;">
+              <div style="
+                width:34px;height:34px;border-radius:999px;
+                display:flex;align-items:center;justify-content:center;
+                background:rgba(255,255,255,0.16);
+                box-shadow:0 4px 10px rgba(0,0,0,0.35);
+                flex-shrink:0;
+              ">
+                <span style="font-size:20px;">🌈</span>
+              </div>
+              <div>
+                <h3 style="font-size:15px;margin:0 0 4px;">Projetos em territórios e ruas para brincar</h3>
+                <p style="font-size:12px;margin:0 0 4px;">
+                  Projetos que aproximam a Primeira Infância dos territórios, qualificando ruas, praças e
+                  espaços públicos como ambientes de cuidado, convivência e brincadeira.
+                </p>
+              </div>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Ruas da Infância</h4>
+              <p>
+                Iniciativa voltada à transformação de ruas e espaços urbanos em ambientes mais seguros e
+                acolhedores para crianças pequenas. O projeto articula urbanismo tático, sinalização lúdica,
+                estímulo à mobilidade a pé e fortalecimento de redes locais de cuidado.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Infância Viva em território</h4>
+              <p>
+                Ações territorializadas que levam a agenda da Primeira Infância para bairros específicos,
+                combinando visitas técnicas, escutas, oficinas, monitoramento de dados e articulação com
+                equipamentos locais da saúde, educação, assistência e cultura.
+              </p>
+            </div>
+
+            <!-- NOVO PROJETO DESTAQUE: INFÂNCIA VIVA NA PRAÇA -->
+            <div class="projeto-pill projeto-pill--destaque" data-projeto-modal="modal-infancia-praca">
+              <h4>Infância Viva na Praça</h4>
+              <p>
+                Programação especial em praças e espaços públicos, com apresentações culturais, ações de
+                cidadania, atividades lúdicas e rodas de conversa sobre cuidado e parentalidade.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Infância Viva</h4>
+              <p>
+                Agenda municipal intersetorial que integra iniciativas do PMPIF, promovendo a articulação
+                das diferentes secretarias em torno de objetivos comuns: desenvolvimento integral das
+                crianças, redução de desigualdades e fortalecimento de vínculos familiares e comunitários.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Cirandas</h4>
+              <p>
+                Encontros e mobilizações comunitárias em formato de rodas, brincadeiras e momentos de
+                escuta com crianças e famílias. As Cirandas permitem discutir temas sensíveis, divulgar
+                serviços e fortalecer o sentimento de pertencimento ao território.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Projeto Cidade</h4>
+              <p>
+                Conjunto de ações que utilizam espaços urbanos – como a própria Cidade da Criança e outros
+                equipamentos públicos – como laboratórios vivos para experimentar políticas, atividades
+                pedagógicas e intervenções urbanas centradas nas crianças.
+              </p>
+            </div>
+
+            <!-- BEBETECAS – DESTAQUE COM MODAL -->
+            <div class="projeto-pill projeto-pill--destaque" data-projeto-modal="modal-bebeteca">
+              <h4>Bebetecas</h4>
+              <p>
+                Implantação e fortalecimento de espaços de leitura, estímulo sensorial e convivência voltados
+                a bebês e crianças pequenas, com acervos adequados à faixa etária e atividades mediadas
+                voltadas à família.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Cuidoteca</h4>
+              <p>
+                Ambiente que integra cuidado, informação e acesso a serviços para famílias e cuidadores,
+                promovendo práticas de cuidado responsivo, orientação sobre direitos e conexão com a rede
+                socioassistencial e de saúde.
+              </p>
+            </div>
+
+            <!-- CUCA CUIDA – DESTAQUE COM MODAL -->
+            <div class="projeto-pill projeto-pill--destaque" data-projeto-modal="modal-cuca-cuida">
+              <h4>Cuca Cuida</h4>
+              <p>
+                Parceria com equipamentos da juventude e cultura para incorporar a Primeira Infância na
+                agenda desses espaços, conectando adolescentes, famílias e crianças em ações de
+                sensibilização, cuidado e proteção.
+              </p>
+            </div>
+          </article>
+
+          <!-- CARD 2: Planejamento e Governança -->
+          <article
+            class="card"
+            style="
+              background:
+                radial-gradient(circle at top left, rgba(255,255,255,0.24) 0, transparent 55%),
+                linear-gradient(135deg, #F4AD22 0%, #EB5E28 55%, #F4AD22 100%);
+              color:#111827;
+              border-color:rgba(0,0,0,0.12);
+            "
+          >
+            <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;">
+              <div style="
+                width:34px;height:34px;border-radius:999px;
+                display:flex;align-items:center;justify-content:center;
+                background:rgba(255,255,255,0.95);
+                box-shadow:0 4px 10px rgba(0,0,0,0.18);
+                flex-shrink:0;
+              ">
+                <span style="font-size:20px;">📜</span>
+              </div>
+              <div>
+                <h3 style="font-size:15px;margin:0 0 4px;">Planejamento, marcos legais e governança</h3>
+                <p style="font-size:12px;margin:0 0 4px;">
+                  Projetos que sustentam o marco legal, a governança intersetorial e o planejamento de
+                  longo prazo da política de Primeira Infância em Fortaleza.
+                </p>
+              </div>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Plano Decenal Nacional de Combate à Violência</h4>
+              <p>
+                Articulação do município ao plano nacional voltado ao enfrentamento das violências contra
+                crianças, com leitura local, definição de prioridades e integração com o PMPIF.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Plano Decenal municipal</h4>
+              <p>
+                Desdobramento do plano decenal para a realidade de Fortaleza, com metas, ações,
+                indicadores e instâncias de acompanhamento voltadas à primeira infância.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>PFI – Plano/Programa intersetorial</h4>
+              <p>
+                Instrumento de planejamento que organiza as ações do PMPIF entre diferentes secretarias,
+                facilitando a pactuação de responsabilidades, metas e cronogramas.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Comissões e instâncias de governança</h4>
+              <p>
+                Comissões e grupos formais que acompanham planos, programas e instrumentos, garantindo
+                que a pauta da Primeira Infância esteja presente nos espaços estratégicos de decisão.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>GTI – Grupo de Trabalho Intersetorial</h4>
+              <p>
+                Espaço técnico de pactuação e acompanhamento das ações do PMPIF, onde diferentes áreas
+                da gestão debatem dados, prioridades e fluxos de trabalho.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Monitoramento de planos e indicadores (JPS e afins)</h4>
+              <p>
+                Participação em fóruns e agendas de monitoramento, conectando os indicadores da infância aos
+                planos municipais, estaduais e nacionais, e fortalecendo a cultura de avaliação.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Articulação com o Conselho de Direitos</h4>
+              <p>
+                Integração com o Conselho Municipal dos Direitos da Criança e do Adolescente em decisões
+                sobre financiamento, prioridades de editais e acompanhamento de projetos voltados à
+                Primeira Infância.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Parceria com iniciativas nacionais (como ABRINQ)</h4>
+              <p>
+                Projetos que dialogam com iniciativas nacionais de reconhecimento e apoio a cidades
+                comprometidas com a infância, fortalecendo a imagem e os compromissos de Fortaleza.
+              </p>
+            </div>
+          </article>
+
+          <!-- CARD 3: Proteção e Fluxos -->
+          <article
+            class="card"
+            style="
+              background:
+                radial-gradient(circle at top left, rgba(255,255,255,0.24) 0, transparent 55%),
+                linear-gradient(135deg, #DE464E 0%, #1787B5 45%, #1CABB2 100%);
+              color:#FFFFFF;
+              border-color:rgba(0,0,0,0.12);
+            "
+          >
+            <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;">
+              <div style="
+                width:34px;height:34px;border-radius:999px;
+                display:flex;align-items:center;justify-content:center;
+                background:rgba(255,255,255,0.16);
+                box-shadow:0 4px 10px rgba(0,0,0,0.35);
+                flex-shrink:0;
+              ">
+                <span style="font-size:20px;">🛡️</span>
+              </div>
+              <div>
+                <h3 style="font-size:15px;margin:0 0 4px;">Proteção integral e fluxos de atendimento</h3>
+                <p style="font-size:12px;margin:0 0 4px;">
+                  Projetos que qualificam fluxos de atendimento, articulação com justiça e órgãos de controle,
+                  e garantem que crianças pequenas sejam protegidas em diferentes situações de vulnerabilidade.
+                </p>
+              </div>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Fluxo de Criança em Situação de Rua</h4>
+              <p>
+                Organização do fluxo intersetorial de atendimento às crianças de 0 a 6 anos em situação de rua,
+                conectando assistência social, saúde, educação, conselhos de direitos e sistema de justiça.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Acordos de Cooperação Técnica com órgãos de controle</h4>
+              <p>
+                Projetos e acordos com órgãos como tribunais de contas para acompanhar investimentos,
+                programas e resultados relacionados à Primeira Infância, reforçando transparência e
+                responsabilização.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Parcerias com universidades</h4>
+              <p>
+                Cooperações com instituições de ensino superior para desenvolvimento de estudos, pesquisas,
+                avaliações e formações que apoiem as decisões sobre a Primeira Infância.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Integração com política habitacional</h4>
+              <p>
+                Projetos que aproximam a política de habitação do debate sobre direitos das crianças,
+                considerando moradia digna, entorno urbano e acesso a serviços como elementos da
+                proteção integral.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Uso de imóveis públicos para a infância</h4>
+              <p>
+                Diálogo com instâncias responsáveis por imóveis e espaços públicos para garantir que
+                áreas estratégicas possam ser destinadas a projetos e serviços voltados às crianças e suas famílias.
+              </p>
+            </div>
+          </article>
+
+          <!-- CARD 4: Diálogo, Fé e Formação -->
+          <article
+            class="card"
+            style="
+              background:
+                radial-gradient(circle at top left, rgba(255,255,255,0.26) 0, transparent 55%),
+                linear-gradient(135deg, #1787B5 0%, #1CABB2 55%, #F4AD22 100%);
+              color:#111827;
+              border-color:rgba(0,0,0,0.12);
+            "
+          >
+            <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;">
+              <div style="
+                width:34px;height:34px;border-radius:999px;
+                display:flex;align-items:center;justify-content:center;
+                background:rgba(255,255,255,0.95);
+                box-shadow:0 4px 10px rgba(0,0,0,0.18);
+                flex-shrink:0;
+              ">
+                <span style="font-size:20px;">💬</span>
+              </div>
+              <div>
+                <h3 style="font-size:15px;margin:0 0 4px;">Diálogo social, fé, formação e comunicação</h3>
+                <p style="font-size:12px;margin:0 0 4px;">
+                  Projetos que apostam na escuta, na fé, na formação contínua e na comunicação para
+                  reforçar a agenda da Primeira Infância junto a diferentes públicos.
+                </p>
+              </div>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Café com Fé</h4>
+              <p>
+                Encontros com comunidades e lideranças religiosas para dialogar sobre proteção, cuidado,
+                prevenção de violências e promoção de uma cultura de paz e acolhimento às crianças.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Cursos e formações</h4>
+              <p>
+                Oferta de cursos e atividades formativas para equipes técnicas, gestoras e parceiros da rede,
+                abordando temas como desenvolvimento infantil, intersetorialidade, proteção e uso de dados.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Livros e materiais de referência</h4>
+              <p>
+                Curadoria, produção e divulgação de livros, cadernos e materiais de apoio sobre a Primeira
+                Infância, ampliando o repertório das equipes e das famílias.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Ouvidoria e canais de escuta</h4>
+              <p>
+                Fortalecimento da escuta institucional por meio de ouvidorias e outros canais, qualificando
+                o registro e a análise de manifestações relacionadas às crianças e às famílias.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Ofícios e comunicação institucional</h4>
+              <p>
+                Gestão de ofícios, convites, respostas e comunicados que garantem o fluxo de informação
+                entre a CESPI, secretarias parceiras, conselhos, órgãos de controle e sociedade civil.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Comunicação via e-mail institucional</h4>
+              <p>
+                Organização da comunicação por e-mail com secretarias, equipamentos, parceiros e
+                projetos, apoiando a coordenação da agenda da Primeira Infância.
+              </p>
+            </div>
+          </article>
+
+          <!-- CARD 5: Observatório e Dados -->
+          <article class="projeto-card projeto-card--observatorio">
+            <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;">
+              <div style="
+                width:34px;height:34px;border-radius:999px;
+                display:flex;align-items:center;justify-content:center;
+                background:linear-gradient(135deg,#1CABB2,#1787B5);
+                color:#FFFFFF;
+                box-shadow:0 4px 12px rgba(15,23,42,0.45);
+                flex-shrink:0;
+              ">
+                <span style="font-size:20px;">📊</span>
+              </div>
+              <div>
+                <h3 style="font-size:15px;margin:0 0 4px;">Observa Infância Viva &amp; inteligência em dados</h3>
+                <p style="font-size:12px;margin:0 0 4px;">
+                  Projetos que conectam o Observa Infância Viva à atenção primária, aos núcleos
+                  especializados e às instâncias de planejamento, transformando dados em decisões.
+                </p>
+              </div>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Observatório CESPI</h4>
+              <p>
+                Organização de bases de dados, construção de indicadores, desenvolvimento de painéis,
+                infográficos e relatórios que apoiam a gestão do PMPIF e as secretarias parceiras.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Articulação com APS e Núcleos de Desenvolvimento Infantil</h4>
+              <p>
+                Integração com a Atenção Primária à Saúde e núcleos especializados para monitorar
+                desenvolvimento infantil, encaminhamentos e acesso a serviços essenciais.
+              </p>
+            </div>
+
+            <div class="projeto-pill">
+              <h4>Monitoramento de metas e indicadores</h4>
+              <p>
+                Consolidação de indicadores, acompanhamento de metas e elaboração de análises para
+                qualificar a tomada de decisão, a prestação de contas e o diálogo com órgãos de controle.
+              </p>
+            </div>
+
+            <p style="font-size:12px;margin-top:8px;">
+              Estes projetos formam o núcleo de inteligência do Observa Infância Viva, permitindo que
+              as evidências geradas se traduzam em ajustes de rota, priorização de ações e fortalecimento
+              da rede de proteção à Primeira Infância.
+            </p>
+          </article>
+
+        </div>
+
+        <!-- MINI-CRONOGRAMA SEMANAL (SEM NOMES DE PESSOAS) -->
+        <section class="semana-wrapper" aria-label="Cronograma semanal de projetos">
+          <h3 style="font-size:15px;margin-bottom:6px;">Como os projetos aparecem na rotina semanal</h3>
+          <p style="font-size:12px;max-width:780px;margin-bottom:8px;">
+            Abaixo, uma síntese do <strong>cronograma de eventos CESPI</strong> que inspirou esta organização.
+            Cada dia da semana concentra um conjunto de projetos, combinando planejamento, território,
+            proteção, formação e articulação institucional.
+          </p>
+
+          <div class="semana-grid">
+            <!-- Segunda -->
+            <article class="semana-card semana-card--seg">
+              <div class="semana-card-content">
+                <div class="semana-day">
+                  <span class="semana-day-chip">S</span>
+                  <span>Segunda-feira</span>
+                </div>
+                <p class="semana-sub">
+                  Foco em territórios, marcos de enfrentamento à violência e ações de fé e formação.
+                </p>
+                <div class="semana-projects">
+                  <span class="semana-tag">Ruas da Infância</span>
+                  <span class="semana-tag">Plano Decenal Violência</span>
+                  <span class="semana-tag">Infância Viva em território</span>
+                  <span class="semana-tag">Café com Fé</span>
+                  <span class="semana-tag">Cursos</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Terça -->
+            <article class="semana-card semana-card--ter">
+              <div class="semana-card-content">
+                <div class="semana-day">
+                  <span class="semana-day-chip">T</span>
+                  <span>Terça-feira</span>
+                </div>
+                <p class="semana-sub">
+                  Dia de pactuação, planos e articulação com iniciativas nacionais e instâncias de governança.
+                </p>
+                <div class="semana-projects">
+                  <span class="semana-tag">Ações com ABRINQ</span>
+                  <span class="semana-tag">PFI</span>
+                  <span class="semana-tag">Infância Viva</span>
+                  <span class="semana-tag">Plano Decenal municipal</span>
+                  <span class="semana-tag">Comissões de governança</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Quarta -->
+            <article class="semana-card semana-card--qua">
+              <div class="semana-card-content">
+                <div class="semana-day">
+                  <span class="semana-day-chip">Q</span>
+                  <span>Quarta-feira</span>
+                </div>
+                <p class="semana-sub">
+                  Centralidade na cultura, leitura, circulação pela cidade e comunicação da agenda da infância.
+                </p>
+                <div class="semana-projects">
+                  <span class="semana-tag">Bebetecas</span>
+                  <span class="semana-tag">Projeto Cidade</span>
+                  <span class="semana-tag">Cirandas</span>
+                  <span class="semana-tag">Livros e materiais</span>
+                  <span class="semana-tag">Comunicação institucional</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Quinta -->
+            <article class="semana-card semana-card--qui">
+              <div class="semana-card-content">
+                <div class="semana-day">
+                  <span class="semana-day-chip">Q</span>
+                  <span>Quinta-feira</span>
+                </div>
+                <p class="semana-sub">
+                  Integração com juventude, saúde, desenvolvimento infantil e grupos intersetoriais.
+                </p>
+                <div class="semana-projects">
+                  <span class="semana-tag">Cuca Cuida</span>
+                  <span class="semana-tag">APS e desenvolvimento infantil</span>
+                  <span class="semana-tag">GTI</span>
+                  <span class="semana-tag">Articulação com Conselho de Direitos</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Sexta -->
+            <article class="semana-card semana-card--sex">
+              <div class="semana-card-content">
+                <div class="semana-day">
+                  <span class="semana-day-chip">S</span>
+                  <span>Sexta-feira</span>
+                </div>
+                <p class="semana-sub">
+                  Encerramento da semana com foco em dados, ouvidoria e integração com políticas estruturantes.
+                </p>
+                <div class="semana-projects">
+                  <span class="semana-tag">Observatório CESPI</span>
+                  <span class="semana-tag">Ouvidoria</span>
+                  <span class="semana-tag">Ofícios</span>
+                  <span class="semana-tag">Integração com política habitacional</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Sábado -->
+            <article class="semana-card semana-card--sab">
+              <div class="semana-card-content">
+                <div class="semana-day">
+                  <span class="semana-day-chip">S</span>
+                  <span>Sábado</span>
+                </div>
+                <p class="semana-sub">
+                  Ações em campo e articulações estratégicas em torno da proteção e da intersetorialidade.
+                </p>
+                <div class="semana-projects">
+                  <span class="semana-tag">Fluxo Criança em Situação de Rua</span>
+                  <span class="semana-tag">Acordos com órgãos de controle</span>
+                  <span class="semana-tag">Parcerias com universidades</span>
+                  <span class="semana-tag">Cuidoteca</span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div>Observa Infância Viva · Observatório da Primeira Infância</div>
+        <div>Coordenadoria Especial da Primeira Infância (CESPI) · Prefeitura de Fortaleza</div>
+      </div>
+      <div class="footer-pills">
+        <span class="footer-pill">CESPI</span>
+        <span class="footer-pill">Gabinete do Prefeito</span>
+        <span class="footer-pill">Secretarias parceiras</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html#topo">Início</a>
+        <a href="dados.html">Painel</a>
+        <a href="programas.html">Programas</a>
+        <a href="contato.html">Contato</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== MODAIS DOS PROJETOS EM DESTAQUE ===== -->
+
+  <!-- Modal Infância Viva na Praça -->
+  <div class="modal-overlay" id="modal-infancia-praca">
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modalInfanciaPracaTitle">
+      <div class="modal-header">
+        <div class="modal-title" id="modalInfanciaPracaTitle">
+          <span>Infância Viva na Praça</span>
+          <span class="modal-chip">Evento em território</span>
+        </div>
+        <button class="modal-close" type="button" data-modal-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-hero-img">
+          <img src="https://fortalezainclusiva.fortaleza.ce.gov.br/img/infancia.png" alt="Infância Viva na Praça">
+        </div>
+
+        <p>
+          O <strong>Infância Viva na Praça</strong> transforma praças e espaços públicos em grandes arenas de
+          convivência, cultura, cidadania e cuidado com as crianças pequenas e suas famílias.
+        </p>
+
+        <div class="modal-section">
+          <div class="modal-section-title">Apresentações culturais</div>
+          <ul>
+            <li>Grupo de Dança <strong>Flor do Amanhã</strong></li>
+            <li>Coral <strong>Grupo Phylos</strong></li>
+            <li>Bandas <strong>Dantas Garage</strong></li>
+            <li>Apresentação de jovens skatistas</li>
+            <li>Aula de zumba</li>
+            <li>Grupo de cover K-pop <strong>Stray Kids</strong></li>
+            <li><strong>Jazz Moviment</strong></li>
+          </ul>
+        </div>
+
+        <div class="modal-section">
+          <div class="modal-section-title">Ações de cidadania</div>
+          <ul>
+            <li>Emissão da <strong>Carteirinha Ciptea</strong></li>
+            <li>Emissão do <strong>Passe Livre da Criança</strong></li>
+            <li><strong>Registro Civil de Nascimento</strong> – Sim, eu Existo</li>
+            <li><strong>Vacinação</strong></li>
+            <li>Atividades educativas da <strong>AMC</strong></li>
+          </ul>
+        </div>
+
+        <div class="modal-section">
+          <div class="modal-section-title">Atividades lúdicas</div>
+          <ul>
+            <li><strong>Programa Leitura na Praça</strong></li>
+            <li>Oficinas de artes manuais</li>
+            <li>Contação de histórias</li>
+            <li>Apresentações de teatro</li>
+            <li>Música e dança</li>
+            <li>Ações de educação ambiental</li>
+            <li>Sessões de “pellesina” (bem-estar e relaxamento)</li>
+          </ul>
+        </div>
+
+        <div class="modal-section">
+          <div class="modal-section-title">Cuidado e parentalidade</div>
+          <p>
+            Palestra com a psicóloga <strong>Camila Machado de Aquino</strong>, em diferentes horários
+            (14h30, 15h30 e 16h30), com foco em:
+          </p>
+          <ul>
+            <li>Parentalidade positiva</li>
+            <li>Fortalecimento dos vínculos familiares</li>
+            <li>Desenvolvimento socioemocional das crianças</li>
+            <li>Estratégias de cuidado na Primeira Infância</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Cuca Cuida -->
+  <div class="modal-overlay" id="modal-cuca-cuida">
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modalCucaCuidaTitle">
+      <div class="modal-header">
+        <div class="modal-title" id="modalCucaCuidaTitle">
+          <span>Cuca Cuida</span>
+          <span class="modal-chip">Juventude &amp; Primeira Infância</span>
+        </div>
+        <button class="modal-close" type="button" data-modal-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-hero-img">
+          <img src="https://www.fortaleza.ce.gov.br/images/images3/2025/Dezembro/04%2012%202025%20Cuca%20Pici%20IMG_8736.jpg" alt="Projeto Cuca Cuida">
+        </div>
+
+        <p>
+          O <strong>Cuca Cuida</strong> nasce como um projeto que aproxima os equipamentos da juventude
+          (como o Cuca Pici) da agenda da Primeira Infância, criando pontes entre adolescentes, crianças
+          e famílias em um mesmo território.
+        </p>
+
+        <p>
+          O projeto foi lançado junto à <strong>reinauguração do anfiteatro do Cuca Pici</strong>,
+          com uma programação especial voltada para a Primeira Infância, reunindo apresentações,
+          atividades lúdicas e ações de cuidado compartilhado.
+        </p>
+
+        <div class="modal-section">
+          <div class="modal-section-title">Eixos trabalhados</div>
+          <ul>
+            <li>Convivência entre juventude e crianças pequenas em espaços culturais</li>
+            <li>Promoção de vínculos familiares e comunitários</li>
+            <li>Uso de linguagem artística para falar de cuidado e proteção</li>
+            <li>Integração com ações do <strong>Infância Viva</strong> e do PMPIF</li>
+          </ul>
+        </div>
+
+        <p>
+          A ideia central é que a juventude também se reconheça como parte da rede de cuidado
+          das crianças, ajudando a difundir uma cultura de proteção, respeito e brincar
+          compartilhado nos territórios.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Bebetecas -->
+  <div class="modal-overlay" id="modal-bebeteca">
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modalBebetecaTitle">
+      <div class="modal-header">
+        <div class="modal-title" id="modalBebetecaTitle">
+          <span>Bebetecas</span>
+          <span class="modal-chip">Leitura &amp; vínculo</span>
+        </div>
+        <button class="modal-close" type="button" data-modal-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-hero-img">
+          <img src="assets/baby-shower.png" alt="Espaço de Bebeteca">
+        </div>
+
+        <p>
+          As <strong>Bebetecas</strong> são espaços pensados especialmente para bebês e crianças pequenas,
+          onde leitura, afeto e descoberta sensorial acontecem de forma integrada com as famílias.
+        </p>
+
+        <div class="modal-section">
+          <div class="modal-section-title">Principais atividades</div>
+          <ul>
+            <li>Mediação de leitura com bebês e cuidadores</li>
+            <li>Contação de histórias e músicas para a Primeira Infância</li>
+            <li>Brincadeiras sensoriais com materiais seguros e adequados à faixa etária</li>
+            <li>Oficinas simples de artes manuais inspiradas nos livros e nas histórias</li>
+          </ul>
+        </div>
+
+        <div class="modal-section">
+          <div class="modal-section-title">Por que a Bebeteca importa?</div>
+          <ul>
+            <li>Estimula linguagem, imaginação e vínculo afetivo desde o início da vida</li>
+            <li>Oferece um espaço de encontro entre famílias, comunidade e políticas públicas</li>
+            <li>Ajuda a consolidar a leitura como prática cotidiana e prazerosa</li>
+          </ul>
+        </div>
+
+        <p>
+          As Bebetecas se articulam com ações como <strong>Leitura na Praça</strong>, eventos
+          do <strong>Infância Viva</strong> e iniciativas de formação para valorizar o brincar,
+          a literatura e o cuidado responsivo na Primeira Infância.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const btnMenu = document.getElementById('btnMenu');
+    const menuMain = document.getElementById('menuMain');
+    if (btnMenu && menuMain){
+      btnMenu.addEventListener('click', () => {
+        menuMain.classList.toggle('menu--open');
+      });
+    }
+
+    // ===== LÓGICA DOS MODAIS DE PROJETOS DESTACADOS =====
+    (function(){
+      const triggers = document.querySelectorAll('.projeto-pill--destaque[data-projeto-modal]');
+      const overlays = document.querySelectorAll('.modal-overlay');
+
+      function openModal(id){
+        const modal = document.getElementById(id);
+        if(modal){
+          modal.classList.add('is-open');
+        }
+      }
+
+      function closeModal(modal){
+        modal.classList.remove('is-open');
+      }
+
+      triggers.forEach(el => {
+        el.addEventListener('click', () => {
+          const targetId = el.getAttribute('data-projeto-modal');
+          if(targetId){
+            openModal(targetId);
+          }
+        });
+      });
+
+      overlays.forEach(overlay => {
+        // fecha ao clicar fora do diálogo
+        overlay.addEventListener('click', (e) => {
+          if(e.target === overlay){
+            closeModal(overlay);
+          }
+        });
+
+        // fecha ao clicar no botão X
+        const closeBtn = overlay.querySelector('[data-modal-close]');
+        if(closeBtn){
+          closeBtn.addEventListener('click', () => closeModal(overlay));
+        }
+      });
+
+      // fecha com ESC
+      document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape'){
+          overlays.forEach(overlay => overlay.classList.remove('is-open'));
+        }
+      });
+    })();
+  </script>
+  <script src="js/theme.js"></script>
+</body>
+</html>

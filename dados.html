@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dados &amp; Painéis – Observa Infância Viva · CESPI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- amCharts 5 -->
+  <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+  <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+  <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+  <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+  <style>
+    /* Afinando a cara da área de dados com o resto do site */
+
+    .data-shell{
+      margin-top: 12px;
+      padding: 16px;
+      border-radius: 24px;
+      background: radial-gradient(circle at top left, #E0F7FA 0, #F9FAFB 40%, #FEF9C3 100%);
+      box-shadow: 0 18px 40px rgba(15,23,42,0.18);
+    }
+
+    body.theme-dark .data-shell{
+      background: radial-gradient(circle at top left,#020617 0,#0F172A 40%,#1E3A8A 100%);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.9);
+    }
+
+    .data-grid{
+      display:grid;
+      gap:18px;
+      margin-top:16px;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    }
+
+    /* Grid principal – 12 colunas para permitir 1/2-1/2 em telas maiores */
+    @media (min-width: 1024px){
+      .data-grid--main{
+        grid-template-columns:repeat(12,minmax(0,1fr));
+      }
+    }
+
+    .chart-card{
+      position:relative;
+      border-radius:20px;
+      background:var(--card, #FFFFFF);
+      padding:14px 14px 10px;
+      box-shadow:0 8px 20px rgba(15,23,42,0.12);
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      overflow:hidden;
+    }
+
+    /* Por padrão, cada card ocupa a linha inteira no grid principal */
+    @media (min-width: 1024px){
+      .data-grid--main .chart-card{
+        grid-column:span 12;
+      }
+    }
+
+    .chart-card--wide{
+      /* continua ocupando a largura toda */
+      grid-column:1 / -1;
+    }
+
+    /* Cards que devem ficar metade/metade em telas largas */
+    @media (min-width: 1024px){
+      .data-grid--main .chart-card--half{
+        grid-column:span 6;
+      }
+    }
+
+    body.theme-dark .chart-card{
+      background:rgba(15,23,42,0.96);
+      box-shadow:0 10px 26px rgba(0,0,0,0.85);
+      border:1px solid rgba(148,163,184,0.8);
+      color:#E5E7EB;
+    }
+
+    .chart-tag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:3px 10px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:600;
+      background:linear-gradient(135deg,#22C55E,#16A34A);
+      color:#FFFFFF;
+    }
+
+    .chart-tag--orange{
+      background:linear-gradient(135deg,#F97316,#FB923C);
+    }
+    .chart-tag--pink{
+      background:linear-gradient(135deg,#EC4899,#DB2777);
+    }
+    .chart-tag--blue{
+      background:linear-gradient(135deg,#0EA5E9,#2563EB);
+    }
+
+    .chart-title{
+      margin:4px 0 0;
+      font-size:16px;
+      font-weight:700;
+    }
+
+    .chart-subtitle{
+      margin:2px 0 0;
+      font-size:12px;
+      color:var(--muted,#4b5563);
+    }
+
+    body.theme-dark .chart-subtitle{
+      color:#CBD5F5;
+    }
+
+    .chart-meta{
+      margin-top:4px;
+      font-size:11px;
+      color:var(--muted,#64748b);
+    }
+
+    body.theme-dark .chart-meta{
+      color:#E5E7EB;
+      opacity:0.9;
+    }
+
+    .chart-box{
+      margin-top:8px;
+      width:100%;
+      min-height:260px;
+      border-radius:18px;
+      overflow:hidden;
+      background:radial-gradient(circle at top,#e0f2fe 0,#eff6ff 40%,#fef2f2 100%);
+    }
+
+    body.theme-dark .chart-box{
+      background:radial-gradient(circle at top,#020617 0,#0F172A 40%,#1D2341 100%);
+    }
+
+    @media (min-width: 1024px){
+      .chart-box{
+        min-height:300px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-ribbon">
+    <span class="r-blue"></span>
+    <span class="r-green"></span>
+    <span class="r-yellow"></span>
+    <span class="r-orange"></span>
+    <span class="r-red"></span>
+  </div>
+
+  <header class="main-header">
+    <div class="container">
+      <div class="main-header__inner">
+        <a href="index.html#topo" class="brand-block">
+          <div class="brand-icon">
+            <img src="https://images.seeklogo.com/logo-png/23/3/prefeitura-de-fortaleza-logo-png_seeklogo-231117.png" alt="Logo Prefeitura de Fortaleza">
+          </div>
+          <div class="brand-text">
+            <strong>Observa Infância Viva</strong>
+            <span>Observatório da Primeira Infância · CESPI · Fortaleza</span>
+          </div>
+        </a>
+
+        <nav class="main-nav">
+          <button class="menu-toggle" id="btnMenu" aria-label="Abrir menu">
+            <span></span><span></span><span></span>
+          </button>
+          <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">
+            🌙
+          </button>
+          <ul class="menu" id="menuMain">
+            <li><a href="index.html#topo">Início</a></li>
+            <li class="active"><a href="dados.html">Dados &amp; Painéis</a></li>
+            <li><a href="biblioteca.html">Biblioteca &amp; Materiais</a></li>
+            <li><a href="projetos.html">Projetos</a></li>
+            <li><a href="parcerias.html">Parcerias</a></li>
+            <li><a href="noticias.html">Notícias</a></li>
+            <li><a href="sobre.html">Sobre o Observatório</a></li>
+            <li><a href="contato.html">Fale Conosco</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section section--white" id="dados">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="index.html">Início</a> / Dados &amp; Painéis
+        </div>
+
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Painel de dados da primeira infância</h2>
+            <p class="section-subtitle">
+              Leituras sintéticas de algumas ações do Plano Municipal pela Primeira Infância (PMPIF),
+              com foco em proteção social, enfrentamento às violências e incentivo ao brincar.
+            </p>
+          </div>
+        </div>
+
+        <div class="data-shell">
+          <!-- Grid PRINCIPAL -->
+          <div class="data-grid data-grid--main">
+
+            <!-- Cartão Missão Infância – FUNCI / Ação 40 -->
+            <article class="chart-card chart-card--wide">
+              <span class="chart-tag chart-tag--green">FUNCI · Ação 40 · Cartão Missão Infância</span>
+              <h3 class="chart-title">Crianças beneficiadas e cobertura (0–3 anos) – jan–jun/2025</h3>
+              <p class="chart-subtitle">
+                Evolução mensal do número de crianças beneficiadas pelo auxílio financeiro e da
+                porcentagem de cobertura em relação às crianças 0–3 anos com perfil no CadÚnico.
+              </p>
+              <div class="chart-box" id="chart-missao-infancia"></div>
+              <div class="chart-meta">
+                Fonte: Documento de coleta de dados das ações do PMPIF – FUNCI, Ação 40 – Cartão Missão Infância (jan–jun/2025).
+              </div>
+            </article>
+
+            <!-- Ponte de Encontro & Violência sexual – lado a lado (50/50) -->
+            <!-- Crianças 0–6 em situação de rua – Programa Ponte de Encontro · Ação 41 -->
+            <article class="chart-card chart-card--half">
+              <span class="chart-tag chart-tag--orange">FUNCI · Ação 41 · Ponte de Encontro</span>
+              <h3 class="chart-title">Crianças 0–6 em situação de rua – participação no total atendido</h3>
+              <p class="chart-subtitle">
+                Comparação entre o total de atendimentos do programa e o recorte 0–6 anos,
+                no primeiro semestre de 2025.
+              </p>
+              <div class="chart-box" id="chart-ponte-encontro"></div>
+              <div class="chart-meta">
+                Fonte: FUNCI – Ação 41 – Programa Ponte de Encontro (jan–jun/2025).
+              </div>
+            </article>
+
+            <!-- Violência sexual – DCECA + Rede Aquarela (0–6 anos) -->
+            <article class="chart-card chart-card--half">
+              <span class="chart-tag chart-tag--pink">FUNCI · Ações 44 e 45</span>
+              <h3 class="chart-title">Fluxo de casos de violência sexual (0–6 anos)</h3>
+              <p class="chart-subtitle">
+                Casos atendidos pela Delegacia de Combate à Exploração de Crianças e Adolescentes (DCECA)
+                e acompanhamentos psicossociais na Rede Aquarela.
+              </p>
+              <div class="chart-box" id="chart-violencia-sexual"></div>
+              <div class="chart-meta">
+                Fonte: FUNCI – Ação 44 (DCECA) e Ação 45 (Rede Aquarela) – jan–jun/2025.
+              </div>
+            </article>
+
+            <!-- Violações de direitos & Sub-registro civil -->
+            <article class="chart-card chart-card--wide">
+              <span class="chart-tag chart-tag--blue">Conselhos Tutelares &amp; FUNCI</span>
+              <h3 class="chart-title">Violações de direitos na primeira infância e registro civil</h3>
+              <p class="chart-subtitle">
+                De um lado, o recorte de violações de direitos contra crianças 0–6 anos; de outro,
+                a resolutividade nos processos de registro civil tardio.
+              </p>
+              <div class="data-grid">
+                <div class="chart-box" id="chart-violacoes-pi"></div>
+                <div class="chart-box" id="chart-registro-civil"></div>
+              </div>
+              <div class="chart-meta">
+                Fonte: Conselhos Tutelares – Ação 52 (SIPIA) e FUNCI – Ação 55 (sub-registro civil) – jan–jun/2025.
+              </div>
+            </article>
+
+            <!-- Saúde materno-infantil – Pré-natal (SMS · Ação 1) -->
+            <article class="chart-card chart-card--half">
+              <span class="chart-tag chart-tag--blue">SMS · Ação 1 · Pré-natal</span>
+              <h3 class="chart-title">Qualidade do pré-natal – nascidos vivos (jan–jun/2025)</h3>
+              <p class="chart-subtitle">
+                Percentual de gestantes com captação precoce (até a 12ª semana) e com 7 ou mais consultas
+                de pré-natal entre os nascidos vivos do período, em comparação à meta de 80%.
+              </p>
+              <div class="chart-box" id="chart-prenatal-sms"></div>
+              <div class="chart-meta">
+                Fonte: SMS – Documento de coleta de dados das ações do PMPIF, Ação 1 (nascidos vivos, captação precoce e 7+ consultas, jan–jun/2025).
+              </div>
+            </article>
+
+            <!-- Saúde mental infantil – CAPS (SMS · Ação 2) -->
+            <article class="chart-card chart-card--half">
+              <span class="chart-tag chart-tag--pink">SMS · Ação 2 · Saúde mental infantil</span>
+              <h3 class="chart-title">Matriciamento em saúde mental infantil nas UAPS</h3>
+              <p class="chart-subtitle">
+                Situação do matriciamento em saúde mental infantil realizado pelos CAPS infantis nas Unidades de
+                Atenção Primária (UAPS), até junho de 2025.
+              </p>
+              <div class="chart-box" id="chart-saude-mental"></div>
+              <div class="chart-meta">
+                Fonte: SMS – Ação 2 do PMPIF (matriciamento em saúde mental infantil nas UAPS, jan–jun/2025).
+              </div>
+            </article>
+
+            <!-- Proteção social & mobilidade – BPC + Bilhetinho Único -->
+            <article class="chart-card chart-card--wide">
+              <span class="chart-tag chart-tag--green">SDHDS &amp; ETUFOR · Proteção social e mobilidade</span>
+              <h3 class="chart-title">Renda e mobilidade amigas da primeira infância</h3>
+              <p class="chart-subtitle">
+                À esquerda, a cobertura do Benefício de Prestação Continuada (BPC) entre crianças de 0–6 anos com
+                deficiência; à direita, as solicitações e emissões do Bilhetinho Único da Criança no primeiro semestre
+                de 2025.
+              </p>
+              <div class="data-grid">
+                <div class="chart-box" id="chart-bpc-cobertura"></div>
+                <div class="chart-box" id="chart-bilhetinho"></div>
+              </div>
+              <div class="chart-meta">
+                Fonte: SDHDS – Ação 29 (BPC Criança) e ETUFOR – Ação 57 (Passe livre da criança – Bilhetinho Único), jan–jun/2025.
+              </div>
+            </article>
+
+            <!-- Cidade para brincar – Microparques e Mini circuito de bikes -->
+            <article class="chart-card chart-card--wide">
+              <span class="chart-tag chart-tag--orange">SEUMA &amp; AMC · Cidade para brincar</span>
+              <h3 class="chart-title">Espaços lúdicos na cidade – microparques e circuito de bikes</h3>
+              <p class="chart-subtitle">
+                Evolução da implantação dos microparques urbanos voltados à primeira infância e, em paralelo,
+                o alcance do Mini Circuito de Bikes Infantil no primeiro semestre de 2025.
+              </p>
+              <div class="data-grid">
+                <div class="chart-box" id="chart-microparques"></div>
+                <div class="chart-box" id="chart-mini-circuito"></div>
+              </div>
+              <div class="chart-meta">
+                Fonte: SEUMA – Ação 69 (Microparques Urbanos) e AMC – Nova ação Mini Circuito de Bikes Infantil (jan–jun/2025).
+              </div>
+            </article>
+
+          </div>
+
+          <!-- Bloco dos dashboards externos continua igual -->
+          <div class="dashboards-links" style="margin-top:24px;">
+            <h3 class="dashboards-links-title">Acesse os dashboards completos</h3>
+            <p class="dashboards-links-subtitle">
+              Os painéis interativos abaixo permitem explorar os dados do PMPIF por secretaria,
+              território e período, complementando os recortes apresentados acima.
+            </p>
+
+            <div class="dashboards-grid">
+              <article class="dashboard-card">
+                <div class="dashboard-thumb">
+                  <img src="assets/dashboardPMPIF.png" alt="Print do dashboard do PMPIF">
+                </div>
+                <div class="dashboard-body">
+                  <h3>Dashboard – Ações do Plano Municipal pela Primeira Infância (PMPIF)</h3>
+                  <p>
+                    Acompanha metas e indicadores das ações do PMPIF nas diferentes secretarias,
+                    como nascidos vivos, captação precoce de gestantes, consultas de pré-natal,
+                    matrículas na educação infantil, proteção social e incentivos ao brincar.
+                  </p>
+                  <span class="dashboard-meta">
+                    Fonte: relatórios de coleta de dados das ações do PMPIF (SMS, SME, SDHDS, AMC,
+                    ETUFOR, SCSP, SECEL, SESEC, SEUMA, FUNCI e demais secretarias parceiras).
+                  </span>
+                  <a class="dashboard-link" href="https://exemplo.fortaleza.ce.gov.br/dashboard/sintese-geral" target="_blank" rel="noopener">
+                    Abrir dashboard
+                  </a>
+                </div>
+              </article>
+
+              <article class="dashboard-card">
+                <div class="dashboard-thumb">
+                  <img src="assets/dashboardCidade.png" alt="Print do dashboard de visitas e avaliações na Cidade da Criança">
+                </div>
+                <div class="dashboard-body">
+                  <h3>Dashboard – Visitas e avaliações na Cidade da Criança</h3>
+                  <p>
+                    Mostra o quantitativo de alunos e visitas homologadas, escolas e instituições
+                    participantes, distribuição por turno e os principais indicadores de avaliação
+                    das experiências na Cidade da Criança.
+                  </p>
+                  <span class="dashboard-meta">
+                    Fonte: planilha de registro de visitas da Cidade da Criança e formulários de
+                    avaliação das experiências.
+                  </span>
+                  <a class="dashboard-link" href="https://exemplo.fortaleza.ce.gov.br/dashboard/avaliacoes-experiencias" target="_blank" rel="noopener">
+                    Abrir dashboard
+                  </a>
+                </div>
+              </article>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div>Observa Infância Viva · Observatório da Primeira Infância</div>
+        <div>Coordenadoria Especial da Primeira Infância (CESPI) · Prefeitura de Fortaleza</div>
+      </div>
+      <div class="footer-pills">
+        <span class="footer-pill">CESPI</span>
+        <span class="footer-pill">Gabinete do Prefeito</span>
+        <span class="footer-pill">Secretarias parceiras</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html#topo">Início</a>
+        <a href="dados.html">Painel</a>
+        <a href="programas.html">Programas</a>
+        <a href="contato.html">Contato</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // MENU MOBILE
+    const btnMenu = document.getElementById('btnMenu');
+    const menuMain = document.getElementById('menuMain');
+    if (btnMenu && menuMain){
+      btnMenu.addEventListener('click', () => {
+        menuMain.classList.toggle('menu--open');
+      });
+    }
+
+    // amCharts – gráficos PMPIF
+    am5.ready(function() {
+
+      // ---------- 1) Cartão Missão Infância (FUNCI – Ação 40) ----------
+      var rootMI = am5.Root.new("chart-missao-infancia");
+      rootMI.setThemes([am5themes_Animated.new(rootMI)]);
+
+      var chartMI = rootMI.container.children.push(am5xy.XYChart.new(rootMI, {
+        panX: false,
+        panY: false,
+        wheelX: "panX",
+        wheelY: "zoomX",
+        layout: rootMI.verticalLayout
+      }));
+
+      var dataMI = [
+        { mes: "Jan", criancas: 8055, cobertura: 59.22 },
+        { mes: "Fev", criancas: 8055, cobertura: 59.22 },
+        { mes: "Mar", criancas: 5298, cobertura: 38.95 },
+        { mes: "Abr", criancas: 5878, cobertura: 43.22 },
+        { mes: "Mai", criancas: 5303, cobertura: 38.99 },
+        { mes: "Jun", criancas: 6952, cobertura: 51.11 }
+      ];
+
+      var xAxisMI = chartMI.xAxes.push(am5xy.CategoryAxis.new(rootMI, {
+        categoryField: "mes",
+        renderer: am5xy.AxisRendererX.new(rootMI, { minGridDistance: 30 })
+      }));
+      xAxisMI.data.setAll(dataMI);
+
+      var yAxisCriancas = chartMI.yAxes.push(am5xy.ValueAxis.new(rootMI, {
+        renderer: am5xy.AxisRendererY.new(rootMI, {})
+      }));
+
+      var yAxisCobertura = chartMI.yAxes.push(am5xy.ValueAxis.new(rootMI, {
+        renderer: am5xy.AxisRendererY.new(rootMI, { opposite: true }),
+        min: 0,
+        max: 70,
+        strictMinMax: true
+      }));
+
+      var seriesCriancas = chartMI.series.push(am5xy.ColumnSeries.new(rootMI, {
+        name: "Crianças",
+        xAxis: xAxisMI,
+        yAxis: yAxisCriancas,
+        valueYField: "criancas",
+        categoryXField: "mes",
+        tooltip: am5.Tooltip.new(rootMI, { labelText: "{valueY.formatNumber('#,###')} crianças" })
+      }));
+
+      seriesCriancas.columns.template.setAll({
+        radiusTL: 12, radiusTR: 12, radiusBL: 12, radiusBR: 12,
+        fillGradient: am5.LinearGradient.new(rootMI, {
+          stops: [
+            { color: am5.color(0xF97316) },
+            { color: am5.color(0xFACC15) }
+          ]
+        })
+      });
+
+      var seriesCobertura = chartMI.series.push(am5xy.LineSeries.new(rootMI, {
+        name: "Cobertura (%)",
+        xAxis: xAxisMI,
+        yAxis: yAxisCobertura,
+        valueYField: "cobertura",
+        categoryXField: "mes",
+        stroke: am5.color(0x2563EB),
+        fill: am5.color(0x2563EB),
+        tooltip: am5.Tooltip.new(rootMI, { labelText: "{valueY.formatNumber('#.0')}%" })
+      }));
+      seriesCobertura.strokes.template.setAll({ strokeWidth: 3 });
+      seriesCobertura.bullets.push(function() {
+        return am5.Bullet.new(rootMI, {
+          sprite: am5.Circle.new(rootMI, {
+            radius: 5,
+            fill: am5.color(0xFFFFFF),
+            stroke: am5.color(0x2563EB),
+            strokeWidth: 2
+          })
+        });
+      });
+
+      seriesCriancas.data.setAll(dataMI);
+      seriesCobertura.data.setAll(dataMI);
+
+      // ---------- 2) Programa Ponte de Encontro – situação de rua (Ação 41) ----------
+      var rootPonte = am5.Root.new("chart-ponte-encontro");
+      rootPonte.setThemes([am5themes_Animated.new(rootPonte)]);
+
+      var chartPonte = rootPonte.container.children.push(am5xy.XYChart.new(rootPonte, {
+        panX: false,
+        panY: false,
+        wheelX: "panX",
+        wheelY: "zoomX",
+        layout: rootPonte.verticalLayout
+      }));
+
+      var dataPonte = [
+        { mes: "Jan", total: 148, zero6: 56, perc: 37.83 },
+        { mes: "Fev", total: 85,  zero6: 26, perc: 30.58 },
+        { mes: "Mar", total: 66,  zero6: 32, perc: 48.18 },
+        { mes: "Abr", total: 75,  zero6: 36, perc: 48.00 },
+        { mes: "Mai", total: 86,  zero6: 45, perc: 52.32 },
+        { mes: "Jun", total: 50,  zero6: 24, perc: 48.00 }
+      ];
+
+      var xAxisP = chartPonte.xAxes.push(am5xy.CategoryAxis.new(rootPonte, {
+        categoryField: "mes",
+        renderer: am5xy.AxisRendererX.new(rootPonte, { minGridDistance: 30 })
+      }));
+      xAxisP.data.setAll(dataPonte);
+
+      var yAxisP = chartPonte.yAxes.push(am5xy.ValueAxis.new(rootPonte, {
+        renderer: am5xy.AxisRendererY.new(rootPonte, {})
+      }));
+
+      var seriesTotal = chartPonte.series.push(am5xy.ColumnSeries.new(rootPonte, {
+        name: "Total de atendimentos",
+        xAxis: xAxisP,
+        yAxis: yAxisP,
+        valueYField: "total",
+        categoryXField: "mes",
+        clustered: true,
+        tooltip: am5.Tooltip.new(rootPonte, { labelText: "{valueY} atendimentos (0–18)" })
+      }));
+
+      var seriesZero6 = chartPonte.series.push(am5xy.ColumnSeries.new(rootPonte, {
+        name: "0–6 anos",
+        xAxis: xAxisP,
+        yAxis: yAxisP,
+        valueYField: "zero6",
+        categoryXField: "mes",
+        clustered: true,
+        tooltip: am5.Tooltip.new(rootPonte, { labelText: "{valueY} crianças 0–6 anos" })
+      }));
+
+      seriesTotal.columns.template.setAll({
+        radiusTL: 10, radiusTR: 10, radiusBL: 10, radiusBR: 10,
+        fill: am5.color(0x38BDF8)
+      });
+      seriesZero6.columns.template.setAll({
+        radiusTL: 10, radiusTR: 10, radiusBL: 10, radiusBR: 10,
+        fill: am5.color(0xF97316)
+      });
+
+      seriesTotal.data.setAll(dataPonte);
+      seriesZero6.data.setAll(dataPonte);
+
+      chartPonte.set("cursor", am5xy.XYCursor.new(rootPonte, {}));
+      chartPonte.children.push(
+        am5.Legend.new(rootPonte, {
+          x: am5.p50,
+          centerX: am5.p50,
+          marginTop: 5
+        })
+      ).data.setAll(chartPonte.series.values);
+
+      // ---------- 3) Violência sexual – DCECA & Rede Aquarela (0–6) ----------
+      var rootViol = am5.Root.new("chart-violencia-sexual");
+      rootViol.setThemes([am5themes_Animated.new(rootViol)]);
+
+      var chartViol = rootViol.container.children.push(am5xy.XYChart.new(rootViol, {
+        panX: false,
+        panY: false,
+        wheelX: "panX",
+        wheelY: "zoomX",
+        layout: rootViol.verticalLayout
+      }));
+
+      var dataViol = [
+        { mes: "Jan", dceca: 7,  aquarela: 15 },
+        { mes: "Fev", dceca: 6,  aquarela: 4  },
+        { mes: "Mar", dceca: 11, aquarela: 0  },
+        { mes: "Abr", dceca: 16, aquarela: 3  },
+        { mes: "Mai", dceca: 21, aquarela: 1  },
+        { mes: "Jun", dceca: 17, aquarela: 1  }
+      ];
+
+      var xAxisV = chartViol.xAxes.push(am5xy.CategoryAxis.new(rootViol, {
+        categoryField: "mes",
+        renderer: am5xy.AxisRendererX.new(rootViol, { minGridDistance: 30 })
+      }));
+      xAxisV.data.setAll(dataViol);
+
+      var yAxisV = chartViol.yAxes.push(am5xy.ValueAxis.new(rootViol, {
+        renderer: am5xy.AxisRendererY.new(rootViol, {})
+      }));
+
+      var seriesDceca = chartViol.series.push(am5xy.LineSeries.new(rootViol, {
+        name: "DCECA (delegacia)",
+        xAxis: xAxisV,
+        yAxis: yAxisV,
+        valueYField: "dceca",
+        categoryXField: "mes",
+        stroke: am5.color(0xEF4444),
+        tooltip: am5.Tooltip.new(rootViol, { labelText: "{valueY} casos 0–6 anos (DCECA)" })
+      }));
+      seriesDceca.strokes.template.setAll({ strokeWidth: 3 });
+      seriesDceca.bullets.push(function() {
+        return am5.Bullet.new(rootViol, {
+          sprite: am5.Circle.new(rootViol, {
+            radius: 5,
+            fill: am5.color(0xFFFFFF),
+            stroke: am5.color(0xEF4444),
+            strokeWidth: 2
+          })
+        });
+      });
+
+      var seriesAquarela = chartViol.series.push(am5xy.ColumnSeries.new(rootViol, {
+        name: "Rede Aquarela (psicossocial)",
+        xAxis: xAxisV,
+        yAxis: yAxisV,
+        valueYField: "aquarela",
+        categoryXField: "mes",
+        tooltip: am5.Tooltip.new(rootViol, { labelText: "{valueY} atendimentos 0–6 anos" })
+      }));
+      seriesAquarela.columns.template.setAll({
+        radiusTL: 10, radiusTR: 10, radiusBL: 10, radiusBR: 10,
+        fill: am5.color(0x22C55E)
+      });
+
+      seriesDceca.data.setAll(dataViol);
+      seriesAquarela.data.setAll(dataViol);
+
+      chartViol.set("cursor", am5xy.XYCursor.new(rootViol, {}));
+      chartViol.children.push(
+        am5.Legend.new(rootViol, {
+          x: am5.p50,
+          centerX: am5.p50,
+          marginTop: 5
+        })
+      ).data.setAll(chartViol.series.values);
+
+      // ---------- 4a) Violações de direitos – SIPIA (Ação 52) ----------
+      var rootPI = am5.Root.new("chart-violacoes-pi");
+      rootPI.setThemes([am5themes_Animated.new(rootPI)]);
+
+      var chartPI = rootPI.container.children.push(
+        am5percent.PieChart.new(rootPI, {
+          layout: rootPI.verticalLayout,
+          innerRadius: am5.percent(55)
+        })
+      );
+
+      var seriesPI = chartPI.series.push(
+        am5percent.PieSeries.new(rootPI, {
+          valueField: "valor",
+          categoryField: "categoria"
+        })
+      );
+
+      var dataPI = [
+        { categoria: "Primeira infância (0–6 anos)", valor: 559 },
+        { categoria: "Outras faixas etárias", valor: 1653 - 559 }
+      ];
+
+      seriesPI.data.setAll(dataPI);
+      seriesPI.slices.template.setAll({
+        cornerRadius: 10,
+        strokeWidth: 1,
+        stroke: am5.color(0xFFFFFF)
+      });
+      seriesPI.labels.template.setAll({
+        fontSize: 11,
+        text: "{category}\n{valuePercentTotal.formatNumber('#.0')}%"
+      });
+
+      // ---------- 4b) Registro civil – sub-registro (Ação 55) ----------
+      var rootRegistro = am5.Root.new("chart-registro-civil");
+      rootRegistro.setThemes([am5themes_Animated.new(rootRegistro)]);
+
+      var chartReg = rootRegistro.container.children.push(
+        am5percent.PieChart.new(rootRegistro, {
+          layout: rootRegistro.verticalLayout,
+          innerRadius: am5.percent(55)
+        })
+      );
+
+      var seriesReg = chartReg.series.push(
+        am5percent.PieSeries.new(rootRegistro, {
+          valueField: "valor",
+          categoryField: "categoria"
+        })
+      );
+
+      var dataReg = [
+        { categoria: "Processos resolvidos", valor: 152 },
+        { categoria: "Em andamento / não concluídos", valor: 211 - 152 }
+      ];
+
+      seriesReg.data.setAll(dataReg);
+      seriesReg.slices.template.setAll({
+        cornerRadius: 10,
+        strokeWidth: 1,
+        stroke: am5.color(0xFFFFFF)
+      });
+      seriesReg.labels.template.setAll({
+        fontSize: 11,
+        text: "{category}\n{valuePercentTotal.formatNumber('#.0')}%"
+      });
+
+      // ---------- 5) Saúde materno-infantil – Pré-natal (SMS · Ação 1) ----------
+      var rootPre = am5.Root.new("chart-prenatal-sms");
+      rootPre.setThemes([am5themes_Animated.new(rootPre)]);
+
+      var chartPre = rootPre.container.children.push(am5xy.XYChart.new(rootPre, {
+        panX: false,
+        panY: false,
+        layout: rootPre.verticalLayout
+      }));
+
+      var dataPre = [
+        { indicador: "Captação precoce até 12ª semana", valor: 73.1, meta: 80 },
+        { indicador: "Gestantes com ≥ 7 consultas",   valor: 74.4, meta: 80 }
+      ];
+
+      var xAxisPre = chartPre.xAxes.push(am5xy.CategoryAxis.new(rootPre, {
+        categoryField: "indicador",
+        renderer: am5xy.AxisRendererX.new(rootPre, {
+          minGridDistance: 20,
+          cellStartLocation: 0.1,
+          cellEndLocation: 0.9
+        })
+      }));
+      xAxisPre.data.setAll(dataPre);
+
+      var yAxisPre = chartPre.yAxes.push(am5xy.ValueAxis.new(rootPre, {
+        renderer: am5xy.AxisRendererY.new(rootPre, {}),
+        min: 0,
+        max: 100,
+        strictMinMax: true
+      }));
+
+      var seriesPreValor = chartPre.series.push(am5xy.ColumnSeries.new(rootPre, {
+        name: "Realizado (%)",
+        xAxis: xAxisPre,
+        yAxis: yAxisPre,
+        valueYField: "valor",
+        categoryXField: "indicador",
+        tooltip: am5.Tooltip.new(rootPre, { labelText: "{valueY.formatNumber('#.0')}%" })
+      }));
+
+      seriesPreValor.columns.template.setAll({
+        radiusTL: 10, radiusTR: 10, radiusBL: 10, radiusBR: 10,
+        fillGradient: am5.LinearGradient.new(rootPre, {
+          stops: [
+            { color: am5.color(0x22C55E) },
+            { color: am5.color(0x16A34A) }
+          ]
+        })
+      });
+
+      var seriesPreMeta = chartPre.series.push(am5xy.LineSeries.new(rootPre, {
+        name: "Meta PMPIF (80%)",
+        xAxis: xAxisPre,
+        yAxis: yAxisPre,
+        valueYField: "meta",
+        categoryXField: "indicador",
+        stroke: am5.color(0x0EA5E9),
+        tooltip: am5.Tooltip.new(rootPre, { labelText: "{valueY.formatNumber('#.0')}%" })
+      }));
+      seriesPreMeta.strokes.template.setAll({ strokeWidth: 2, strokeDasharray: [4, 4] });
+      seriesPreMeta.bullets.push(function() {
+        return am5.Bullet.new(rootPre, {
+          sprite: am5.Circle.new(rootPre, {
+            radius: 4,
+            fill: am5.color(0xFFFFFF),
+            stroke: am5.color(0x0EA5E9),
+            strokeWidth: 2
+          })
+        });
+      });
+
+      seriesPreValor.data.setAll(dataPre);
+      seriesPreMeta.data.setAll(dataPre);
+
+      chartPre.children.push(
+        am5.Legend.new(rootPre, {
+          x: am5.p50,
+          centerX: am5.p50,
+          marginTop: 5
+        })
+      ).data.setAll(chartPre.series.values);
+
+      // ---------- 6) Saúde mental infantil – barras horizontais (SMS · Ação 2) ----------
+      var rootSM = am5.Root.new("chart-saude-mental");
+      rootSM.setThemes([am5themes_Animated.new(rootSM)]);
+
+      var chartSM = rootSM.container.children.push(am5xy.XYChart.new(rootSM, {
+        panX: false,
+        panY: false,
+        layout: rootSM.verticalLayout
+      }));
+
+      var dataSM = [
+        { categoria: "UAPS com matriciamento em saúde mental infantil", valor: 68.75 },
+        { categoria: "UAPS ainda sem matriciamento", valor: 31.25 }
+      ];
+
+      // Eixo X: porcentagem (0–100)
+      var xAxisSM = chartSM.xAxes.push(am5xy.ValueAxis.new(rootSM, {
+        renderer: am5xy.AxisRendererX.new(rootSM, { minGridDistance: 20 }),
+        min: 0,
+        max: 100,
+        strictMinMax: true
+      }));
+
+      // Eixo Y: categorias (texto)
+      var yAxisSM = chartSM.yAxes.push(am5xy.CategoryAxis.new(rootSM, {
+        categoryField: "categoria",
+        renderer: am5xy.AxisRendererY.new(rootSM, {
+          inversed: true,
+          cellStartLocation: 0.1,
+          cellEndLocation: 0.9
+        })
+      }));
+      yAxisSM.data.setAll(dataSM);
+
+      var seriesSM = chartSM.series.push(am5xy.ColumnSeries.new(rootSM, {
+        name: "Participação",
+        xAxis: xAxisSM,
+        yAxis: yAxisSM,
+        valueXField: "valor",
+        categoryYField: "categoria",
+        tooltip: am5.Tooltip.new(rootSM, {
+          labelText: "{valueX.formatNumber('#.0')}%"
+        })
+      }));
+
+      seriesSM.columns.template.setAll({
+        cornerRadiusTL: 10,
+        cornerRadiusBL: 10,
+        cornerRadiusTR: 10,
+        cornerRadiusBR: 10,
+        strokeOpacity: 0,
+        fillGradient: am5.LinearGradient.new(rootSM, {
+          rotation: 0,
+          stops: [
+            { color: am5.color(0x6366F1) },
+            { color: am5.color(0xEC4899) }
+          ]
+        })
+      });
+
+      seriesSM.data.setAll(dataSM);
+
+      chartSM.children.push(
+        am5.Legend.new(rootSM, {
+          x: am5.p50,
+          centerX: am5.p50,
+          marginTop: 5
+        })
+      ).data.setAll(chartSM.series.values);
+
+      // ---------- 7a) Cobertura BPC Criança (SDHDS · Ação 29) ----------
+      var rootBPC = am5.Root.new("chart-bpc-cobertura");
+      rootBPC.setThemes([am5themes_Animated.new(rootBPC)]);
+
+      var chartBPC = rootBPC.container.children.push(
+        am5percent.PieChart.new(rootBPC, {
+          layout: rootBPC.verticalLayout,
+          innerRadius: am5.percent(55)
+        })
+      );
+
+      var seriesBPC = chartBPC.series.push(
+        am5percent.PieSeries.new(rootBPC, {
+          valueField: "valor",
+          categoryField: "categoria"
+        })
+      );
+
+      var dataBPC = [
+        { categoria: "Crianças com deficiência beneficiárias do BPC", valor: 6096 },
+        { categoria: "Com perfil no CadÚnico, sem BPC", valor: 11982 - 6096 }
+      ];
+
+      seriesBPC.data.setAll(dataBPC);
+      seriesBPC.slices.template.setAll({
+        cornerRadius: 10,
+        strokeWidth: 1,
+        stroke: am5.color(0xFFFFFF)
+      });
+      seriesBPC.labels.template.setAll({
+        fontSize: 11,
+        text: "{category}\n{valuePercentTotal.formatNumber('#.0')}%"
+      });
+
+      // ---------- 7b) Bilhetinho Único da Criança (ETUFOR · Ação 57) ----------
+      var rootBil = am5.Root.new("chart-bilhetinho");
+      rootBil.setThemes([am5themes_Animated.new(rootBil)]);
+
+      var chartBil = rootBil.container.children.push(am5xy.XYChart.new(rootBil, {
+        panX: false,
+        panY: false,
+        wheelX: "panX",
+        wheelY: "zoomX",
+        layout: rootBil.verticalLayout
+      }));
+
+      var dataBil = [
+        { mes: "Jan", solicitados: 64,  entregues: 11 },
+        { mes: "Fev", solicitados: 39,  entregues: 27 },
+        { mes: "Mar", solicitados: 29,  entregues: 24 },
+        { mes: "Abr", solicitados: 54,  entregues: 27 },
+        { mes: "Mai", solicitados: 38,  entregues: 26 },
+        { mes: "Jun", solicitados: 409, entregues: 105 }
+      ];
+
+      var xAxisBil = chartBil.xAxes.push(am5xy.CategoryAxis.new(rootBil, {
+        categoryField: "mes",
+        renderer: am5xy.AxisRendererX.new(rootBil, { minGridDistance: 30 })
+      }));
+      xAxisBil.data.setAll(dataBil);
+
+      var yAxisBil = chartBil.yAxes.push(am5xy.ValueAxis.new(rootBil, {
+        renderer: am5xy.AxisRendererY.new(rootBil, {})
+      }));
+
+      var seriesBilSol = chartBil.series.push(am5xy.ColumnSeries.new(rootBil, {
+        name: "Solicitações 0–6 anos",
+        xAxis: xAxisBil,
+        yAxis: yAxisBil,
+        valueYField: "solicitados",
+        categoryXField: "mes",
+        clustered: true,
+        tooltip: am5.Tooltip.new(rootBil, { labelText: "{valueY} solicitações 0–6 anos" })
+      }));
+
+      var seriesBilEnt = chartBil.series.push(am5xy.ColumnSeries.new(rootBil, {
+        name: "Cartões emitidos 0–6 anos",
+        xAxis: xAxisBil,
+        yAxis: yAxisBil,
+        valueYField: "entregues",
+        categoryXField: "mes",
+        clustered: true,
+        tooltip: am5.Tooltip.new(rootBil, { labelText: "{valueY} cartões emitidos 0–6 anos" })
+      }));
+
+      seriesBilSol.columns.template.setAll({
+        radiusTL: 10, radiusTR: 10, radiusBL: 10, radiusBR: 10,
+        fill: am5.color(0x0EA5E9)
+      });
+      seriesBilEnt.columns.template.setAll({
+        radiusTL: 10, radiusTR: 10, radiusBL: 10, radiusBR: 10,
+        fill: am5.color(0x22C55E)
+      });
+
+      seriesBilSol.data.setAll(dataBil);
+      seriesBilEnt.data.setAll(dataBil);
+
+      chartBil.set("cursor", am5xy.XYCursor.new(rootBil, {}));
+      chartBil.children.push(
+        am5.Legend.new(rootBil, {
+          x: am5.p50,
+          centerX: am5.p50,
+          marginTop: 5
+        })
+      ).data.setAll(chartBil.series.values);
+
+      // ---------- 8a) Microparques Urbanos (SEUMA · Ação 69) ----------
+      var rootMP = am5.Root.new("chart-microparques");
+      rootMP.setThemes([am5themes_Animated.new(rootMP)]);
+
+      var chartMP = rootMP.container.children.push(am5xy.XYChart.new(rootMP, {
+        panX: false,
+        panY: false,
+        layout: rootMP.verticalLayout
+      }));
+
+      var dataMP = [
+        { ano: "2022", implantados: 2 },
+        { ano: "2023", implantados: 3 },
+        { ano: "2024", implantados: 7 }
+      ];
+
+      var xAxisMP = chartMP.xAxes.push(am5xy.CategoryAxis.new(rootMP, {
+        categoryField: "ano",
+        renderer: am5xy.AxisRendererX.new(rootMP, {
+          minGridDistance: 30
+        })
+      }));
+      xAxisMP.data.setAll(dataMP);
+
+      var yAxisMP = chartMP.yAxes.push(am5xy.ValueAxis.new(rootMP, {
+        renderer: am5xy.AxisRendererY.new(rootMP, {}),
+        min: 0,
+        extraMax: 0.2
+      }));
+
+      var seriesMP = chartMP.series.push(am5xy.ColumnSeries.new(rootMP, {
+        name: "Microparques implantados no ano",
+        xAxis: xAxisMP,
+        yAxis: yAxisMP,
+        valueYField: "implantados",
+        categoryXField: "ano",
+        tooltip: am5.Tooltip.new(rootMP, { labelText: "{valueY} microparques implantados" })
+      }));
+
+      seriesMP.columns.template.setAll({
+        radiusTL: 10, radiusTR: 10, radiusBL: 10, radiusBR: 10,
+        fillGradient: am5.LinearGradient.new(rootMP, {
+          stops: [
+            { color: am5.color(0xF97316) },
+            { color: am5.color(0xFDBA74) }
+          ]
+        })
+      });
+
+      seriesMP.data.setAll(dataMP);
+
+      // ---------- 8b) Mini Circuito de Bikes Infantil (AMC – nova ação) ----------
+      var rootMini = am5.Root.new("chart-mini-circuito");
+      rootMini.setThemes([am5themes_Animated.new(rootMini)]);
+
+      var chartMini = rootMini.container.children.push(am5xy.XYChart.new(rootMini, {
+        panX: false,
+        panY: false,
+        layout: rootMini.verticalLayout
+      }));
+
+      var dataMini = [
+        { periodo: "Jan–Jun/2025", acoes: 17, criancas: 186 }
+      ];
+
+      var xAxisMini = chartMini.xAxes.push(am5xy.CategoryAxis.new(rootMini, {
+        categoryField: "periodo",
+        renderer: am5xy.AxisRendererX.new(rootMini, {
+          minGridDistance: 30,
+          cellStartLocation: 0.2,
+          cellEndLocation: 0.8
+        })
+      }));
+      xAxisMini.data.setAll(dataMini);
+
+      var yAxisMini = chartMini.yAxes.push(am5xy.ValueAxis.new(rootMini, {
+        renderer: am5xy.AxisRendererY.new(rootMini, {}),
+        min: 0
+      }));
+
+      var seriesMiniAcoes = chartMini.series.push(am5xy.ColumnSeries.new(rootMini, {
+        name: "Ações realizadas",
+        xAxis: xAxisMini,
+        yAxis: yAxisMini,
+        valueYField: "acoes",
+        categoryXField: "periodo",
+        clustered: true,
+        tooltip: am5.Tooltip.new(rootMini, { labelText: "{valueY} ações realizadas" })
+      }));
+
+      var seriesMiniCriancas = chartMini.series.push(am5xy.ColumnSeries.new(rootMini, {
+        name: "Crianças alcançadas (0–6 anos)",
+        xAxis: xAxisMini,
+        yAxis: yAxisMini,
+        valueYField: "criancas",
+        categoryXField: "periodo",
+        clustered: true,
+        tooltip: am5.Tooltip.new(rootMini, { labelText: "{valueY} crianças alcançadas" })
+      }));
+
+      seriesMiniAcoes.columns.template.setAll({
+        radiusTL: 10, radiusTR: 10, radiusBL: 10, radiusBR: 10,
+        fill: am5.color(0x38BDF8)
+      });
+
+      seriesMiniCriancas.columns.template.setAll({
+        radiusTL: 10, radiusTR: 10, radiusBL: 10, radiusBR: 10,
+        fill: am5.color(0x22C55E)
+      });
+
+      seriesMiniAcoes.data.setAll(dataMini);
+      seriesMiniCriancas.data.setAll(dataMini);
+
+      chartMini.children.push(
+        am5.Legend.new(rootMini, {
+          x: am5.p50,
+          centerX: am5.p50,
+          marginTop: 5
+        })
+      ).data.setAll(chartMini.series.values);
+
+    }); // fim am5.ready
+  </script>
+
+  <script src="js/theme.js"></script>
+</body>
+</html>

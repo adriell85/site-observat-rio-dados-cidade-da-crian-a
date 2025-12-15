@@ -34,13 +34,16 @@
             <span></span><span></span><span></span>
           </button>
           <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">
-    🌙
-  </button>
+            🌙
+          </button>
           <ul class="menu" id="menuMain">
             <li><a href="index.html#topo">Início</a></li>
             <li><a href="dados.html">Dados &amp; Painéis</a></li>
-            <li><a href="programas.html">Planos, Programas e Ações</a></li>
+            <!-- <li><a href="programas.html">Planos, Programas e Ações</a></li> -->
             <li><a href="biblioteca.html">Biblioteca &amp; Materiais</a></li>
+            <li><a href="projetos.html">Projetos</a></li>
+            <li><a href="parcerias.html">Parcerias</a></li>
+            <li><a href="noticias.html">Notícias</a></li>
             <li class="active"><a href="sobre.html">Sobre o Observatório</a></li>
             <li><a href="contato.html">Fale Conosco</a></li>
           </ul>
@@ -77,8 +80,12 @@
         <div class="sobre-wrapper">
           <!-- COLUNA PRINCIPAL -->
           <div class="sobre-main">
-            <div id="sobre-o-que-e" class="sobre-block">
-              <h3>I. O que é o Observatório CESPI?</h3>
+            <!-- I. O que é o Observatório -->
+            <div id="sobre-o-que-e" class="sobre-block sobre-block-shell sobre-block-shell--blue">
+              <div class="sobre-block-header">
+                <span class="sobre-badge-circle sobre-badge-1">I</span>
+                <h3>O que é o Observatório CESPI?</h3>
+              </div>
               <p>
                 O <strong>Observa Infância Viva · CESPI</strong> é o ponto estratégico de uma rede
                 de conhecimento dedicada à <strong>Primeira Infância</strong> em Fortaleza.
@@ -93,14 +100,20 @@
               </p>
             </div>
 
-            <div id="sobre-missao-visao" class="sobre-block">
-              <h3>II. Missão &amp; Visão</h3>
+            <!-- II. Missão & Visão -->
+            <div id="sobre-missao-visao" class="sobre-block sobre-block-shell sobre-block-shell--green">
+              <div class="sobre-block-header">
+                <span class="sobre-badge-circle sobre-badge-2">II</span>
+                <h3>Missão &amp; Visão</h3>
+              </div>
+
               <p><strong>Missão</strong></p>
               <p>
                 Produzir, integrar e difundir conhecimento sobre a Primeira Infância em Fortaleza,
                 oferecendo subsídios qualificados para o planejamento, monitoramento e avaliação de
                 políticas públicas, com foco na equidade e na garantia de direitos.
               </p>
+
               <p><strong>Visão</strong></p>
               <p>
                 Ser reconhecido como <strong>núcleo de inteligência em Primeira Infância</strong> de Fortaleza,
@@ -109,8 +122,13 @@
               </p>
             </div>
 
-            <div id="sobre-por-que" class="sobre-block">
-              <h3>III. Por que? · Para que? · Como?</h3>
+            <!-- III. Por que · Para que · Como -->
+            <div id="sobre-por-que" class="sobre-block sobre-block-shell sobre-block-shell--yellow">
+              <div class="sobre-block-header">
+                <span class="sobre-badge-circle sobre-badge-3">III</span>
+                <h3>Por que? · Para que? · Como?</h3>
+              </div>
+
               <div class="sobre-grid-3">
                 <div class="sobre-card-mini">
                   <strong>Por que?</strong>
@@ -139,8 +157,13 @@
               </div>
             </div>
 
-            <div id="sobre-quem-somos" class="sobre-block">
-              <h3>IV. Quem somos</h3>
+            <!-- IV. Quem somos -->
+            <div id="sobre-quem-somos" class="sobre-block sobre-block-shell sobre-block-shell--orange">
+              <div class="sobre-block-header">
+                <span class="sobre-badge-circle sobre-badge-4">IV</span>
+                <h3>Quem somos</h3>
+              </div>
+
               <p>
                 O Observatório CESPI reúne uma equipe multidisciplinar que integra análise de dados,
                 planejamento, avaliação de políticas, educação e participação social.
@@ -191,8 +214,13 @@
               </table>
             </div>
 
-            <div id="sobre-cespi" class="sobre-block">
-              <h3>V. CESPI e a governança da primeira infância</h3>
+            <!-- V. CESPI e governança -->
+            <div id="sobre-cespi" class="sobre-block sobre-block-shell sobre-block-shell--red">
+              <div class="sobre-block-header">
+                <span class="sobre-badge-circle sobre-badge-5">V</span>
+                <h3>CESPI e a governança da primeira infância</h3>
+              </div>
+
               <p>
                 A CESPI atua como instância de articulação estratégica para as políticas voltadas às crianças de 0 a 6 anos,
                 conectando secretarias, equipamentos e serviços municipais. O Observa Infância Viva é uma das ferramentas
@@ -226,29 +254,58 @@
             <div class="sobre-pill">
               <span>CESPI · Observa Infância Viva</span>
             </div>
-            <h3>Núcleo de inteligência em Primeira Infância</h3>
-            <p>
-              Integramos dados, pesquisas e experiências para apoiar decisões que afetam diretamente
-              a vida das crianças de Fortaleza.
-            </p>
 
-            <h3>Missão</h3>
-            <p>
-              Produzir, organizar e difundir conhecimento sobre a Primeira Infância,
-              subsidiando políticas públicas baseadas em evidências.
-            </p>
+            <div class="sobre-aside-block">
+              <div class="sobre-aside-icon-bubble">
+                <span>💡</span>
+              </div>
+              <div class="sobre-aside-text">
+                <h3>Núcleo de inteligência em Primeira Infância</h3>
+                <p>
+                  Integramos dados, pesquisas e experiências para apoiar decisões que afetam diretamente
+                  a vida das crianças de Fortaleza.
+                </p>
+              </div>
+            </div>
 
-            <h3>Visão</h3>
-            <p>
-              Ser referência em análise e monitoramento da Primeira Infância em Fortaleza,
-              articulando indicadores, histórias e territórios.
-            </p>
+            <div class="sobre-aside-block">
+              <div class="sobre-aside-icon-bubble">
+                <span>🎯</span>
+              </div>
+              <div class="sobre-aside-text">
+                <h3>Missão</h3>
+                <p>
+                  Produzir, organizar e difundir conhecimento sobre a Primeira Infância,
+                  subsidiando políticas públicas baseadas em evidências.
+                </p>
+              </div>
+            </div>
 
-            <h3>Parcerias estratégicas</h3>
-            <p>
-              <strong>Prefeitura de Fortaleza</strong>, secretarias setoriais, conselhos de direitos,
-              universidades, redes de pesquisa e organizações da sociedade civil.
-            </p>
+            <div class="sobre-aside-block">
+              <div class="sobre-aside-icon-bubble">
+                <span>🌈</span>
+              </div>
+              <div class="sobre-aside-text">
+                <h3>Visão</h3>
+                <p>
+                  Ser referência em análise e monitoramento da Primeira Infância em Fortaleza,
+                  articulando indicadores, histórias e territórios.
+                </p>
+              </div>
+            </div>
+
+            <div class="sobre-aside-block">
+              <div class="sobre-aside-icon-bubble">
+                <span>🤝</span>
+              </div>
+              <div class="sobre-aside-text">
+                <h3>Parcerias estratégicas</h3>
+                <p>
+                  <strong>Prefeitura de Fortaleza</strong>, secretarias setoriais, conselhos de direitos,
+                  universidades, redes de pesquisa e organizações da sociedade civil.
+                </p>
+              </div>
+            </div>
           </aside>
         </div>
       </div>

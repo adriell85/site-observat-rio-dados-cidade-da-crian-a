@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Notícias &amp; Materiais – Observa Infância Viva · CESPI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Estilos globais do site -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Splide CSS -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" />
+
+  <!-- Estilos específicos desta página -->
+  <style>
+    /* ==== CARROSSEL DE NOTÍCIAS – SPLIDE (FOCUS CENTER) ==== */
+
+    .news-splide{
+      margin-top:18px;
+      max-width:960px;
+      margin-inline:auto;
+    }
+
+    .news-splide .splide__track{
+      padding-block:6px;
+    }
+
+    /* Cada slide ocupa o espaço normal, mas fica "apagado" se não estiver ativo */
+    .news-splide .splide__slide{
+      padding:12px;
+      box-sizing:border-box;
+      transition:
+        transform .25s ease,
+        opacity .25s ease,
+        filter .25s ease;
+      opacity:.55;
+      transform:scale(.94);
+    }
+
+    /* Card interno reaproveitando estilo do site */
+    .news-card{
+      border-radius:20px;
+      background:var(--card);
+      box-shadow:0 8px 20px rgba(15,23,42,0.12);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      height:100%;
+      overflow:hidden;
+      border:1px solid rgba(148,163,184,0.45);
+    }
+
+    .news-card__img img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:18px 18px 0 0;
+    }
+
+    .news-card__body{
+      padding:10px 12px 12px;
+    }
+
+    .news-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:2px 10px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:.03em;
+      background:var(--blue);
+      color:#FFFFFF;
+      margin-bottom:4px;
+    }
+
+    .news-meta{
+      margin-top:6px;
+      font-size:11px;
+      color:var(--muted);
+    }
+
+    /* Slide em foco (center) – destaque visual */
+    .news-splide .splide__slide.is-active{
+      opacity:1;
+      transform:scale(1.03);
+      filter:none;
+    }
+
+    .news-splide .splide__slide.is-active .news-card{
+      box-shadow:0 14px 30px rgba(15,23,42,0.30);
+      border:1px solid var(--blue);
+    }
+
+    /* Pequeno hover extra em desktop */
+    @media (hover:hover){
+      .news-splide .splide__slide.is-active .news-card:hover{
+        transform:translateY(-2px);
+      }
+    }
+
+    /* Arrows padrão da Splide, tunadas pro layout */
+    .news-splide .splide__arrow{
+      background:#FFFFFF;
+      border-radius:999px;
+      width:32px;
+      height:32px;
+      box-shadow:0 4px 10px rgba(15,23,42,0.25);
+      border:1px solid rgba(15,23,42,0.12);
+    }
+
+    .news-splide .splide__arrow svg{
+      width:16px;
+      height:16px;
+    }
+
+    /* Paginação (bolinhas) */
+    .news-splide .splide__pagination{
+      margin-top:10px;
+      gap:6px;
+    }
+
+    .news-splide .splide__pagination__page{
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background:rgba(148,163,184,0.8);
+      opacity:1;
+    }
+
+    .news-splide .splide__pagination__page.is-active{
+      width:18px;
+      background:var(--blue);
+    }
+
+    /* Dark mode – coerente com as outras telas */
+    body.theme-dark .news-card{
+      background:rgba(15,23,42,0.96);
+      box-shadow:0 10px 24px rgba(0,0,0,0.75);
+      border:1px solid rgba(148,163,184,0.7);
+      color:#E5E7EB;
+    }
+
+    body.theme-dark .news-card__body h3{
+      color:#E5E7EB;
+    }
+
+    body.theme-dark .news-card__body p,
+    body.theme-dark .news-card__body .news-meta{
+      color:#CBD5F5;
+    }
+
+    body.theme-dark .news-splide .splide__slide.is-active .news-card{
+      border-color:#60A5FA;
+      box-shadow:0 16px 36px rgba(0,0,0,0.85);
+    }
+
+    body.theme-dark .news-splide .splide__arrow{
+      background:rgba(15,23,42,0.9);
+      border-color:rgba(148,163,184,0.9);
+      color:#F9FAFB;
+      box-shadow:0 6px 16px rgba(0,0,0,0.75);
+    }
+
+    body.theme-dark .news-splide .splide__arrow:hover{
+      background:rgba(15,23,42,1);
+      border-color:#93C5FD;
+    }
+
+    body.theme-dark .news-splide .splide__pagination__page{
+      background:rgba(75,85,99,0.9);
+    }
+
+    body.theme-dark .news-splide .splide__pagination__page.is-active{
+      background:#60A5FA;
+    }
+
+    /* Ajuste em telas maiores: centro com 3 slides visíveis */
+    @media (min-width: 900px){
+      .news-splide{
+        max-width:780px;
+      }
+    }
+
+    /* ==== FILTROS (chips) de categoria ==== */
+
+    .news-filters{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:14px;
+}
+
+.news-filter-btn{
+  border:none;
+  padding:4px 12px;
+  border-radius:999px;
+  font-size:12px;
+  cursor:pointer;
+  background:rgba(148,163,184,0.16);
+  color:var(--text); /* garante texto escuro no modo claro */
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  transition:
+    background .15s ease,
+    color .15s ease,
+    box-shadow .15s ease,
+    transform .12s ease;
+}
+
+.news-filter-btn span.dot{
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background:var(--blue);
+}
+
+.news-filter-btn[data-category="evento"] .dot{
+  background:var(--blue);
+}
+
+.news-filter-btn[data-category="infografico"] .dot{
+  background:var(--orange);
+}
+
+.news-filter-btn[data-category="publicacao"] .dot{
+  background:var(--badge-material);
+}
+
+.news-filter-btn[data-category="formacao"] .dot{
+  background:var(--badge-formacao);
+}
+
+.news-filter-btn--active{
+  background:#FFFFFF;
+  color:var(--text); /* não deixa o texto ficar branco no ativo */
+  box-shadow:0 4px 10px rgba(15,23,42,0.12);
+  transform:translateY(-1px);
+}
+
+body.theme-dark .news-filter-btn{
+  background:rgba(15,23,42,0.8);
+  color:#E5E7EB;
+}
+
+body.theme-dark .news-filter-btn--active{
+  background:rgba(15,23,42,1);
+  color:#E5E7EB;
+  box-shadow:0 6px 14px rgba(0,0,0,0.75);
+}
+
+
+    body.theme-dark .news-filter-btn{
+      background:rgba(15,23,42,0.8);
+      color:#E5E7EB;
+    }
+
+    body.theme-dark .news-filter-btn--active{
+      background:rgba(15,23,42,1);
+      box-shadow:0 6px 14px rgba(0,0,0,0.75);
+    }
+
+    /* ==== LISTA SECUNDÁRIA DE NOTÍCIAS (grade) ==== */
+
+    .news-list-section{
+      padding-top:10px;
+    }
+
+    .news-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:16px;
+      margin-top:14px;
+    }
+
+    .news-card--small{
+      border-radius:16px;
+      background:var(--card);
+      box-shadow:0 4px 12px rgba(15,23,42,0.1);
+      padding:10px 12px;
+      border:1px solid rgba(148,163,184,0.35);
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    .news-card--small h3{
+      font-size:14px;
+      margin:0;
+    }
+
+    .news-card--small p{
+      font-size:12px;
+      margin:0;
+      color:var(--muted);
+    }
+
+    .news-card--small .news-meta{
+      margin-top:4px;
+      font-size:11px;
+    }
+
+    body.theme-dark .news-card--small{
+      background:rgba(15,23,42,0.96);
+      box-shadow:0 8px 18px rgba(0,0,0,0.8);
+      border-color:rgba(148,163,184,0.7);
+    }
+
+    body.theme-dark .news-card--small p{
+      color:#CBD5F5;
+    }
+
+    .news-splide{
+  margin-top:18px;
+  max-width:420px;   /* deixa mais estreito, se quiser */
+  height:420px;      /* altura obrigatória pro vertical */
+  margin-inline:auto;
+}
+
+
+.news-splide{
+  margin-top:20px;
+  max-width:620px;   /* um pouco menor que 720 */
+  height:520px;      /* menos alta que 640 */
+  margin-inline:auto;
+}
+
+/* aumenta um pouco o padding de cada slide */
+.news-splide .splide__slide{
+  padding:14px;
+}
+
+/* dá uma altura mínima confortável ao card */
+.news-card{
+  border-radius:20px;
+  background:var(--card);
+  box-shadow:0 8px 20px rgba(15,23,42,0.12);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  height:100%;
+  min-height:230px;   /* um tiquinho menor que 260 */
+  overflow:hidden;
+  border:1px solid rgba(148,163,184,0.45);
+}
+
+/* imagem ainda em destaque, mas menor */
+.news-card__img img{
+  width:100%;
+  height:190px;       /* antes 220px */
+  object-fit:cover;
+  display:block;
+  border-radius:18px 18px 0 0;
+}
+
+/* Responsivo pra telas menores */
+@media (max-width: 768px){
+  .news-splide{
+    max-width:100%;
+    height:460px;    /* também reduzido no mobile */
+  }
+}
+
+/* Fundo diferente só na faixa do carrossel de destaques */
+#destaques-noticias{
+  background: var(--bg-soft);   /* usa o fundo suave já do site */
+}
+
+/* No modo escuro, um fundo mais escuro contínuo */
+body.theme-dark #destaques-noticias{
+  background: rgba(15,23,42,0.98);
+}
+
+#destaques-noticias .container{
+  padding-block: 18px 24px;
+}
+
+@media (min-width: 900px){
+  #destaques-noticias .container{
+    border-radius: 20px;
+  }
+}
+
+/* =========================================
+   DESTAQUES / CARROSSEL – degradê global no fundo
+   sem “tingir” os cards
+   ========================================= */
+
+/* MODO CLARO: usa o mesmo degradê da capa / contato */
+#destaques-noticias{
+  padding: 26px 0 24px;
+  background:
+    radial-gradient(circle at top left, rgba(255,255,255,0.25) 0, transparent 55%),
+    radial-gradient(circle at bottom right, rgba(235,94,40,0.25) 0, transparent 65%),
+    linear-gradient(120deg, #1CABB2 0%, #F4AD22 40%, #1787B5 100%);
+}
+
+/* título/subtítulo em cima do degradê */
+#destaques-noticias .section-header,
+#destaques-noticias .section-title,
+#destaques-noticias .section-subtitle{
+  color: #111827;
+}
+
+/* “concha” que envolve o carrossel (opcional, se você tiver um wrapper) */
+#destaques-noticias .destaques-shell{
+  border-radius: var(--radius-xl);
+  padding: 14px 14px 18px;
+  background: rgba(255,255,255,0.96);
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.18);
+}
+
+/* garante que os cards fiquem SEM transparência / sem pegar cor do fundo */
+#destaques-noticias .card,
+#destaques-noticias .news-card,
+#destaques-noticias .story-card,
+#destaques-noticias .material-card,
+#destaques-noticias .dashboard-card{
+  background: #FFFFFF;
+  border-color: rgba(0,0,0,0.12);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+}
+
+/* se alguma imagem ou overlay tiver mix-blend, neutraliza só dentro dos destaques */
+#destaques-noticias img,
+#destaques-noticias .card *{
+  mix-blend-mode: normal;
+}
+
+/* MODO ESCURO: fundo noturno, mas cards continuam neutros/escuros lisos */
+[data-theme="dark"] #destaques-noticias{
+  background:
+    radial-gradient(circle at top left, rgba(15,23,42,0.9) 0, transparent 60%),
+    radial-gradient(circle at bottom right, rgba(15,23,42,0.9) 0, transparent 60%),
+    linear-gradient(120deg, #0F172A 0%, #1CABB2 35%, #1787B5 80%);
+}
+
+[data-theme="dark"] #destaques-noticias .section-title,
+[data-theme="dark"] #destaques-noticias .section-subtitle{
+  color: #E5E7EB;
+}
+
+[data-theme="dark"] #destaques-noticias .destaques-shell{
+  background: #020617;
+  border-color: rgba(148,163,184,0.7);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.95);
+}
+
+[data-theme="dark"] #destaques-noticias .card,
+[data-theme="dark"] #destaques-noticias .news-card,
+[data-theme="dark"] #destaques-noticias .story-card,
+[data-theme="dark"] #destaques-noticias .material-card,
+[data-theme="dark"] #destaques-noticias .dashboard-card{
+  background: #020617;
+  border-color: rgba(148,163,184,0.6);
+  box-shadow: 0 16px 38px rgba(0,0,0,0.9);
+}
+
+    
+  </style>
+</head>
+<body>
+
+  <!-- Faixa colorida no topo -->
+  <div class="top-ribbon">
+    <span class="r-blue"></span>
+    <span class="r-green"></span>
+    <span class="r-yellow"></span>
+    <span class="r-orange"></span>
+    <span class="r-red"></span>
+  </div>
+
+  <!-- Cabeçalho -->
+  <header class="main-header">
+    <div class="container">
+      <div class="main-header__inner">
+        <a href="index.html#topo" class="brand-block">
+          <div class="brand-icon">
+            <img src="https://images.seeklogo.com/logo-png/23/3/prefeitura-de-fortaleza-logo-png_seeklogo-231117.png"
+                 alt="Logo Prefeitura de Fortaleza">
+          </div>
+          <div class="brand-text">
+            <strong>Observa Infância Viva</strong>
+            <span>Observatório da Primeira Infância · CESPI · Fortaleza</span>
+          </div>
+        </a>
+
+        <nav class="main-nav">
+          <button class="menu-toggle" id="btnMenu" aria-label="Abrir menu">
+            <span></span><span></span><span></span>
+          </button>
+          <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">
+            🌙
+          </button>
+          <ul class="menu" id="menuMain">
+            <li><a href="index.html#topo">Início</a></li>
+            <li><a href="dados.html">Dados &amp; Painéis</a></li>
+            <li><a href="biblioteca.html">Biblioteca &amp; Materiais</a></li>
+            <li><a href="projetos.html">Projetos</a></li>
+            <li><a href="parcerias.html">Parcerias</a></li>
+            <li class="active"><a href="noticias.html">Notícias</a></li>
+            <li><a href="sobre.html">Sobre o Observatório</a></li>
+            <li><a href="contato.html">Fale Conosco</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO / TÍTULO GERAL -->
+    <section class="section section--white">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="index.html">Início</a> / Notícias &amp; Materiais
+        </div>
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Notícias, eventos e materiais Infância Viva</h2>
+            <p class="section-subtitle">
+              Acompanhamento de ações, formações, publicações e registros da agenda da primeira infância em Fortaleza.
+            </p>
+          </div>
+        </div>
+
+        <!-- Filtros de categoria (só visuais por enquanto, ou você liga no futuro) -->
+        <div class="news-filters" aria-label="Filtros de tipo de notícia">
+          <button class="news-filter-btn news-filter-btn--active" data-category="todos">
+            <span class="dot"></span> Todos
+          </button>
+          <button class="news-filter-btn" data-category="evento">
+            <span class="dot"></span> Eventos
+          </button>
+          <button class="news-filter-btn" data-category="infografico">
+            <span class="dot"></span> Infográficos
+          </button>
+          <button class="news-filter-btn" data-category="publicacao">
+            <span class="dot"></span> Publicações / Relatórios
+          </button>
+          <button class="news-filter-btn" data-category="formacao">
+            <span class="dot"></span> Formações
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARROSSEL DESTAQUES -->
+    <section class="section section--white" id="destaques-noticias">
+      <div class="container">
+        <div id="news-splide" class="splide news-splide"
+             aria-label="Destaques de notícias e materiais do Observa Infância Viva">
+          <div class="splide__track">
+            <ul class="splide__list">
+
+              <!-- Slide 1 -->
+              <li class="splide__slide" data-category="publicacao">
+                <article class="news-card">
+                  <div class="news-card__img">
+                    <img src="https://media.istockphoto.com/id/157482029/pt/foto/pilha-de-livros.jpg?s=612x612&w=0&k=20&c=myOJb6QEPe3OX7IO_youGJY_qc9KF699encUvHRP1E0="
+                         alt="Livros e materiais impressos sobre primeira infância">
+                  </div>
+                  <div class="news-card__body">
+                    <span class="news-badge">Relatório</span>
+                    <h3>Relatório anual do PMPIF e ações Infância Viva</h3>
+                    <p>
+                      Síntese dos principais resultados, indicadores e histórias de cuidado com a primeira infância
+                      em Fortaleza, com foco nas ações intersetoriais coordenadas pela CESPI.
+                    </p>
+                    <div class="news-meta">
+                      • Atualizado anualmente &middot; Uso recomendado em formações e prestações de contas.
+                    </div>
+                  </div>
+                </article>
+              </li>
+
+              <!-- Slide 2 -->
+              <li class="splide__slide" data-category="evento">
+                <article class="news-card">
+                  <div class="news-card__img">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStUDU3zv1fp64cfzTnKB-tfx9NQ5vp9wFBeQ&s"
+                         alt="Encontro com famílias e crianças em praça pública">
+                  </div>
+                  <div class="news-card__body">
+                    <span class="news-badge" style="background:var(--blue);color:#fff;">
+                      Evento
+                    </span>
+                    <h3>Encontros Infância Viva nos territórios</h3>
+                    <p>
+                      Ações em praças, escolas e equipamentos públicos, reunindo crianças, famílias e equipes
+                      para atividades lúdicas, culturais e de cuidado em diferentes bairros de Fortaleza.
+                    </p>
+                    <div class="news-meta">
+                      • CESPI em parceria com SME, SMS, SDHDS, Funci e demais secretarias.
+                    </div>
+                  </div>
+                </article>
+              </li>
+
+              <!-- Slide 3 -->
+              <li class="splide__slide" data-category="infografico">
+                <article class="news-card">
+                  <div class="news-card__img">
+                    <img src="https://cdn.create.microsoft.com/catalog-assets/pt-br/b0e3906b-4070-402b-8374-7384e2f4b3bd/thumbnails/600/formas-de-infogr%25C3%25A1fico-modern-simple-1-1-e48519a5acf6.webp"
+                         alt="Infográfico colorido com indicadores da primeira infância">
+                  </div>
+                  <div class="news-card__body">
+                    <span class="news-badge" style="background:var(--orange);color:#fff;">
+                      Infográfico
+                    </span>
+                    <h3>Infográficos da primeira infância</h3>
+                    <p>
+                      Painéis visuais com dados sobre participação das crianças em equipamentos, saúde,
+                      proteção social e educação, para apoiar apresentações, relatórios e debates públicos.
+                    </p>
+                    <div class="news-meta">
+                      • Produção conjunta CESPI + áreas técnicas parceiras.
+                    </div>
+                  </div>
+                </article>
+              </li>
+
+              <!-- Slide 4 -->
+              <li class="splide__slide" data-category="formacao">
+                <article class="news-card">
+                  <div class="news-card__img">
+                    <img src="https://blbescoladenegocios.com.br/blog/wp-content/uploads/2018/08/treinamento-e-desenvolvimento-de-pessoas.jpg"
+                         alt="Formação com gestores e equipes de políticas públicas">
+                  </div>
+                  <div class="news-card__body">
+                    <span class="news-badge" style="background:var(--badge-material);color:#fff;">
+                      Formação
+                    </span>
+                    <h3>Formações sobre primeira infância e territórios</h3>
+                    <p>
+                      Encontros de formação com equipes das secretarias e instituições parceiras, integrando dados,
+                      conceitos e práticas sobre o cuidado integral na primeira infância.
+                    </p>
+                    <div class="news-meta">
+                      • Módulos presenciais e on-line &middot; Materiais de apoio disponíveis na biblioteca.
+                    </div>
+                  </div>
+                </article>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LISTA DE OUTRAS NOTÍCIAS / MATERIAIS -->
+    <section class="section section--white news-list-section" id="lista-noticias">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Mais notícias e registros</h2>
+            <p class="section-subtitle">
+              Seleção de notícias, matérias, registros fotográficos e materiais de apoio relacionados à agenda Infância Viva.
+            </p>
+          </div>
+        </div>
+
+        <div class="news-grid">
+          <article class="news-card--small">
+            <span class="news-badge" style="background:var(--blue);color:#fff;">Evento</span>
+            <h3>Circuito sensorial da Cidade da Criança recebe novas escolas</h3>
+            <p>
+              Turmas da educação infantil e do ensino fundamental participam de atividades lúdicas, explorando
+              os circuitos de arte, imaginação e tecnologia.
+            </p>
+            <div class="news-meta">
+              • Registros disponíveis na galeria &middot; Indicado para divulgação nas escolas.
+            </div>
+          </article>
+
+          <article class="news-card--small">
+            <span class="news-badge" style="background:var(--orange);color:#fff;">Infográfico</span>
+            <h3>Panorama das visitas mediadas à Cidade da Criança</h3>
+            <p>
+              Infográfico com número de crianças atendidas, escolas participantes e avaliações de satisfação
+              ao longo do ano.
+            </p>
+            <div class="news-meta">
+              • Pode ser utilizado em apresentações para conselhos e fóruns.
+            </div>
+          </article>
+
+          <article class="news-card--small">
+            <span class="news-badge" style="background:var(--badge-material);color:#fff;">Material</span>
+            <h3>Guia de apoio para equipes escolares</h3>
+            <p>
+              Orientações para organizar visitas mediadas, preparar as turmas e aproveitar as experiências lúdicas
+              nos equipamentos da infância.
+            </p>
+            <div class="news-meta">
+              • PDF disponível na biblioteca &middot; Atualizado periodicamente.
+            </div>
+          </article>
+
+          <article class="news-card--small">
+            <span class="news-badge" style="background:var(--badge-formacao);color:#fff;">Formação</span>
+            <h3>Rodadas de escuta com famílias e crianças</h3>
+            <p>
+              Encontros onde crianças e responsáveis compartilham percepções sobre os espaços, atividades e
+              acolhimento nos equipamentos da primeira infância.
+            </p>
+            <div class="news-meta">
+              • Insumos qualitativos utilizados na atualização de indicadores e ações.
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div>Observa Infância Viva · Observatório da Primeira Infância</div>
+        <div>Coordenadoria Especial da Primeira Infância (CESPI) · Prefeitura de Fortaleza</div>
+      </div>
+      <div class="footer-pills">
+        <span class="footer-pill">CESPI</span>
+        <span class="footer-pill">Gabinete do Prefeito</span>
+        <span class="footer-pill">Secretarias parceiras</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html#topo">Início</a>
+        <a href="dados.html">Painel</a>
+        <a href="programas.html">Programas</a>
+        <a href="contato.html">Contato</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Menu mobile -->
+  <script>
+    const btnMenu = document.getElementById('btnMenu');
+    const menuMain = document.getElementById('menuMain');
+    if (btnMenu && menuMain){
+      btnMenu.addEventListener('click', () => {
+        menuMain.classList.toggle('menu--open');
+      });
+    }
+  </script>
+
+  <!-- Splide core -->
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+
+<!-- Extensão de rolagem (Wheel) -->
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-wheel@0.6.0/dist/js/splide-extension-wheel.min.js"></script>
+
+
+
+  <!-- Inicialização do Splide (focus center) -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+  const sliderEl = document.getElementById('news-splide');
+  if (!sliderEl) return;
+
+  const splide = new Splide(sliderEl, {
+  type      : 'loop',
+  direction : 'ttb',
+  height    : '520px',   // em vez de 640px
+  focus     : 'center',
+  gap       : '1.1rem',
+  perPage   : 2,
+  trimSpace : false,
+  pagination: true,
+
+  wheel            : true,
+  waitForTransition: true,
+  wheelSleep       : 300,
+  wheelDirection   : 'ttb',
+
+  breakpoints: {
+    1024: {
+      perPage: 2,
+      height : '480px',
+    },
+    640 : {
+      perPage: 1,
+      height : '440px',
+    }
+  }
+});
+
+
+  if (window.splide && window.splide.Extensions && window.splide.Extensions.Wheel) {
+    splide.mount(window.splide.Extensions);
+  } else {
+    splide.mount();
+  }
+
+  const filterButtons = document.querySelectorAll('.news-filter-btn');
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterButtons.forEach(b => b.classList.remove('news-filter-btn--active'));
+      btn.classList.add('news-filter-btn--active');
+    });
+  });
+});
+
+
+</script>
+
+
+
+  <!-- Tema claro/escuro -->
+  <script src="js/theme.js"></script>
+</body>
+</html>
